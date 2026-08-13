@@ -25,7 +25,6 @@
     --rest:#9C8B72;
     --game:#E03A3E;
     --blaze-black:#0B0B0B;
-    --blaze-silver:#C4CED4;
     --wfh:#6B4FA0;
     --card-bg:rgba(255,250,238,0.72);
     --card-border:rgba(11,11,11,0.16);
@@ -38,131 +37,97 @@
       repeating-linear-gradient(90deg, var(--plank-a) 0px, var(--plank-a) 42px, var(--plank-b) 42px, var(--plank-b) 84px);
     font-family:'IBM Plex Sans', sans-serif;
     color:var(--ink);
-    padding:40px 18px 44px;
+    padding:32px 14px 44px;
     position:relative;
-    overflow-x:hidden;
   }
-  .court-footer{ margin-top:36px; width:100%; }
-  .wrap{max-width:960px; margin:0 auto; position:relative; z-index:1;}
+  .wrap{max-width:1080px; margin:0 auto; position:relative; z-index:1;}
   header{text-align:center; margin-bottom:8px;}
   .eyebrow{
-    font-family:'IBM Plex Mono', monospace;
-    font-size:11.5px; letter-spacing:0.18em; text-transform:uppercase;
-    color:var(--game); margin-bottom:8px;
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; letter-spacing:0.18em;
+    text-transform:uppercase; color:var(--game); margin-bottom:8px;
   }
   h1{
-    font-family:'Oswald', sans-serif; font-weight:700;
-    font-size:clamp(26px,5vw,40px); margin:0 0 26px;
-    color:var(--ink);
+    font-family:'Oswald', sans-serif; font-weight:700; font-size:clamp(24px,5vw,38px);
+    margin:0 0 22px; color:var(--ink);
   }
   .controls{
-    background:var(--card-bg);
-    border:1px solid var(--card-border);
-    border-radius:8px;
-    padding:18px 20px;
-    margin-bottom:28px;
-    display:flex; flex-wrap:wrap; gap:22px; align-items:center;
-    backdrop-filter:blur(2px);
+    background:var(--card-bg); border:1px solid var(--card-border); border-top:3px solid var(--game);
+    border-radius:8px; padding:16px 18px; margin-bottom:20px;
+    display:flex; flex-wrap:wrap; gap:20px; align-items:flex-end;
   }
   .ctrl-group{display:flex; flex-direction:column; gap:8px;}
   .ctrl-label{
-    font-family:'IBM Plex Mono', monospace; font-size:10.5px;
-    letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-dim);
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:0.1em;
+    text-transform:uppercase; color:var(--ink-dim);
   }
   .split-toggle{display:flex; gap:6px;}
   .split-toggle button{
-    font-family:'Oswald', sans-serif; font-weight:600; font-size:13.5px;
-    padding:8px 14px; border-radius:5px; border:1px solid var(--card-border);
+    font-family:'Oswald', sans-serif; font-weight:600; font-size:13px;
+    padding:7px 12px; border-radius:5px; border:1px solid var(--card-border);
     background:transparent; color:var(--ink); cursor:pointer;
   }
   .split-toggle button.active{ background:var(--blaze-black); color:#fff; border-color:var(--blaze-black); }
-  .controls{ border-top:3px solid var(--game); }
-  .wfh-days{display:flex; gap:8px; flex-wrap:wrap;}
+  .wfh-days{display:flex; gap:6px; flex-wrap:wrap;}
   .wfh-chip{
-    font-family:'IBM Plex Mono', monospace; font-size:12px; font-weight:500;
-    padding:8px 13px; border-radius:20px; border:1.5px solid var(--wfh);
+    font-family:'IBM Plex Mono', monospace; font-size:11.5px; font-weight:500;
+    padding:7px 11px; border-radius:20px; border:1.5px solid var(--wfh);
     background:transparent; color:var(--wfh); cursor:pointer;
-    transition:all .15s ease;
   }
   .wfh-chip.on{ background:var(--wfh); color:#fff; }
-  .wfh-chip:disabled{ opacity:0.35; cursor:not-allowed; border-color:var(--ink-dim); color:var(--ink-dim);}
-  .count-note{
-    font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-dim);
-  }
-  .sunday-select{
+  select.sunday-select{
     font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink);
     background:#fff; border:1px solid var(--card-border); border-radius:5px;
     padding:7px 8px; cursor:pointer;
   }
-  .grid{
-    display:grid; grid-template-columns:repeat(7,1fr); gap:10px;
+  .schedule-btn{
+    font-family:'Oswald', sans-serif; font-weight:600; font-size:13.5px;
+    padding:9px 16px; border-radius:5px; border:none; cursor:pointer;
+    background:var(--game); color:#fff;
   }
-  .day{
-    background:var(--card-bg);
-    border:1px solid var(--card-border);
-    border-radius:7px;
-    padding:14px 12px 12px;
-    min-height:190px;
-    display:flex; flex-direction:column;
-    position:relative;
-    transition:transform .15s ease;
+  .schedule-btn:active{ transform:scale(0.98); }
+  .toast{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--game);
+    margin-top:8px; max-width:100%;
   }
-  .day.is-wfh{ box-shadow:inset 0 0 0 1.5px var(--wfh); }
-  .day-top{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px;}
-  .day-name{
-    font-family:'IBM Plex Mono', monospace; font-size:10.5px;
-    letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-dim);
+  .table-wrap{
+    background:var(--card-bg); border:1px solid var(--card-border); border-radius:8px;
+    overflow-x:auto; margin-bottom:8px;
   }
-  .loc-tag{
-    font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:0.05em;
-    padding:2px 6px; border-radius:10px; text-transform:uppercase;
+  table{ border-collapse:collapse; width:100%; min-width:760px; }
+  th, td{ padding:6px 6px; text-align:center; border:1px solid rgba(11,11,11,0.08); }
+  thead th{
+    font-family:'Oswald', sans-serif; font-weight:600; font-size:13px;
+    background:rgba(11,11,11,0.04); padding:10px 6px;
   }
-  .loc-tag.oficina{ color:var(--ink-dim); border:1px solid rgba(59,42,24,0.2);}
-  .loc-tag.wfh{ color:#fff; background:var(--wfh); }
-  .day-row{
-    display:flex; flex-direction:column; gap:2px;
-    padding:6px 0;
-    border-top:1px solid rgba(11,11,11,0.07);
+  thead th.slot-col{ font-family:'IBM Plex Mono', monospace; font-weight:500; font-size:10px; text-transform:uppercase; }
+  tbody th{
+    font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:0.06em;
+    text-transform:uppercase; color:var(--ink-dim); text-align:left; padding:8px 8px;
+    white-space:nowrap; position:sticky; left:0; background:var(--card-bg);
   }
-  .day-row:first-of-type{ border-top:none; }
-  .row-label{
-    font-family:'IBM Plex Mono', monospace; font-size:8.5px;
-    letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-dim);
+  td.day-col select{
+    width:100%; font-family:'IBM Plex Sans', sans-serif; font-size:11.5px; font-weight:500;
+    border:1px solid rgba(11,11,11,0.12); border-radius:4px; padding:6px 2px;
+    background:#fff; cursor:pointer;
   }
-  .row-value{
-    font-family:'IBM Plex Sans', sans-serif; font-size:12px; font-weight:500;
-    color:var(--ink); line-height:1.3;
-  }
-  .row-value.push{ color:var(--push); }
-  .row-value.pull{ color:var(--pull); }
-  .row-value.leg{ color:var(--leg); }
-  .row-value.game{ color:var(--game); font-weight:600; }
-  .row-value.dim{ color:var(--ink-dim); font-weight:400; }
   .legend{
-    display:flex; gap:16px; flex-wrap:wrap; margin-top:22px; padding-top:14px;
-    border-top:1px solid var(--card-border);
+    display:flex; gap:14px; flex-wrap:wrap; margin:14px 2px 26px;
     font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--ink-dim);
   }
   .legend span{display:inline-flex; align-items:center; gap:6px;}
   .dot{width:9px; height:9px; border-radius:2px; display:inline-block;}
-  .note{ margin-top:26px; font-size:12.5px; color:var(--ink-dim); text-align:center; line-height:1.6;}
-  @media(max-width:760px){
-    .grid{grid-template-columns:repeat(2,1fr);}
-    .day{min-height:auto;}
-    .controls{flex-direction:column; align-items:flex-start;}
-  }
-  @media(max-width:480px){
-    .grid{grid-template-columns:1fr;}
-    h1{font-size:28px;}
+  .note{ font-size:12.5px; color:var(--ink-dim); text-align:center; line-height:1.6; margin-top:6px;}
+  .court-footer{ margin-top:30px; width:100%; }
+  @media(max-width:640px){
+    .controls{ flex-direction:column; align-items:stretch; }
+    h1{ font-size:26px; }
   }
 </style>
 </head>
 <body>
-
-
 <div class="wrap">
   <header>
-    <div class="eyebrow">Interactivo · toca los chips de WFH</div>
+    <div class="eyebrow">Interactivo · cada hueco es editable</div>
     <h1>Gym + Baloncesto + WFH</h1>
   </header>
 
@@ -170,6 +135,7 @@
     <div class="ctrl-group">
       <span class="ctrl-label">Split</span>
       <div class="split-toggle" id="splitToggle">
+        <button data-split="3">3 días</button>
         <button data-split="4" class="active">4 días</button>
         <button data-split="5">5 días</button>
       </div>
@@ -177,10 +143,6 @@
     <div class="ctrl-group">
       <span class="ctrl-label">Días de teletrabajo</span>
       <div class="wfh-days" id="wfhDays"></div>
-    </div>
-    <div class="ctrl-group">
-      <span class="ctrl-label">&nbsp;</span>
-      <span class="count-note" id="countNote"></span>
     </div>
     <div class="ctrl-group">
       <span class="ctrl-label">Hora partido domingo</span>
@@ -192,35 +154,30 @@
         <option value="13:30">13:30</option>
       </select>
     </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">&nbsp;</span>
+      <button class="schedule-btn" id="scheduleBtn">📅 Programar entrenamiento</button>
+    </div>
+  </div>
+  <div class="toast" id="toast"></div>
+
+  <div class="table-wrap">
+    <table id="scheduleTable"></table>
   </div>
 
-  <div class="grid" id="grid"></div>
+  <div class="legend" id="legend"></div>
 
-  <div class="legend">
-    <span><span class="dot" style="background:var(--push)"></span>Push</span>
-    <span><span class="dot" style="background:var(--pull)"></span>Pull</span>
-    <span><span class="dot" style="background:var(--leg)"></span>Leg</span>
-    <span><span class="dot" style="background:var(--game)"></span>Partido</span>
-    <span><span class="dot" style="background:var(--wfh)"></span>WFH</span>
-  </div>
-
-  <p class="note">Lunes siempre en oficina (día fijo de la rota) — no seleccionable.<br>
-  Si marcas martes como WFH, solo cambia el paseo (corto en vez de largo); el resto de días WFH cambia el entreno de la mañana por paseo largo + gym a mediodía o descanso.</p>
+  <p class="note">Cada celda es un desplegable: pincha y elige la actividad. "↺ Automático" borra tu elección manual y vuelve a la regla por defecto (oficina, paseo, partido...).<br>
+  El botón de programar solo rellena huecos vacíos — nunca pisa lo que hayas puesto a mano.</p>
 
   <div class="court-footer">
     <svg viewBox="0 0 960 260" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block;">
-      <!-- línea de fondo -->
       <line x1="80" y1="250" x2="880" y2="250" stroke="#0B0B0B" stroke-width="3" opacity="0.35"/>
-      <!-- zona / key -->
       <rect x="390" y="130" width="180" height="120" fill="none" stroke="#0B0B0B" stroke-width="3" opacity="0.35"/>
-      <!-- círculo de tiros libres -->
       <circle cx="480" cy="130" r="55" fill="none" stroke="#E03A3E" stroke-width="3" opacity="0.4"/>
-      <!-- tablero y aro -->
       <line x1="445" y1="228" x2="515" y2="228" stroke="#0B0B0B" stroke-width="3" opacity="0.35"/>
       <circle cx="480" cy="236" r="7" fill="none" stroke="#E03A3E" stroke-width="2.5" opacity="0.45"/>
-      <!-- área restringida -->
       <path d="M 442 236 A 38 38 0 0 1 518 236" fill="none" stroke="#E03A3E" stroke-width="2.5" opacity="0.4"/>
-      <!-- línea de triple -->
       <path d="M 130 250 L 130 165 C 130 70 300 20 480 20 C 660 20 830 70 830 165 L 830 250"
             fill="none" stroke="#0B0B0B" stroke-width="3" opacity="0.3"/>
     </svg>
@@ -228,32 +185,49 @@
 </div>
 
 <script>
-const SPLITS = {
-  4: { lun:'push', mar:'rest', mie:'leg', jue:'pull', vie:'upper', sab:'rest', dom:'rest' },
-  5: { lun:'push', mar:'rest', mie:'leg', jue:'pull', vie:'push', sab:'pull', dom:'rest' }
+const SLOTS = ['temprano','manana','mediodia','siesta','tarde','noche'];
+const SLOT_LABELS = {temprano:'Mañana temprano', manana:'Mañana', mediodia:'Mediodía', siesta:'Siesta', tarde:'Tarde', noche:'Noche'};
+const DAYS = ['lun','mar','mie','jue','vie','sab','dom'];
+const DAY_NAMES = {lun:'Lunes', mar:'Martes', mie:'Miércoles', jue:'Jueves', vie:'Viernes', sab:'Sábado', dom:'Domingo'};
+const WFH_SELECTABLE = ['lun','mar','mie','jue','vie'];
+
+const ACTIVITIES = {
+  '':          {label:'— Libre —',      cls:'dim'},
+  oficina:     {label:'🏢 Oficina',      cls:'dim'},
+  push:        {label:'🏋️ Push',        cls:'push'},
+  pull:        {label:'🏋️ Pull',        cls:'pull'},
+  leg:         {label:'🏋️ Leg',         cls:'leg'},
+  upper:       {label:'🏋️ Upper',       cls:'push'},
+  paseo_corto: {label:'🐕 Paseo corto',  cls:'dim'},
+  paseo_largo: {label:'🐕 Paseo largo',  cls:'dim'},
+  baloncesto:  {label:'🏀 Baloncesto',   cls:'game'},
+  descanso:    {label:'😴 Descanso',     cls:'dim'},
+  cine:        {label:'🎬 Cine',         cls:''},
+  correr:      {label:'🏃 Correr',       cls:''}
 };
-const BADGE_LABEL = { push:'Push', pull:'Pull', leg:'Leg', upper:'Upper', rest:'Descanso' };
-const DAY_NAMES = { lun:'Lunes', mar:'Martes', mie:'Miércoles', jue:'Jueves', vie:'Viernes', sab:'Sábado', dom:'Domingo' };
-const GAME = { lun:'🏀 21–23h', jue:'🏀 21–22h' };
-function getSundayGame(){
-  const v = document.getElementById('sundayTime').value;
-  return v === 'var' ? '🏀 8–13h (var.)' : `🏀 ${v}`;
-}
-const WFH_SELECTABLE = ['mar','mie','jue','vie'];
+const CLS_COLOR = {push:'var(--push)', pull:'var(--pull)', leg:'var(--leg)', game:'var(--game)', dim:'var(--ink-dim)', '':'var(--ink)'};
+
+const SPLIT_REQUIREMENTS = {
+  3: ['push','leg','pull'],
+  4: ['push','leg','pull','upper'],
+  5: ['push','leg','pull','push','pull']
+};
 
 let currentSplit = 4;
 let wfhSet = new Set();
+let overrides = {}; // key `${day}_${slot}` -> activity key (manual override)
 
-const STORAGE_KEY = 'rutina_gym_baloncesto_v1';
+const STORAGE_KEY = 'rutina_gym_baloncesto_v2';
 
 function saveState(){
   try {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({
       split: currentSplit,
       wfh: Array.from(wfhSet),
-      sundayTime: document.getElementById('sundayTime').value
+      sundayTime: document.getElementById('sundayTime').value,
+      overrides
     }));
-  } catch(e) { /* localStorage no disponible, seguimos sin congelar */ }
+  } catch(e) {}
 }
 
 function loadState(){
@@ -264,137 +238,168 @@ function loadState(){
     if (state.split) currentSplit = state.split;
     if (Array.isArray(state.wfh)) wfhSet = new Set(state.wfh);
     if (state.sundayTime) document.getElementById('sundayTime').value = state.sundayTime;
-    document.querySelectorAll('#splitToggle button').forEach(b => {
-      b.classList.toggle('active', Number(b.dataset.split) === currentSplit);
-    });
-  } catch(e) { /* nada guardado o corrupto, empezamos de cero */ }
+    if (state.overrides) overrides = state.overrides;
+  } catch(e) {}
 }
 
-function renderControls(){
-  const c = document.getElementById('wfhDays');
-  c.innerHTML = '';
-  WFH_SELECTABLE.forEach(d => {
-    const btn = document.createElement('button');
-    btn.className = 'wfh-chip' + (wfhSet.has(d) ? ' on' : '');
-    btn.textContent = DAY_NAMES[d];
-    btn.onclick = () => { toggleDay(d); };
-    c.appendChild(btn);
+function key(d,s){ return d+'_'+s; }
+
+// Defaults SIN la regla de desplazamiento de oficina (se aplica después, mirando lo ya colocado)
+function computeBaseDefaults(){
+  const grid = {};
+  DAYS.forEach(d=>{ grid[d]={}; SLOTS.forEach(s=> grid[d][s]=''); });
+
+  grid.lun.noche = 'baloncesto';
+  grid.jue.noche = 'baloncesto';
+  const st = document.getElementById('sundayTime').value;
+  if (st !== 'var') {
+    const slot = st === '9:00' ? 'temprano' : st === '10:30' ? 'manana' : 'mediodia';
+    grid.dom[slot] = 'baloncesto';
+  }
+
+  ['lun','mar','mie','jue','vie'].forEach(d=>{
+    if (wfhSet.has(d)) {
+      grid[d].temprano = (d === 'mar') ? 'paseo_corto' : 'paseo_largo';
+    } else {
+      grid[d].temprano = (d === 'mar') ? 'descanso' : '';
+      grid[d].manana = 'oficina';
+      grid[d].mediodia = 'oficina';
+      grid[d].siesta = 'oficina';
+    }
   });
+  return grid;
 }
 
-function toggleDay(d){
-  if (wfhSet.has(d)) wfhSet.delete(d); else wfhSet.add(d);
+function effective(grid, d, s){
+  const k = key(d,s);
+  return (overrides[k] !== undefined) ? overrides[k] : grid[d][s];
+}
+
+// aplica la regla: si mediodía de un día de oficina termina siendo un entreno, la oficina salta a la tarde
+function applyOfficeShift(grid){
+  ['lun','mar','mie','jue','vie'].forEach(d=>{
+    if (wfhSet.has(d)) return;
+    const midday = effective(grid, d, 'mediodia');
+    if (['push','pull','leg','upper'].includes(midday)) {
+      if (effective(grid, d, 'tarde') === '') grid[d].tarde = 'oficina';
+    }
+  });
+  return grid;
+}
+
+function buildGrid(){
+  return applyOfficeShift(computeBaseDefaults());
+}
+
+function slotForDay(d){
+  return wfhSet.has(d) ? 'mediodia' : 'temprano';
+}
+
+function autoFillWeek(){
+  const required = SPLIT_REQUIREMENTS[currentSplit];
+  const need = {};
+  required.forEach(t => need[t] = (need[t]||0) + 1);
+
+  Object.values(overrides).forEach(v => { if (need[v] !== undefined && need[v] > 0) need[v]--; });
+
+  const legDay = wfhSet.has('mar') ? 'mar' : (wfhSet.has('mie') ? 'vie' : 'mie');
+  const shiftMode = wfhSet.has('mie') && !wfhSet.has('mar');
+
+  const seq = [];
+  seq.push({type:'push', day:'lun'});
+  seq.push({type:'leg', day: legDay});
+  if (currentSplit === 3) {
+    seq.push({type:'pull', day:'jue'});
+  } else if (currentSplit === 4) {
+    if (shiftMode) { seq.push({type:'pull', day:'mie'}); seq.push({type:'upper', day:'jue'}); }
+    else { seq.push({type:'pull', day:'jue'}); seq.push({type:'upper', day:'vie'}); }
+  } else if (currentSplit === 5) {
+    if (shiftMode) { seq.push({type:'pull', day:'mie'}); seq.push({type:'push', day:'jue'}); seq.push({type:'pull', day:'sab'}); }
+    else { seq.push({type:'pull', day:'jue'}); seq.push({type:'push', day:'vie'}); seq.push({type:'pull', day:'sab'}); }
+  }
+
+  const base = computeBaseDefaults();
+  const skipped = [];
+  seq.forEach(({type, day}) => {
+    if (!need[type] || need[type] <= 0) return;
+    const slot = slotForDay(day);
+    const k = key(day, slot);
+    const val = (overrides[k] !== undefined) ? overrides[k] : base[day][slot];
+    if (val === '') {
+      overrides[k] = type;
+      need[type]--;
+    } else {
+      skipped.push(`${ACTIVITIES[type].label} (${DAY_NAMES[day]})`);
+    }
+  });
+
+  const toast = document.getElementById('toast');
+  toast.textContent = skipped.length ? `No se pudo colocar automáticamente: ${skipped.join(', ')}` : 'Semana programada ✓';
+  setTimeout(() => { toast.textContent=''; }, 4000);
+
   saveState();
   render();
 }
 
-function computeWeekSessions(){
-  const base = SPLITS[currentSplit];
-  const result = Object.assign({}, base);
-  if (wfhSet.has('mar')) {
-    // pierna se adelanta al martes (más margen aún con el jueves)
-    result.mar = 'leg';
-    result.mie = 'rest';
-  } else if (wfhSet.has('mie')) {
-    // miércoles WFH sin martes WFH: pierna quedaría a ~24h del partido del jueves,
-    // así que la mandamos al viernes y adelantamos lo demás un hueco
-    result.mie = base.jue;
-    result.jue = base.vie;
-    result.vie = 'leg';
-  }
-  return result;
-}
-
-function dayContent(d){
-  const weekSessions = computeWeekSessions();
-  const session = weekSessions[d];
-  const isWfh = wfhSet.has(d);
-  const isWeekday = d !== 'sab' && d !== 'dom';
-  const hasSession = session !== 'rest';
-  const locTag = isWfh
-    ? `<span class="loc-tag wfh">WFH</span>`
-    : (isWeekday ? `<span class="loc-tag oficina">Oficina</span>` : '');
-
-  // --- Mañana ---
-  const sundayEarly = d === 'dom' && ['9:00','10:30'].includes(document.getElementById('sundayTime').value);
-  let morning;
-  if (d === 'dom') {
-    morning = sundayEarly
-      ? `<span class="row-value game">${getSundayGame()}</span>`
-      : `<span class="row-value dim">—</span>`;
-  } else if (isWfh) {
-    morning = (d === 'mar')
-      ? `<span class="row-value">🐕 Paseo corto</span>`
-      : `<span class="row-value">🐕 Paseo largo</span>`;
-  } else if (d === 'mar') {
-    morning = `<span class="row-value dim">😴 Dormir más</span>`;
-  } else if (d === 'sab') {
-    morning = hasSession
-      ? `<span class="row-value ${session}">🏋️ ${BADGE_LABEL[session]}</span>`
-      : `<span class="row-value dim">🏋️ Opcional (5º)</span>`;
-  } else {
-    morning = hasSession
-      ? `<span class="row-value ${session}">🏋️ ${BADGE_LABEL[session]}</span>`
-      : `<span class="row-value dim">Descanso</span>`;
-  }
-
-  // --- Mediodía ---
-  let midday;
-  if (d === 'dom') {
-    midday = sundayEarly
-      ? `<span class="row-value dim">—</span>`
-      : `<span class="row-value game">${getSundayGame()}</span>`;
-  } else if (d === 'sab') {
-    midday = `<span class="row-value dim">—</span>`;
-  } else if (isWfh) {
-    midday = hasSession
-      ? `<span class="row-value ${session}">🏋️ ${BADGE_LABEL[session]} o descanso</span>`
-      : `<span class="row-value dim">Descanso</span>`;
-  } else {
-    midday = `<span class="row-value dim">Oficina</span>`;
-  }
-
-  // --- Noche ---
-  let night;
-  if (GAME[d]) {
-    night = `<span class="row-value game">${GAME[d]}</span>`;
-  } else if (d === 'sab' || d === 'dom') {
-    night = `<span class="row-value dim">—</span>`;
-  } else {
-    night = `<span class="row-value dim">Descanso</span>`;
-  }
-
-  return `
-    <div class="day-top">
-      <span class="day-name">${DAY_NAMES[d].slice(0,3)}</span>
-      ${locTag}
-    </div>
-    <div class="day-row">
-      <span class="row-label">Mañana</span>
-      ${morning}
-    </div>
-    <div class="day-row">
-      <span class="row-label">Mediodía</span>
-      ${midday}
-    </div>
-    <div class="day-row">
-      <span class="row-label">Noche</span>
-      ${night}
-    </div>
-  `;
+function optionsHTML(currentVal, hasOverride){
+  let html = `<option value="__AUTO__" ${!hasOverride ? 'selected' : ''}>↺ Automático</option>`;
+  Object.keys(ACTIVITIES).forEach(k => {
+    html += `<option value="${k}" ${hasOverride && currentVal === k ? 'selected' : ''}>${ACTIVITIES[k].label}</option>`;
+  });
+  return html;
 }
 
 function render(){
-  const grid = document.getElementById('grid');
-  grid.innerHTML = '';
-  Object.keys(DAY_NAMES).forEach(d => {
-    const el = document.createElement('div');
-    el.className = 'day' + (wfhSet.has(d) ? ' is-wfh' : '');
-    el.innerHTML = dayContent(d);
-    grid.appendChild(el);
+  const grid = buildGrid();
+
+  // tabla
+  let html = '<thead><tr><th class="slot-col">Franja</th>';
+  DAYS.forEach(d => { html += `<th>${DAY_NAMES[d]}</th>`; });
+  html += '</tr></thead><tbody>';
+  SLOTS.forEach(s => {
+    html += `<tr><th>${SLOT_LABELS[s]}</th>`;
+    DAYS.forEach(d => {
+      const k = key(d,s);
+      const hasOverride = overrides[k] !== undefined;
+      const val = hasOverride ? overrides[k] : grid[d][s];
+      const cls = (ACTIVITIES[val] || {}).cls || '';
+      html += `<td class="day-col"><select data-day="${d}" data-slot="${s}" style="color:${CLS_COLOR[cls] || 'var(--ink)'}">${optionsHTML(val, hasOverride)}</select></td>`;
+    });
+    html += '</tr>';
   });
-  document.getElementById('countNote').textContent = `${wfhSet.size} día(s) de WFH esta semana`;
-  renderControls();
+  html += '</tbody>';
+  document.getElementById('scheduleTable').innerHTML = html;
+
+  document.querySelectorAll('#scheduleTable select').forEach(sel => {
+    sel.addEventListener('change', (e) => {
+      const d = e.target.dataset.day, s = e.target.dataset.slot;
+      const v = e.target.value;
+      if (v === '__AUTO__') delete overrides[key(d,s)];
+      else overrides[key(d,s)] = v;
+      saveState();
+      render();
+    });
+  });
+
+  // wfh chips
+  const wfhC = document.getElementById('wfhDays');
+  wfhC.innerHTML = '';
+  WFH_SELECTABLE.forEach(d => {
+    const btn = document.createElement('button');
+    btn.className = 'wfh-chip' + (wfhSet.has(d) ? ' on' : '');
+    btn.textContent = DAY_NAMES[d];
+    btn.onclick = () => { wfhSet.has(d) ? wfhSet.delete(d) : wfhSet.add(d); saveState(); render(); };
+    wfhC.appendChild(btn);
+  });
+
+  // legend
+  document.getElementById('legend').innerHTML = `
+    <span><span class="dot" style="background:var(--push)"></span>Push/Upper</span>
+    <span><span class="dot" style="background:var(--pull)"></span>Pull</span>
+    <span><span class="dot" style="background:var(--leg)"></span>Leg</span>
+    <span><span class="dot" style="background:var(--game)"></span>Partido</span>
+    <span><span class="dot" style="background:var(--wfh)"></span>WFH</span>
+  `;
 }
 
 document.getElementById('splitToggle').addEventListener('click', (e) => {
@@ -406,14 +411,16 @@ document.getElementById('splitToggle').addEventListener('click', (e) => {
   render();
 });
 document.getElementById('sundayTime').addEventListener('change', () => { saveState(); render(); });
+document.getElementById('scheduleBtn').addEventListener('click', autoFillWeek);
 
 loadState();
+document.querySelectorAll('#splitToggle button').forEach(b => {
+  b.classList.toggle('active', Number(b.dataset.split) === currentSplit);
+});
 render();
 
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('sw.js').catch(() => {});
-  });
+  window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(()=>{}); });
 }
 </script>
 </body>
