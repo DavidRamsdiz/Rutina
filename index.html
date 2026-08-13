@@ -194,18 +194,19 @@ const WFH_SELECTABLE = ['lun','mar','mie','jue','vie'];
 const ACTIVITIES = {
   '':          {label:'— Libre —',      cls:'dim'},
   oficina:     {label:'🏢 Oficina',      cls:'dim'},
+  teletrabajo: {label:'💻 Teletrabajo',  cls:'wfh'},
   push:        {label:'🏋️ Push',        cls:'push'},
   pull:        {label:'🏋️ Pull',        cls:'pull'},
   leg:         {label:'🏋️ Leg',         cls:'leg'},
   upper:       {label:'🏋️ Upper',       cls:'push'},
-  paseo_corto: {label:'🐕 Paseo corto',  cls:'dim'},
-  paseo_largo: {label:'🐕 Paseo largo',  cls:'dim'},
+  paseo_corto: {label:'🐕 Paseo corto',  cls:'wfh'},
+  paseo_largo: {label:'🐕 Paseo largo',  cls:'wfh'},
   baloncesto:  {label:'🏀 Baloncesto',   cls:'game'},
   descanso:    {label:'😴 Descanso',     cls:'dim'},
   cine:        {label:'🎬 Cine',         cls:''},
   correr:      {label:'🏃 Correr',       cls:''}
 };
-const CLS_COLOR = {push:'var(--push)', pull:'var(--pull)', leg:'var(--leg)', game:'var(--game)', dim:'var(--ink-dim)', '':'var(--ink)'};
+const CLS_COLOR = {push:'var(--push)', pull:'var(--pull)', leg:'var(--leg)', game:'var(--game)', wfh:'var(--wfh)', dim:'var(--ink-dim)', '':'var(--ink)'};
 
 const SPLIT_REQUIREMENTS = {
   3: ['push','leg','pull'],
@@ -218,7 +219,7 @@ let wfhSet = new Set();
 let overrides = {};      // key `${day}_${slot}` -> valor elegido a mano (siempre gana)
 let autoPlacements = {}; // key `${day}_${slot}` -> valor colocado por "Planificar semana" (se recalcula entero cada vez)
 
-const STORAGE_KEY = 'rutina_gym_baloncesto_v2';
+const STORAGE_KEY = 'rutina_gym_baloncesto_v3';
 
 function saveState(){
   try {
@@ -263,6 +264,9 @@ function computeBaseDefaults(){
   ['lun','mar','mie','jue','vie'].forEach(d=>{
     if (wfhSet.has(d)) {
       grid[d].temprano = (d === 'mar') ? 'paseo_corto' : 'paseo_largo';
+      grid[d].manana = 'teletrabajo';
+      grid[d].mediodia = 'teletrabajo';
+      grid[d].siesta = 'teletrabajo';
     } else {
       grid[d].temprano = (d === 'mar') ? 'descanso' : '';
       grid[d].manana = 'oficina';
@@ -280,13 +284,13 @@ function effective(grid, d, s){
   return grid[d][s];
 }
 
-// aplica la regla: si mediodía de un día de oficina termina siendo un entreno, la oficina salta a la tarde
+// si mediodía termina con un entreno, el bloque de trabajo (oficina o teletrabajo) de ese día salta a la tarde
 function applyOfficeShift(grid){
   ['lun','mar','mie','jue','vie'].forEach(d=>{
-    if (wfhSet.has(d)) return;
+    const workLabel = wfhSet.has(d) ? 'teletrabajo' : 'oficina';
     const midday = effective(grid, d, 'mediodia');
     if (['push','pull','leg','upper'].includes(midday)) {
-      if (effective(grid, d, 'tarde') === '') grid[d].tarde = 'oficina';
+      if (effective(grid, d, 'tarde') === '') grid[d].tarde = workLabel;
     }
   });
   return grid;
@@ -326,12 +330,25 @@ function autoFillWeek(){
     else { seq.push({type:'pull', day:'jue'}); seq.push({type:'push', day:'vie'}); seq.push({type:'pull', day:'sab'}); }
   }
 
+  const TRAINING_TYPES = ['push','pull','leg','upper'];
+  function dayHasTraining(d){
+    return SLOTS.some(s => {
+      const k = key(d,s);
+      const v = overrides[k] !== undefined ? overrides[k] : (autoPlacements[k] !== undefined ? autoPlacements[k] : '');
+      return TRAINING_TYPES.includes(v);
+    });
+  }
+
   const skipped = [];
   seq.forEach(({type, day}) => {
     if (!need[type] || need[type] <= 0) return;
+    if (dayHasTraining(day)) {
+      skipped.push(`${ACTIVITIES[type].label} (${DAY_NAMES[day]} ya tiene entreno ese día)`);
+      return;
+    }
     const slot = slotForDay(day);
     const k = key(day, slot);
-    // solo bloquea un hueco elegido a mano; lo automático (oficina/paseo) se puede desplazar
+    // solo bloquea un hueco elegido a mano; lo automático (oficina/teletrabajo/paseo) se puede desplazar
     if (overrides[k] !== undefined) {
       skipped.push(`${ACTIVITIES[type].label} (${DAY_NAMES[day]})`);
       return;
@@ -405,7 +422,7 @@ function render(){
     <span><span class="dot" style="background:var(--pull)"></span>Pull</span>
     <span><span class="dot" style="background:var(--leg)"></span>Leg</span>
     <span><span class="dot" style="background:var(--game)"></span>Partido</span>
-    <span><span class="dot" style="background:var(--wfh)"></span>WFH</span>
+    <span><span class="dot" style="background:var(--wfh)"></span>WFH / Teletrabajo / Paseo</span>
   `;
 }
 
