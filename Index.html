@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Rutina">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#E03A3E">
+<title>Rutina semanal interactiva — Cancha</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --plank-a:#E9C99A;
+    --plank-b:#E2BC85;
+    --line-paint:#F6EFDD;
+    --ink:#1A1A1A;
+    --ink-dim:#7A6E5E;
+    --push:#B5651D;
+    --pull:#1D4E89;
+    --leg:#2F6B4F;
+    --rest:#9C8B72;
+    --game:#E03A3E;
+    --blaze-black:#0B0B0B;
+    --blaze-silver:#C4CED4;
+    --wfh:#6B4FA0;
+    --card-bg:rgba(255,250,238,0.72);
+    --card-border:rgba(11,11,11,0.16);
+  }
+  *{box-sizing:border-box;}
+  body{
+    margin:0;
+    background:
+      radial-gradient(ellipse 900px 500px at 50% 0%, rgba(255,255,255,0.35), transparent 60%),
+      repeating-linear-gradient(90deg, var(--plank-a) 0px, var(--plank-a) 42px, var(--plank-b) 42px, var(--plank-b) 84px);
+    font-family:'IBM Plex Sans', sans-serif;
+    color:var(--ink);
+    padding:40px 18px 44px;
+    position:relative;
+    overflow-x:hidden;
+  }
+  .court-footer{ margin-top:36px; width:100%; }
+  .wrap{max-width:960px; margin:0 auto; position:relative; z-index:1;}
+  header{text-align:center; margin-bottom:8px;}
+  .eyebrow{
+    font-family:'IBM Plex Mono', monospace;
+    font-size:11.5px; letter-spacing:0.18em; text-transform:uppercase;
+    color:var(--game); margin-bottom:8px;
+  }
+  h1{
+    font-family:'Oswald', sans-serif; font-weight:700;
+    font-size:clamp(26px,5vw,40px); margin:0 0 26px;
+    color:var(--ink);
+  }
+  .controls{
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    border-radius:8px;
+    padding:18px 20px;
+    margin-bottom:28px;
+    display:flex; flex-wrap:wrap; gap:22px; align-items:center;
+    backdrop-filter:blur(2px);
+  }
+  .ctrl-group{display:flex; flex-direction:column; gap:8px;}
+  .ctrl-label{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px;
+    letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-dim);
+  }
+  .split-toggle{display:flex; gap:6px;}
+  .split-toggle button{
+    font-family:'Oswald', sans-serif; font-weight:600; font-size:13.5px;
+    padding:8px 14px; border-radius:5px; border:1px solid var(--card-border);
+    background:transparent; color:var(--ink); cursor:pointer;
+  }
+  .split-toggle button.active{ background:var(--blaze-black); color:#fff; border-color:var(--blaze-black); }
+  .controls{ border-top:3px solid var(--game); }
+  .wfh-days{display:flex; gap:8px; flex-wrap:wrap;}
+  .wfh-chip{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; font-weight:500;
+    padding:8px 13px; border-radius:20px; border:1.5px solid var(--wfh);
+    background:transparent; color:var(--wfh); cursor:pointer;
+    transition:all .15s ease;
+  }
+  .wfh-chip.on{ background:var(--wfh); color:#fff; }
+  .wfh-chip:disabled{ opacity:0.35; cursor:not-allowed; border-color:var(--ink-dim); color:var(--ink-dim);}
+  .count-note{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-dim);
+  }
+  .sunday-select{
+    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink);
+    background:#fff; border:1px solid var(--card-border); border-radius:5px;
+    padding:7px 8px; cursor:pointer;
+  }
+  .grid{
+    display:grid; grid-template-columns:repeat(7,1fr); gap:10px;
+  }
+  .day{
+    background:var(--card-bg);
+    border:1px solid var(--card-border);
+    border-radius:7px;
+    padding:14px 12px 12px;
+    min-height:190px;
+    display:flex; flex-direction:column;
+    position:relative;
+    transition:transform .15s ease;
+  }
+  .day.is-wfh{ box-shadow:inset 0 0 0 1.5px var(--wfh); }
+  .day-top{display:flex; justify-content:space-between; align-items:baseline; margin-bottom:10px;}
+  .day-name{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px;
+    letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-dim);
+  }
+  .loc-tag{
+    font-family:'IBM Plex Mono', monospace; font-size:9px; letter-spacing:0.05em;
+    padding:2px 6px; border-radius:10px; text-transform:uppercase;
+  }
+  .loc-tag.oficina{ color:var(--ink-dim); border:1px solid rgba(59,42,24,0.2);}
+  .loc-tag.wfh{ color:#fff; background:var(--wfh); }
+  .day-row{
+    display:flex; flex-direction:column; gap:2px;
+    padding:6px 0;
+    border-top:1px solid rgba(11,11,11,0.07);
+  }
+  .day-row:first-of-type{ border-top:none; }
+  .row-label{
+    font-family:'IBM Plex Mono', monospace; font-size:8.5px;
+    letter-spacing:0.1em; text-transform:uppercase; color:var(--ink-dim);
+  }
+  .row-value{
+    font-family:'IBM Plex Sans', sans-serif; font-size:12px; font-weight:500;
+    color:var(--ink); line-height:1.3;
+  }
+  .row-value.push{ color:var(--push); }
+  .row-value.pull{ color:var(--pull); }
+  .row-value.leg{ color:var(--leg); }
+  .row-value.game{ color:var(--game); font-weight:600; }
+  .row-value.dim{ color:var(--ink-dim); font-weight:400; }
+  .legend{
+    display:flex; gap:16px; flex-wrap:wrap; margin-top:22px; padding-top:14px;
+    border-top:1px solid var(--card-border);
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--ink-dim);
+  }
+  .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .dot{width:9px; height:9px; border-radius:2px; display:inline-block;}
+  .note{ margin-top:26px; font-size:12.5px; color:var(--ink-dim); text-align:center; line-height:1.6;}
+  @media(max-width:760px){
+    .grid{grid-template-columns:repeat(4,1fr);}
+    .day{min-height:180px;}
+  }
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header>
+    <div class="eyebrow">Interactivo · toca los chips de WFH</div>
+    <h1>Gym + Baloncesto + WFH</h1>
+  </header>
+
+  <div class="controls">
+    <div class="ctrl-group">
+      <span class="ctrl-label">Split</span>
+      <div class="split-toggle" id="splitToggle">
+        <button data-split="4" class="active">4 días</button>
+        <button data-split="5">5 días</button>
+      </div>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">Días de teletrabajo</span>
+      <div class="wfh-days" id="wfhDays"></div>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">&nbsp;</span>
+      <span class="count-note" id="countNote"></span>
+    </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">Hora partido domingo</span>
+      <select id="sundayTime" class="sunday-select">
+        <option value="var">Sin confirmar (8–13h var.)</option>
+        <option value="9:00">9:00</option>
+        <option value="10:30">10:30</option>
+        <option value="12:00">12:00</option>
+        <option value="13:30">13:30</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="grid" id="grid"></div>
+
+  <div class="legend">
+    <span><span class="dot" style="background:var(--push)"></span>Push</span>
+    <span><span class="dot" style="background:var(--pull)"></span>Pull</span>
+    <span><span class="dot" style="background:var(--leg)"></span>Leg</span>
+    <span><span class="dot" style="background:var(--game)"></span>Partido</span>
+    <span><span class="dot" style="background:var(--wfh)"></span>WFH</span>
+  </div>
+
+  <p class="note">Lunes siempre en oficina (día fijo de la rota) — no seleccionable.<br>
+  Si marcas martes como WFH, solo cambia el paseo (corto en vez de largo); el resto de días WFH cambia el entreno de la mañana por paseo largo + gym a mediodía o descanso.</p>
+
+  <div class="court-footer">
+    <svg viewBox="0 0 960 260" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block;">
+      <!-- línea de fondo -->
+      <line x1="80" y1="250" x2="880" y2="250" stroke="#0B0B0B" stroke-width="3" opacity="0.35"/>
+      <!-- zona / key -->
+      <rect x="390" y="130" width="180" height="120" fill="none" stroke="#0B0B0B" stroke-width="3" opacity="0.35"/>
+      <!-- círculo de tiros libres -->
+      <circle cx="480" cy="130" r="55" fill="none" stroke="#E03A3E" stroke-width="3" opacity="0.4"/>
+      <!-- tablero y aro -->
+      <line x1="445" y1="228" x2="515" y2="228" stroke="#0B0B0B" stroke-width="3" opacity="0.35"/>
+      <circle cx="480" cy="236" r="7" fill="none" stroke="#E03A3E" stroke-width="2.5" opacity="0.45"/>
+      <!-- área restringida -->
+      <path d="M 442 236 A 38 38 0 0 1 518 236" fill="none" stroke="#E03A3E" stroke-width="2.5" opacity="0.4"/>
+      <!-- línea de triple -->
+      <path d="M 130 250 L 130 165 C 130 70 300 20 480 20 C 660 20 830 70 830 165 L 830 250"
+            fill="none" stroke="#0B0B0B" stroke-width="3" opacity="0.3"/>
+    </svg>
+  </div>
+</div>
+
+<script>
+const SPLITS = {
+  4: { lun:'push', mar:'rest', mie:'leg', jue:'pull', vie:'upper', sab:'rest', dom:'rest' },
+  5: { lun:'push', mar:'rest', mie:'leg', jue:'pull', vie:'push', sab:'pull', dom:'rest' }
+};
+const BADGE_LABEL = { push:'Push', pull:'Pull', leg:'Leg', upper:'Upper', rest:'Descanso' };
+const DAY_NAMES = { lun:'Lunes', mar:'Martes', mie:'Miércoles', jue:'Jueves', vie:'Viernes', sab:'Sábado', dom:'Domingo' };
+const GAME = { lun:'🏀 21–23h', jue:'🏀 21–22h' };
+function getSundayGame(){
+  const v = document.getElementById('sundayTime').value;
+  return v === 'var' ? '🏀 8–13h (var.)' : `🏀 ${v}`;
+}
+const WFH_SELECTABLE = ['mar','mie','jue','vie'];
+
+let currentSplit = 4;
+let wfhSet = new Set();
+
+function renderControls(){
+  const c = document.getElementById('wfhDays');
+  c.innerHTML = '';
+  WFH_SELECTABLE.forEach(d => {
+    const btn = document.createElement('button');
+    btn.className = 'wfh-chip' + (wfhSet.has(d) ? ' on' : '');
+    btn.textContent = DAY_NAMES[d];
+    btn.onclick = () => { toggleDay(d); };
+    c.appendChild(btn);
+  });
+}
+
+function toggleDay(d){
+  if (wfhSet.has(d)) wfhSet.delete(d); else wfhSet.add(d);
+  render();
+}
+
+function computeWeekSessions(){
+  const base = SPLITS[currentSplit];
+  const result = Object.assign({}, base);
+  if (wfhSet.has('mar')) {
+    // pierna se adelanta al martes (más margen aún con el jueves)
+    result.mar = 'leg';
+    result.mie = 'rest';
+  } else if (wfhSet.has('mie')) {
+    // miércoles WFH sin martes WFH: pierna quedaría a ~24h del partido del jueves,
+    // así que la mandamos al viernes y adelantamos lo demás un hueco
+    result.mie = base.jue;
+    result.jue = base.vie;
+    result.vie = 'leg';
+  }
+  return result;
+}
+
+function dayContent(d){
+  const weekSessions = computeWeekSessions();
+  const session = weekSessions[d];
+  const isWfh = wfhSet.has(d);
+  const isWeekday = d !== 'sab' && d !== 'dom';
+  const hasSession = session !== 'rest';
+  const locTag = isWfh
+    ? `<span class="loc-tag wfh">WFH</span>`
+    : (isWeekday ? `<span class="loc-tag oficina">Oficina</span>` : '');
+
+  // --- Mañana ---
+  const sundayEarly = d === 'dom' && ['9:00','10:30'].includes(document.getElementById('sundayTime').value);
+  let morning;
+  if (d === 'dom') {
+    morning = sundayEarly
+      ? `<span class="row-value game">${getSundayGame()}</span>`
+      : `<span class="row-value dim">—</span>`;
+  } else if (isWfh) {
+    morning = (d === 'mar')
+      ? `<span class="row-value">🐕 Paseo corto</span>`
+      : `<span class="row-value">🐕 Paseo largo</span>`;
+  } else if (d === 'mar') {
+    morning = `<span class="row-value dim">😴 Dormir más</span>`;
+  } else if (d === 'sab') {
+    morning = hasSession
+      ? `<span class="row-value ${session}">🏋️ ${BADGE_LABEL[session]}</span>`
+      : `<span class="row-value dim">🏋️ Opcional (5º)</span>`;
+  } else {
+    morning = hasSession
+      ? `<span class="row-value ${session}">🏋️ ${BADGE_LABEL[session]}</span>`
+      : `<span class="row-value dim">Descanso</span>`;
+  }
+
+  // --- Mediodía ---
+  let midday;
+  if (d === 'dom') {
+    midday = sundayEarly
+      ? `<span class="row-value dim">—</span>`
+      : `<span class="row-value game">${getSundayGame()}</span>`;
+  } else if (d === 'sab') {
+    midday = `<span class="row-value dim">—</span>`;
+  } else if (isWfh) {
+    midday = hasSession
+      ? `<span class="row-value ${session}">🏋️ ${BADGE_LABEL[session]} o descanso</span>`
+      : `<span class="row-value dim">Descanso</span>`;
+  } else {
+    midday = `<span class="row-value dim">Oficina</span>`;
+  }
+
+  // --- Noche ---
+  let night;
+  if (GAME[d]) {
+    night = `<span class="row-value game">${GAME[d]}</span>`;
+  } else if (d === 'sab' || d === 'dom') {
+    night = `<span class="row-value dim">—</span>`;
+  } else {
+    night = `<span class="row-value dim">Descanso</span>`;
+  }
+
+  return `
+    <div class="day-top">
+      <span class="day-name">${DAY_NAMES[d].slice(0,3)}</span>
+      ${locTag}
+    </div>
+    <div class="day-row">
+      <span class="row-label">Mañana</span>
+      ${morning}
+    </div>
+    <div class="day-row">
+      <span class="row-label">Mediodía</span>
+      ${midday}
+    </div>
+    <div class="day-row">
+      <span class="row-label">Noche</span>
+      ${night}
+    </div>
+  `;
+}
+
+function render(){
+  const grid = document.getElementById('grid');
+  grid.innerHTML = '';
+  Object.keys(DAY_NAMES).forEach(d => {
+    const el = document.createElement('div');
+    el.className = 'day' + (wfhSet.has(d) ? ' is-wfh' : '');
+    el.innerHTML = dayContent(d);
+    grid.appendChild(el);
+  });
+  document.getElementById('countNote').textContent = `${wfhSet.size} día(s) de WFH esta semana`;
+  renderControls();
+}
+
+document.getElementById('splitToggle').addEventListener('click', (e) => {
+  const btn = e.target.closest('button');
+  if (!btn) return;
+  currentSplit = Number(btn.dataset.split);
+  document.querySelectorAll('#splitToggle button').forEach(b => b.classList.toggle('active', b === btn));
+  render();
+});
+document.getElementById('sundayTime').addEventListener('change', render);
+
+render();</script>
+</body>
+</html>
