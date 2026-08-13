@@ -156,7 +156,7 @@
     </div>
     <div class="ctrl-group">
       <span class="ctrl-label">&nbsp;</span>
-      <button class="schedule-btn" id="scheduleBtn">📅 Programar entrenamiento</button>
+      <button class="schedule-btn" id="scheduleBtn">📅 Planificar semana</button>
     </div>
   </div>
   <div class="toast" id="toast"></div>
@@ -167,8 +167,8 @@
 
   <div class="legend" id="legend"></div>
 
-  <p class="note">Cada celda es un desplegable: pincha y elige la actividad. "↺ Automático" borra tu elección manual y vuelve a la regla por defecto (oficina, paseo, partido...).<br>
-  El botón de programar solo rellena huecos vacíos — nunca pisa lo que hayas puesto a mano.</p>
+  <p class="note">Cada celda es un desplegable: pincha y elige la actividad. "↺ Volver a automático" borra tu elección manual (y cualquier entreno colocado por el botón) y vuelve a la regla por defecto.<br>
+  Oficina, paseos y baloncesto ya salen solos desde el principio. "Planificar semana" recalcula el entreno entero cada vez que lo pulsas (útil si cambias el WFH o el split) — solo respeta lo que hayas tocado tú a mano.</p>
 
   <div class="court-footer">
     <svg viewBox="0 0 960 260" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block;">
@@ -215,7 +215,8 @@ const SPLIT_REQUIREMENTS = {
 
 let currentSplit = 4;
 let wfhSet = new Set();
-let overrides = {}; // key `${day}_${slot}` -> activity key (manual override)
+let overrides = {};      // key `${day}_${slot}` -> valor elegido a mano (siempre gana)
+let autoPlacements = {}; // key `${day}_${slot}` -> valor colocado por "Planificar semana" (se recalcula entero cada vez)
 
 const STORAGE_KEY = 'rutina_gym_baloncesto_v2';
 
@@ -225,7 +226,8 @@ function saveState(){
       split: currentSplit,
       wfh: Array.from(wfhSet),
       sundayTime: document.getElementById('sundayTime').value,
-      overrides
+      overrides,
+      autoPlacements
     }));
   } catch(e) {}
 }
@@ -239,6 +241,7 @@ function loadState(){
     if (Array.isArray(state.wfh)) wfhSet = new Set(state.wfh);
     if (state.sundayTime) document.getElementById('sundayTime').value = state.sundayTime;
     if (state.overrides) overrides = state.overrides;
+    if (state.autoPlacements) autoPlacements = state.autoPlacements;
   } catch(e) {}
 }
 
@@ -272,7 +275,9 @@ function computeBaseDefaults(){
 
 function effective(grid, d, s){
   const k = key(d,s);
-  return (overrides[k] !== undefined) ? overrides[k] : grid[d][s];
+  if (overrides[k] !== undefined) return overrides[k];
+  if (autoPlacements[k] !== undefined) return autoPlacements[k];
+  return grid[d][s];
 }
 
 // aplica la regla: si mediodía de un día de oficina termina siendo un entreno, la oficina salta a la tarde
@@ -296,10 +301,13 @@ function slotForDay(d){
 }
 
 function autoFillWeek(){
+  autoPlacements = {}; // se recalcula entero cada vez: si cambiaste WFH/split, esto lo recoloca todo
+
   const required = SPLIT_REQUIREMENTS[currentSplit];
   const need = {};
   required.forEach(t => need[t] = (need[t]||0) + 1);
 
+  // solo cuentan como "ya cumplidas" las elecciones manuales reales (no lo que puso el propio botón antes)
   Object.values(overrides).forEach(v => { if (need[v] !== undefined && need[v] > 0) need[v]--; });
 
   const legDay = wfhSet.has('mar') ? 'mar' : (wfhSet.has('mie') ? 'vie' : 'mie');
@@ -318,33 +326,32 @@ function autoFillWeek(){
     else { seq.push({type:'pull', day:'jue'}); seq.push({type:'push', day:'vie'}); seq.push({type:'pull', day:'sab'}); }
   }
 
-  const base = computeBaseDefaults();
   const skipped = [];
   seq.forEach(({type, day}) => {
     if (!need[type] || need[type] <= 0) return;
     const slot = slotForDay(day);
     const k = key(day, slot);
-    const val = (overrides[k] !== undefined) ? overrides[k] : base[day][slot];
-    if (val === '') {
-      overrides[k] = type;
-      need[type]--;
-    } else {
+    // solo bloquea un hueco elegido a mano; lo automático (oficina/paseo) se puede desplazar
+    if (overrides[k] !== undefined) {
       skipped.push(`${ACTIVITIES[type].label} (${DAY_NAMES[day]})`);
+      return;
     }
+    autoPlacements[k] = type;
+    need[type]--;
   });
 
   const toast = document.getElementById('toast');
-  toast.textContent = skipped.length ? `No se pudo colocar automáticamente: ${skipped.join(', ')}` : 'Semana programada ✓';
+  toast.textContent = skipped.length ? `No se pudo colocar automáticamente: ${skipped.join(', ')}` : 'Semana planificada ✓';
   setTimeout(() => { toast.textContent=''; }, 4000);
 
   saveState();
   render();
 }
 
-function optionsHTML(currentVal, hasOverride){
-  let html = `<option value="__AUTO__" ${!hasOverride ? 'selected' : ''}>↺ Automático</option>`;
+function optionsHTML(currentVal){
+  let html = `<option value="__AUTO__">↺ Volver a automático</option>`;
   Object.keys(ACTIVITIES).forEach(k => {
-    html += `<option value="${k}" ${hasOverride && currentVal === k ? 'selected' : ''}>${ACTIVITIES[k].label}</option>`;
+    html += `<option value="${k}" ${currentVal === k ? 'selected' : ''}>${ACTIVITIES[k].label}</option>`;
   });
   return html;
 }
@@ -360,10 +367,9 @@ function render(){
     html += `<tr><th>${SLOT_LABELS[s]}</th>`;
     DAYS.forEach(d => {
       const k = key(d,s);
-      const hasOverride = overrides[k] !== undefined;
-      const val = hasOverride ? overrides[k] : grid[d][s];
+      const val = effective(grid, d, s);
       const cls = (ACTIVITIES[val] || {}).cls || '';
-      html += `<td class="day-col"><select data-day="${d}" data-slot="${s}" style="color:${CLS_COLOR[cls] || 'var(--ink)'}">${optionsHTML(val, hasOverride)}</select></td>`;
+      html += `<td class="day-col"><select data-day="${d}" data-slot="${s}" style="color:${CLS_COLOR[cls] || 'var(--ink)'}">${optionsHTML(val)}</select></td>`;
     });
     html += '</tr>';
   });
@@ -374,8 +380,9 @@ function render(){
     sel.addEventListener('change', (e) => {
       const d = e.target.dataset.day, s = e.target.dataset.slot;
       const v = e.target.value;
-      if (v === '__AUTO__') delete overrides[key(d,s)];
-      else overrides[key(d,s)] = v;
+      const k = key(d,s);
+      if (v === '__AUTO__') { delete overrides[k]; delete autoPlacements[k]; }
+      else overrides[k] = v;
       saveState();
       render();
     });
