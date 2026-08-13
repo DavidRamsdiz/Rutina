@@ -146,8 +146,13 @@
   .dot{width:9px; height:9px; border-radius:2px; display:inline-block;}
   .note{ margin-top:26px; font-size:12.5px; color:var(--ink-dim); text-align:center; line-height:1.6;}
   @media(max-width:760px){
-    .grid{grid-template-columns:repeat(4,1fr);}
-    .day{min-height:180px;}
+    .grid{grid-template-columns:repeat(2,1fr);}
+    .day{min-height:auto;}
+    .controls{flex-direction:column; align-items:flex-start;}
+  }
+  @media(max-width:480px){
+    .grid{grid-template-columns:1fr;}
+    h1{font-size:28px;}
   }
 </style>
 </head>
