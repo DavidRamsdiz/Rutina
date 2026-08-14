@@ -26,6 +26,7 @@
     --game:#E03A3E;
     --blaze-black:#0B0B0B;
     --wfh:#6B4FA0;
+    --german:#1F8A70;
     --card-bg:rgba(255,250,238,0.72);
     --card-border:rgba(11,11,11,0.16);
   }
@@ -85,6 +86,12 @@
     background:var(--game); color:#fff;
   }
   .schedule-btn:active{ transform:scale(0.98); }
+  .reset-btn{
+    font-family:'Oswald', sans-serif; font-weight:600; font-size:13px;
+    padding:9px 14px; border-radius:5px; border:1px solid var(--card-border); cursor:pointer;
+    background:transparent; color:var(--ink-dim);
+  }
+  .reset-btn:active{ transform:scale(0.98); }
   .toast{
     font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--game);
     margin-top:8px; max-width:100%;
@@ -158,6 +165,10 @@
       <span class="ctrl-label">&nbsp;</span>
       <button class="schedule-btn" id="scheduleBtn">📅 Planificar semana</button>
     </div>
+    <div class="ctrl-group">
+      <span class="ctrl-label">&nbsp;</span>
+      <button class="reset-btn" id="resetBtn">↺ Resetear semana</button>
+    </div>
   </div>
   <div class="toast" id="toast"></div>
 
@@ -202,11 +213,12 @@ const ACTIVITIES = {
   paseo_corto: {label:'🐕 Paseo corto',  cls:'wfh'},
   paseo_largo: {label:'🐕 Paseo largo',  cls:'wfh'},
   baloncesto:  {label:'🏀 Baloncesto',   cls:'game'},
+  aleman:      {label:'🇩🇪 Alemán',      cls:'german'},
   descanso:    {label:'😴 Descanso',     cls:'dim'},
   cine:        {label:'🎬 Cine',         cls:''},
   correr:      {label:'🏃 Correr',       cls:''}
 };
-const CLS_COLOR = {push:'var(--push)', pull:'var(--pull)', leg:'var(--leg)', game:'var(--game)', wfh:'var(--wfh)', dim:'var(--ink-dim)', '':'var(--ink)'};
+const CLS_COLOR = {push:'var(--push)', pull:'var(--pull)', leg:'var(--leg)', game:'var(--game)', wfh:'var(--wfh)', german:'var(--german)', dim:'var(--ink-dim)', '':'var(--ink)'};
 
 const SPLIT_REQUIREMENTS = {
   3: ['push','leg','pull'],
@@ -255,6 +267,7 @@ function computeBaseDefaults(){
 
   grid.lun.noche = 'baloncesto';
   grid.jue.noche = 'baloncesto';
+  grid.vie.tarde = 'aleman';
   const st = document.getElementById('sundayTime').value;
   if (st !== 'var') {
     const slot = st === '9:00' ? 'temprano' : st === '10:30' ? 'manana' : 'mediodia';
@@ -271,7 +284,7 @@ function computeBaseDefaults(){
       grid[d].temprano = (d === 'mar') ? 'descanso' : '';
       grid[d].manana = 'oficina';
       grid[d].mediodia = 'oficina';
-      grid[d].siesta = 'oficina';
+      grid[d].siesta = (d === 'vie') ? '' : 'oficina'; // viernes sales a las 14, sin oficina en siesta
     }
   });
   return grid;
@@ -301,7 +314,8 @@ function buildGrid(){
 }
 
 function slotForDay(d){
-  return wfhSet.has(d) ? 'mediodia' : 'temprano';
+  if (!wfhSet.has(d)) return 'temprano';
+  return (d === 'vie') ? 'siesta' : 'mediodia';
 }
 
 function autoFillWeek(){
@@ -423,6 +437,7 @@ function render(){
     <span><span class="dot" style="background:var(--leg)"></span>Leg</span>
     <span><span class="dot" style="background:var(--game)"></span>Partido</span>
     <span><span class="dot" style="background:var(--wfh)"></span>WFH / Teletrabajo / Paseo</span>
+    <span><span class="dot" style="background:var(--german)"></span>Alemán</span>
   `;
 }
 
@@ -436,6 +451,16 @@ document.getElementById('splitToggle').addEventListener('click', (e) => {
 });
 document.getElementById('sundayTime').addEventListener('change', () => { saveState(); render(); });
 document.getElementById('scheduleBtn').addEventListener('click', autoFillWeek);
+document.getElementById('resetBtn').addEventListener('click', () => {
+  if (!confirm('¿Borrar todo lo que has fijado a mano y volver todo a automático?')) return;
+  overrides = {};
+  autoPlacements = {};
+  saveState();
+  render();
+  const toast = document.getElementById('toast');
+  toast.textContent = 'Semana reseteada ✓';
+  setTimeout(() => { toast.textContent=''; }, 3000);
+});
 
 loadState();
 document.querySelectorAll('#splitToggle button').forEach(b => {
