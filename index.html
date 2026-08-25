@@ -27,6 +27,7 @@
     --blaze-black:#0B0B0B;
     --wfh:#6B4FA0;
     --german:#1F8A70;
+    --fullbody:#A0326E;
     --card-bg:rgba(255,250,238,0.72);
     --card-border:rgba(11,11,11,0.16);
   }
@@ -252,15 +253,19 @@ const ACTIVITIES = {
   pull:        {label:'🏋️ Pull',        cls:'pull'},
   leg:         {label:'🏋️ Leg',         cls:'leg'},
   upper:       {label:'🏋️ Upper',       cls:'push'},
+  fullbody:    {label:'🏋️ Clase full body', cls:'fullbody'},
   paseo_corto: {label:'🐕 Paseo corto',  cls:'wfh'},
   paseo_largo: {label:'🐕 Paseo largo',  cls:'wfh'},
   baloncesto:  {label:'🏀 Baloncesto',   cls:'game'},
   aleman:      {label:'🇩🇪 Alemán',      cls:'german'},
   descanso:    {label:'😴 Descanso',     cls:'dim'},
   cine:        {label:'🎬 Cine',         cls:''},
-  correr:      {label:'🏃 Correr',       cls:''}
+  correr:      {label:'🏃 Correr',       cls:''},
+  medico:      {label:'🩺 Médico',       cls:''},
+  comer_fuera: {label:'🍽️ Comer/cenar fuera', cls:''},
+  recado:      {label:'🧾 Recado',       cls:''}
 };
-const CLS_COLOR = {push:'var(--push)', pull:'var(--pull)', leg:'var(--leg)', game:'var(--game)', wfh:'var(--wfh)', german:'var(--german)', dim:'var(--ink-dim)', '':'var(--ink)'};
+const CLS_COLOR = {push:'var(--push)', pull:'var(--pull)', leg:'var(--leg)', game:'var(--game)', wfh:'var(--wfh)', german:'var(--german)', fullbody:'var(--fullbody)', dim:'var(--ink-dim)', '':'var(--ink)'};
 
 // entrenos NO-pierna, en el orden que debe respetarse (pierna va por libre, según baloncesto)
 const SPLIT_SEQUENCE = {
@@ -424,7 +429,10 @@ function slotForDay(d){
 }
 
 function dayHasTraining(d){
-  return SLOTS.some(s => TRAINING_TYPES.includes(rawValue(d, s) || ''));
+  return SLOTS.some(s => {
+    const v = rawValue(d, s) || '';
+    return TRAINING_TYPES.includes(v) || v === 'fullbody';
+  });
 }
 
 // grupos que se solapan muscularmente: upper comparte tren superior con push y pull
@@ -659,6 +667,7 @@ function render(){
     <span><span class="dot" style="background:var(--push)"></span>Push/Upper</span>
     <span><span class="dot" style="background:var(--pull)"></span>Pull</span>
     <span><span class="dot" style="background:var(--leg)"></span>Leg</span>
+    <span><span class="dot" style="background:var(--fullbody)"></span>Full body</span>
     <span><span class="dot" style="background:var(--game)"></span>Partido</span>
     <span><span class="dot" style="background:var(--wfh)"></span>WFH / Teletrabajo / Paseo</span>
     <span><span class="dot" style="background:var(--german)"></span>Alemán</span>
