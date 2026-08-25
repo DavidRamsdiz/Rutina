@@ -438,6 +438,16 @@ const ACTIVITIES = {
 };
 const CLS_COLOR = {push:'var(--push)', pull:'var(--pull)', leg:'var(--leg)', game:'var(--game)', wfh:'var(--wfh)', german:'var(--german)', fullbody:'var(--fullbody)', dim:'var(--ink-dim)', '':'var(--ink)'};
 
+// "comer fuera" se adapta a la franja: desayuno / comida / cena
+const MEAL_BY_SLOT = {temprano:'desayuno', manana:'desayuno', mediodia:'comida', siesta:'comida', tarde:'cena', noche:'cena'};
+const MEAL_LABELS = {desayuno:'🥐 Desayunar fuera', comida:'🍽️ Comer fuera', cena:'🍷 Cenar fuera'};
+
+// etiqueta de una actividad; algunas dependen de la franja en la que caen
+function actLabel(act, slot){
+  if (act === 'comer_fuera' && slot && MEAL_BY_SLOT[slot]) return MEAL_LABELS[MEAL_BY_SLOT[slot]];
+  return (ACTIVITIES[act] || {label:act}).label;
+}
+
 // entrenos NO-pierna, en el orden que debe respetarse (pierna va por libre, según baloncesto)
 const SPLIT_SEQUENCE = {
   3: ['push','pull'],
@@ -838,10 +848,10 @@ function autoFillWeek(silent){
   setTimeout(() => { lastPlaced.clear(); }, 3000);
 }
 
-function optionsHTML(currentVal){
+function optionsHTML(currentVal, slot){
   let html = `<option value="__AUTO__">↺ Volver a automático</option>`;
   Object.keys(ACTIVITIES).forEach(k => {
-    html += `<option value="${k}" ${currentVal === k ? 'selected' : ''}>${ACTIVITIES[k].label}</option>`;
+    html += `<option value="${k}" ${currentVal === k ? 'selected' : ''}>${actLabel(k, slot)}</option>`;
   });
   return html;
 }
@@ -885,7 +895,7 @@ function render(){
       if (done.has(k)) tdCls.push('done');
       const doneBtn = (val && val !== 'oficina' && val !== 'teletrabajo')
         ? `<button class="done-btn" data-day="${d}" data-slot="${s}" title="Marcar hecho">✓</button>` : '';
-      html += `<td class="${tdCls.join(' ')}"><select data-day="${d}" data-slot="${s}" style="color:${CLS_COLOR[cls] || 'var(--ink)'}">${optionsHTML(val)}</select>${doneBtn}</td>`;
+      html += `<td class="${tdCls.join(' ')}"><select data-day="${d}" data-slot="${s}" style="color:${CLS_COLOR[cls] || 'var(--ink)'}">${optionsHTML(val, s)}</select>${doneBtn}</td>`;
     });
     html += '</tr>';
   });
@@ -1263,6 +1273,9 @@ function weekSnapshot(stamp){
 }
 
 const ALL_TRAINING = new Set(['push','pull','leg','upper','fullbody']);
+// solo se miden deporte y alemán; el resto (paseos, recados, médico, comidas fuera,
+// cine, trabajo, descanso) no entra en las estadísticas
+const STAT_ACTS = new Set([...ALL_TRAINING, 'baloncesto', 'correr', 'aleman']);
 
 function renderStats(){
   const weeks = storedWeeks();
@@ -1282,15 +1295,16 @@ function renderStats(){
   let totalCells = 0, totalDone = 0, trainPlan = 0, trainDone = 0, gamesDone = 0, germanDone = 0;
   const actCount = {};
   snaps.forEach(sn => sn.cells.forEach(c => {
-    if (c.act === 'descanso') return; // el descanso no es algo que "cumplir"
+    if (!STAT_ACTS.has(c.act)) return;
     totalCells++;
     if (c.done) totalDone++;
     if (ALL_TRAINING.has(c.act)) { trainPlan++; if (c.done) trainDone++; }
     if (c.act === 'baloncesto' && c.done) gamesDone++;
     if (c.act === 'aleman' && c.done) germanDone++;
-    actCount[c.act] = actCount[c.act] || {plan:0, done:0};
-    actCount[c.act].plan++;
-    if (c.done) actCount[c.act].done++;
+    const ck = c.act;
+    actCount[ck] = actCount[ck] || {plan:0, done:0, act:c.act, slot:c.slot};
+    actCount[ck].plan++;
+    if (c.done) actCount[ck].done++;
   }));
 
   const pct = (a,b) => b ? Math.round(a*100/b) : 0;
@@ -1314,7 +1328,7 @@ function renderStats(){
     : (trend > 0.25 ? `↑ +${trend.toFixed(1)}/sem` : trend < -0.25 ? `↓ ${trend.toFixed(1)}/sem` : '→ estable');
 
   cards.innerHTML = `
-    <div class="stat-card"><div class="lbl">Adherencia global</div>
+    <div class="stat-card"><div class="lbl">Adherencia deporte + alemán</div>
       <div class="num">${pct(totalDone, totalCells)}%</div>
       <div class="sub">${totalDone} de ${totalCells} actividades</div></div>
     <div class="stat-card"><div class="lbl">Adherencia entreno</div>
@@ -1359,16 +1373,16 @@ function renderStats(){
     <table class="act-table"><thead><tr>
       <th>Actividad</th><th style="text-align:right">Plan.</th><th style="text-align:right">Hechas</th><th style="text-align:right">%</th>
     </tr></thead><tbody>` +
-    rows.map(([act, c]) => {
-      const cls = (ACTIVITIES[act] || {}).cls || '';
+    rows.map(([ck, c]) => {
+      const cls = (ACTIVITIES[c.act] || {}).cls || '';
       return `<tr>
-        <td style="color:${CLS_COLOR[cls] || 'var(--ink)'}">${(ACTIVITIES[act]||{label:act}).label}</td>
+        <td style="color:${CLS_COLOR[cls] || 'var(--ink)'}">${actLabel(c.act, c.slot)}</td>
         <td class="n">${c.plan}</td><td class="n">${c.done}</td>
         <td class="n">${pct(c.done, c.plan)}%</td></tr>`;
     }).join('') + '</tbody></table>';
 
   document.getElementById('statNote').textContent =
-    `${snaps.length} semana(s) con datos. Las semanas futuras no cuentan. Los porcentajes dependen de que marques el ✓ en el planning.`;
+    `${snaps.length} semana(s) con datos. Solo se miden gym, baloncesto, correr y alemán. Las semanas futuras no cuentan. Los porcentajes dependen de que marques el ✓ en el planning.`;
 }
 
 // ---- pestañas de vista ----
