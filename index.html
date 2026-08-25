@@ -448,6 +448,11 @@ function actLabel(act, slot){
   return (ACTIVITIES[act] || {label:act}).label;
 }
 
+const ALL_TRAINING = new Set(['push','pull','leg','upper','fullbody']);
+// solo se miden deporte y alemán; el resto (paseos, recados, médico, comidas fuera,
+// cine, trabajo, descanso) no entra en las estadísticas
+const STAT_ACTS = new Set([...ALL_TRAINING, 'baloncesto', 'correr', 'aleman']);
+
 // entrenos NO-pierna, en el orden que debe respetarse (pierna va por libre, según baloncesto)
 const SPLIT_SEQUENCE = {
   3: ['push','pull'],
@@ -717,9 +722,21 @@ function trainingSlots(){
 function updateCapacityWarning(){
   const banner = document.getElementById('warnBanner');
   const needed = SPLIT_SEQUENCE[currentSplit].length + 1; // + pierna
-  const slots = trainingSlots();
-  const free = slots.filter(c => rawValue(c.day, c.slot) === undefined || TRAINING_TYPES.includes(rawValue(c.day, c.slot)));
-  const missing = needed - free.length;
+
+  // sesiones ya colocadas en CUALQUIER franja (incluidas las que fijas a mano
+  // fuera de los huecos habituales: p. ej. un pull en la siesta)
+  let placed = 0;
+  DAYS.forEach(d => SLOTS.forEach(s => {
+    if (TRAINING_TYPES.includes(rawValue(d, s) || '')) placed++;
+  }));
+
+  // huecos libres que el planificador aún podría usar (un día con entreno ya no cuenta)
+  const free = trainingSlots().filter(c =>
+    rawValue(c.day, c.slot) === undefined && !dayHasTraining(c.day)
+  ).length;
+
+  const capacity = placed + free;
+  const missing = needed - capacity;
 
   if (missing > 0) {
     const games = gamesMap();
@@ -727,9 +744,10 @@ function updateCapacityWarning(){
     if (games.lun.includes('noche') && !wfhSet.has('mar')) reasons.push('el martes queda bloqueado por el partido del lunes');
     if (!satEnabled) reasons.push('el sábado está desactivado');
     banner.className = 'warn-banner';
-    banner.innerHTML = `<strong>No caben ${needed} sesiones esta semana.</strong> Solo hay ${free.length} hueco(s) disponible(s)` +
+    banner.innerHTML = `<strong>No caben ${needed} sesiones esta semana.</strong> ` +
+      `Hay ${placed} colocada(s) y ${free} hueco(s) libre(s)` +
       (reasons.length ? `: ${reasons.join(' y ')}` : '') +
-      `. Activa el sábado, marca algún día de teletrabajo (libera el mediodía) o baja el split.`;
+      `. Activa el sábado, marca algún día de teletrabajo (libera el mediodía), coloca alguna sesión a mano o baja el split.`;
   } else {
     banner.className = 'warn-banner hidden';
     banner.innerHTML = '';
@@ -893,7 +911,7 @@ function render(){
       if (isCurWeek && d === todayD) tdCls.push('today');
       if (isCurWeek && DAYS.indexOf(d) < DAYS.indexOf(todayD)) tdCls.push('past');
       if (done.has(k)) tdCls.push('done');
-      const doneBtn = (val && val !== 'oficina' && val !== 'teletrabajo')
+      const doneBtn = STAT_ACTS.has(val)
         ? `<button class="done-btn" data-day="${d}" data-slot="${s}" title="Marcar hecho">✓</button>` : '';
       html += `<td class="${tdCls.join(' ')}"><select data-day="${d}" data-slot="${s}" style="color:${CLS_COLOR[cls] || 'var(--ink)'}">${optionsHTML(val, s)}</select>${doneBtn}</td>`;
     });
@@ -902,11 +920,11 @@ function render(){
   html += '</tbody>';
   document.getElementById('scheduleTable').innerHTML = html;
 
-  // estadística de la semana: hechas / planificadas (sin contar bloques de trabajo)
+  // contador de la semana: mismas actividades que miden las estadísticas
   let total = 0, doneN = 0;
   DAYS.forEach(d => SLOTS.forEach(s => {
     const v = effective(grid, d, s);
-    if (v && v !== 'oficina' && v !== 'teletrabajo') {
+    if (STAT_ACTS.has(v)) {
       total++;
       if (done.has(key(d,s))) doneN++;
     }
@@ -1272,11 +1290,6 @@ function weekSnapshot(stamp){
   return {stamp, cells, planned: !!st.planned};
 }
 
-const ALL_TRAINING = new Set(['push','pull','leg','upper','fullbody']);
-// solo se miden deporte y alemán; el resto (paseos, recados, médico, comidas fuera,
-// cine, trabajo, descanso) no entra en las estadísticas
-const STAT_ACTS = new Set([...ALL_TRAINING, 'baloncesto', 'correr', 'aleman']);
-
 function renderStats(){
   const weeks = storedWeeks();
   const curMon = mondayOf(new Date());
@@ -1416,7 +1429,27 @@ document.addEventListener('visibilitychange', () => {
 window.addEventListener('online', () => doSync(true));
 
 if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(()=>{}); });
+  window.addEventListener('load', () => {
+    navigator.serviceWorker.register('sw.js').then(reg => {
+      reg.update();                      // busca versión nueva en cada arranque
+      reg.addEventListener('updatefound', () => {
+        const sw = reg.installing;
+        if (!sw) return;
+        sw.addEventListener('statechange', () => {
+          // hay versión nueva lista y ya había una controlando: recargar una vez
+          if (sw.state === 'installed' && navigator.serviceWorker.controller) {
+            sw.postMessage('skipWaiting');
+          }
+        });
+      });
+    }).catch(()=>{});
+    let reloaded = false;
+    navigator.serviceWorker.addEventListener('controllerchange', () => {
+      if (reloaded) return;
+      reloaded = true;
+      location.reload();
+    });
+  });
 }
 </script>
 </body>

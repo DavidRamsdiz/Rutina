@@ -1,4 +1,4 @@
-const CACHE = 'rutina-cache-v1';
+const CACHE = 'rutina-cache-v2';
 
 self.addEventListener('install', (event) => {
   event.waitUntil(
@@ -14,16 +14,24 @@ self.addEventListener('activate', (event) => {
   );
 });
 
-// red primero (para coger versiones nuevas), cache de respaldo cuando no hay conexión
+// Red primero, con la cache solo como respaldo sin conexion.
+// cache:'no-store' evita que Chrome sirva su propia copia HTTP antigua del HTML,
+// que es lo que hacia que la PWA instalada siguiera mostrando la version vieja.
 self.addEventListener('fetch', (event) => {
-  if (event.request.method !== 'GET') return;
+  const req = event.request;
+  if (req.method !== 'GET') return;
+  if (new URL(req.url).origin !== self.location.origin) return; // fuentes y API de GitHub pasan directas
   event.respondWith(
-    fetch(event.request).then(resp => {
+    fetch(req, {cache: 'no-store'}).then(resp => {
       if (resp && resp.ok) {
         const clone = resp.clone();
-        caches.open(CACHE).then(c => c.put(event.request, clone));
+        caches.open(CACHE).then(c => c.put(req, clone));
       }
       return resp;
-    }).catch(() => caches.match(event.request, {ignoreSearch:true}))
+    }).catch(() => caches.match(req, {ignoreSearch: true}))
   );
+});
+
+self.addEventListener('message', (event) => {
+  if (event.data === 'skipWaiting') self.skipWaiting();
 });
