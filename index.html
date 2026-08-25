@@ -154,6 +154,139 @@
     font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--ink-dim);
   }
   .legend span{display:inline-flex; align-items:center; gap:6px;}
+  .week-bar{
+    display:flex; align-items:center; justify-content:center; gap:10px;
+    margin-bottom:16px; flex-wrap:wrap;
+  }
+  .week-bar button{
+    font-family:'IBM Plex Mono', monospace; font-size:13px; padding:6px 12px;
+    border:1px solid var(--card-border); border-radius:5px;
+    background:var(--card-bg); color:var(--ink); cursor:pointer;
+  }
+  .week-bar button:active{ transform:scale(0.96); }
+  .week-label{ font-family:'Oswald', sans-serif; font-weight:600; font-size:15px; min-width:190px; text-align:center; }
+  .week-label .tag{
+    display:block; font-family:'IBM Plex Mono', monospace; font-size:9.5px;
+    letter-spacing:0.1em; text-transform:uppercase; color:var(--game);
+  }
+  .week-stats{ font-family:'IBM Plex Mono', monospace; font-size:11px; color:var(--ink-dim); }
+  thead th.today{ background:rgba(224,58,62,0.15); color:var(--game); }
+  td.day-col.today{ background:rgba(224,58,62,0.06); }
+  td.day-col.past select{ opacity:0.55; }
+  .done-btn{
+    position:absolute; bottom:2px; right:3px; width:16px; height:16px;
+    font-size:9px; line-height:1; padding:0; border-radius:50%;
+    border:1px solid rgba(11,11,11,0.25); background:#fff;
+    color:rgba(11,11,11,0.35); cursor:pointer;
+  }
+  td.day-col.done .done-btn{ background:var(--leg); border-color:var(--leg); color:#fff; }
+  td.day-col.done select{ text-decoration:line-through; opacity:0.5; }
+  .tools-bar{
+    display:flex; gap:8px; flex-wrap:wrap; justify-content:center; margin:0 0 22px;
+  }
+  .tools-bar button{
+    font-family:'IBM Plex Mono', monospace; font-size:11px; padding:7px 12px;
+    border:1px solid var(--card-border); border-radius:5px;
+    background:var(--card-bg); color:var(--ink); cursor:pointer;
+  }
+  .view-tabs{ display:flex; justify-content:center; gap:8px; margin-bottom:20px; }
+  .view-tabs button{
+    font-family:'Oswald', sans-serif; font-weight:600; font-size:14px;
+    padding:9px 18px; border-radius:6px; border:1px solid var(--card-border);
+    background:var(--card-bg); color:var(--ink); cursor:pointer;
+  }
+  .view-tabs button.active{ background:var(--blaze-black); color:#fff; border-color:var(--blaze-black); }
+  .hidden-view{ display:none; }
+  .stat-cards{ display:flex; gap:12px; flex-wrap:wrap; margin-bottom:18px; }
+  .stat-card{
+    flex:1 1 130px; background:var(--card-bg); border:1px solid var(--card-border);
+    border-top:3px solid var(--game); border-radius:8px; padding:14px 16px; text-align:center;
+  }
+  .stat-card .num{ font-family:'Oswald', sans-serif; font-weight:700; font-size:30px; line-height:1.1; }
+  .stat-card .lbl{
+    font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--ink-dim); margin-top:5px;
+  }
+  .stats-panel{
+    background:var(--card-bg); border:1px solid var(--card-border); border-radius:8px;
+    padding:16px 18px; margin-bottom:18px;
+  }
+  .stats-panel h2{
+    font-family:'Oswald', sans-serif; font-weight:600; font-size:16px; margin:0 0 14px;
+  }
+  .stats-panel h3{
+    font-family:'Oswald', sans-serif; font-weight:600; font-size:16px; margin:0 0 14px;
+  }
+  .stat-card .sub{
+    font-family:'IBM Plex Sans', sans-serif; font-size:10.5px; color:var(--ink-dim); margin-top:4px;
+  }
+  .wk-row{ display:flex; align-items:center; gap:10px; margin-bottom:7px; }
+  .wk-lbl{
+    font-family:'IBM Plex Mono', monospace; font-size:10px; color:var(--ink-dim);
+    width:42px; flex-shrink:0; text-align:right;
+  }
+  .bar-outer{ flex:1; height:14px; }
+  .bar-inner{ height:100%; border-radius:3px; min-width:0; }
+  .wk-val{
+    font-family:'IBM Plex Mono', monospace; font-size:10px; color:var(--ink);
+    width:36px; flex-shrink:0;
+  }
+  .act-table th{
+    font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--ink-dim); text-align:left;
+    padding:4px 6px 8px; border-bottom:1px solid rgba(11,11,11,0.15);
+  }
+  .act-table{ width:100%; border-collapse:collapse; }
+  .act-table td{
+    padding:7px 6px; border-bottom:1px solid rgba(11,11,11,0.07);
+    font-family:'IBM Plex Sans', sans-serif; font-size:12.5px; text-align:left; vertical-align:middle;
+  }
+  .act-table td.n{ font-family:'IBM Plex Mono', monospace; font-size:11.5px; text-align:right; white-space:nowrap; }
+  .mini-track{ background:rgba(11,11,11,0.08); border-radius:3px; height:8px; width:100%; min-width:70px; overflow:hidden; }
+  .mini-fill{ height:100%; background:var(--leg); border-radius:3px; }
+  .stats-empty{ text-align:center; color:var(--ink-dim); font-size:13px; padding:30px 10px; }
+  .tools-bar button:disabled{ opacity:0.55; cursor:default; }
+  .view-tabs{ display:flex; justify-content:center; gap:8px; margin-bottom:20px; }
+  .view-tabs button{
+    font-family:'Oswald', sans-serif; font-weight:600; font-size:14px;
+    padding:8px 20px; border-radius:6px; border:1px solid var(--card-border);
+    background:var(--card-bg); color:var(--ink); cursor:pointer;
+  }
+  .view-tabs button.active{ background:var(--blaze-black); color:#fff; border-color:var(--blaze-black); }
+  .stat-cards{
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(150px, 1fr));
+    gap:12px; margin-bottom:18px;
+  }
+  .stat-card{
+    background:var(--card-bg); border:1px solid var(--card-border);
+    border-top:3px solid var(--game); border-radius:8px; padding:13px 15px;
+  }
+  .stat-card .num{ font-family:'Oswald', sans-serif; font-size:26px; font-weight:700; line-height:1.15; }
+  .stat-card .lbl{
+    font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:0.08em;
+    text-transform:uppercase; color:var(--ink-dim); margin-bottom:4px;
+  }
+  .stat-card .sub{ font-size:11px; color:var(--ink-dim); margin-top:2px; }
+  .stats-panel{
+    background:var(--card-bg); border:1px solid var(--card-border);
+    border-radius:8px; padding:16px 18px; margin-bottom:18px;
+  }
+  .stats-panel h3{ font-family:'Oswald', sans-serif; font-weight:600; font-size:15px; margin:0 0 14px; }
+  .wk-row{ display:flex; align-items:center; gap:10px; margin-bottom:7px; }
+  .wk-lbl{
+    font-family:'IBM Plex Mono', monospace; font-size:10.5px; color:var(--ink-dim);
+    width:58px; flex-shrink:0; text-align:right;
+  }
+  .wk-val{ font-family:'IBM Plex Mono', monospace; font-size:10.5px; width:38px; flex-shrink:0; }
+  .bar-outer{ background:rgba(11,11,11,0.08); border-radius:4px; height:9px; width:100%; overflow:hidden; }
+  .bar-inner{ height:100%; border-radius:4px; }
+  .act-table{ width:100%; border-collapse:collapse; font-size:12.5px; }
+  .act-table th, .act-table td{ padding:6px 8px; border-bottom:1px solid rgba(11,11,11,0.08); text-align:left; }
+  .act-table th{
+    font-family:'IBM Plex Mono', monospace; font-size:9.5px; letter-spacing:0.06em;
+    text-transform:uppercase; color:var(--ink-dim);
+  }
+  .act-table td.n{ text-align:right; font-family:'IBM Plex Mono', monospace; font-size:11.5px; }
   .dot{width:9px; height:9px; border-radius:2px; display:inline-block;}
   .note{ font-size:12.5px; color:var(--ink-dim); text-align:center; line-height:1.6; margin-top:6px;}
   .court-footer{ margin-top:30px; width:100%; }
@@ -169,6 +302,21 @@
     <div class="eyebrow">Interactivo · cada hueco es editable</div>
     <h1>Gym + Baloncesto + WFH</h1>
   </header>
+
+  <div class="view-tabs">
+    <button id="tabPlan" class="active">📅 Planning</button>
+    <button id="tabStats">📊 Estadísticas</button>
+  </div>
+
+  <div id="viewPlan">
+
+  <div class="week-bar">
+    <button id="weekPrev" title="Semana anterior">←</button>
+    <div class="week-label"><span class="tag" id="weekTag"></span><span id="weekLabel"></span></div>
+    <button id="weekNext" title="Semana siguiente">→</button>
+    <button id="weekToday">Hoy</button>
+    <span class="week-stats" id="weekStats"></span>
+  </div>
 
   <div class="controls">
     <div class="ctrl-group">
@@ -220,8 +368,31 @@
 
   <div class="legend" id="legend"></div>
 
-  <p class="note">Cada celda es un desplegable: pincha y elige la actividad. "↺ Volver a automático" borra tu elección manual (y cualquier entreno colocado por el botón) y vuelve a la regla por defecto.<br>
+  <div class="tools-bar">
+    <button id="syncBtn">🔄 Sincronizar</button>
+    <button id="syncCfgBtn" title="Configurar sincronización">⚙️</button>
+    <button id="backupBtn">⬇ Copia de seguridad</button>
+    <button id="restoreBtn">⬆ Restaurar copia</button>
+    <input type="file" id="restoreFile" accept="application/json,.json" style="display:none">
+  </div>
+
+  <p class="note">Cada celda es un desplegable: pincha y elige la actividad. "↺ Volver a automático" borra tu elección manual (y cualquier entreno colocado por el botón) y vuelve a la regla por defecto. El circulito ✓ de cada celda marca la actividad como hecha.<br>
   Oficina, paseos y baloncesto ya salen solos desde el principio. "Planificar semana" recalcula el entreno entero cada vez que lo pulsas (útil si cambias el WFH o el split) — solo respeta lo que hayas tocado tú a mano.</p>
+
+  </div><!-- /viewPlan -->
+
+  <div id="viewStats" style="display:none">
+    <div class="stat-cards" id="statCards"></div>
+    <div class="stats-panel">
+      <h3>🏋️ Entrenos por semana</h3>
+      <div id="statChart"></div>
+    </div>
+    <div class="stats-panel">
+      <h3>📋 Recuento por actividad</h3>
+      <div id="statActs"></div>
+    </div>
+    <p class="note" id="statNote"></p>
+  </div><!-- /viewStats -->
 
   <div class="court-footer">
     <svg viewBox="0 0 960 260" preserveAspectRatio="xMidYMid meet" style="width:100%; height:auto; display:block;">
@@ -280,58 +451,117 @@ let overrides = {};      // fijado a mano: siempre gana, nunca se mueve solo
 let autoPlacements = {}; // colocado por "Planificar semana": se recalcula al cambiar condiciones
 let planned = false;     // si ya se planificó, los cambios de condiciones re-planifican solos
 let satEnabled = false;  // sábado disponible para entrenar (permite separar upper)
+let done = new Set();    // celdas marcadas como hechas (✓)
 let lastPlaced = new Set(); // celdas recién colocadas (para resaltarlas)
 
-const STORAGE_KEY = 'rutina_gym_baloncesto_v3';
-const SCHEMA_VERSION = 2;
+const WEEK_PREFIX = 'rutina_week_';
+const CONFIG_KEY = 'rutina_config_v1';
+const LEGACY_KEY = 'rutina_gym_baloncesto_v3';
 
-function weekStamp(){
-  const now = new Date();
-  const monday = new Date(now);
-  monday.setDate(now.getDate() - ((now.getDay() + 6) % 7));
-  return monday.toISOString().slice(0,10);
+// fechas en local (nada de toISOString: desplaza el día cerca de medianoche)
+function localStamp(d){
+  return d.getFullYear() + '-' + String(d.getMonth()+1).padStart(2,'0') + '-' + String(d.getDate()).padStart(2,'0');
 }
+function mondayOf(date){
+  const d = new Date(date);
+  d.setHours(12,0,0,0);
+  d.setDate(d.getDate() - ((d.getDay() + 6) % 7));
+  return localStamp(d);
+}
+function shiftWeek(stamp, weeks){
+  const [y,m,dd] = stamp.split('-').map(Number);
+  const d = new Date(y, m-1, dd, 12);
+  d.setDate(d.getDate() + weeks*7);
+  return localStamp(d);
+}
+
+let viewedMonday = mondayOf(new Date());
+
+// lunes de la semana del primer viernes de curso de alemán (vie 18-09-2026)
+const GERMAN_COURSE_WEEK = '2026-09-14';
+
+// semanas tocadas en esta sesión: el sync en segundo plano no las sobrescribe
+const dirtyWeeks = new Set();
 
 function saveState(){
   try {
-    localStorage.setItem(STORAGE_KEY, JSON.stringify({
-      version: SCHEMA_VERSION,
-      week: weekStamp(),
+    localStorage.setItem(WEEK_PREFIX + viewedMonday, JSON.stringify({
       split: currentSplit,
       wfh: Array.from(wfhSet),
       sundayTime: document.getElementById('sundayTime').value,
       overrides,
       autoPlacements,
       planned,
-      satEnabled
+      satEnabled,
+      done: Array.from(done)
     }));
+    localStorage.setItem(CONFIG_KEY, JSON.stringify({split: currentSplit}));
+    localStorage.setItem('rutina_last_edit', new Date().toISOString());
+    let st = {};
+    try { st = JSON.parse(localStorage.getItem('rutina_stamps') || '{}'); } catch(e) {}
+    st[viewedMonday] = new Date().toISOString();
+    localStorage.setItem('rutina_stamps', JSON.stringify(st));
+  } catch(e) {}
+  dirtyWeeks.add(viewedMonday);
+  if (typeof scheduleSync === 'function') scheduleSync();
+}
+
+// migra el estado de la versión anterior (una sola clave) a su semana correspondiente
+function migrateLegacy(){
+  try {
+    const raw = localStorage.getItem(LEGACY_KEY);
+    if (!raw) return;
+    const st = JSON.parse(raw);
+    const stamp = st.week || mondayOf(new Date());
+    if (!localStorage.getItem(WEEK_PREFIX + stamp)) {
+      localStorage.setItem(WEEK_PREFIX + stamp, JSON.stringify({
+        split: st.split || 4,
+        wfh: st.wfh || [],
+        sundayTime: st.sundayTime || 'var',
+        overrides: st.overrides || {},
+        autoPlacements: st.autoPlacements || {},
+        planned: !!st.planned,
+        satEnabled: !!st.satEnabled,
+        done: []
+      }));
+    }
+    if (st.split) localStorage.setItem(CONFIG_KEY, JSON.stringify({split: st.split}));
+    localStorage.removeItem(LEGACY_KEY);
   } catch(e) {}
 }
 
-function loadState(){
-  let newWeek = false;
+// carga la semana indicada; si no existe, arranca limpia (el split se hereda de la config)
+function loadWeek(stamp){
+  overrides = {}; autoPlacements = {}; planned = false; satEnabled = false;
+  wfhSet = new Set(); done = new Set();
+  let sundayTime = 'var';
   try {
-    const raw = localStorage.getItem(STORAGE_KEY);
-    if (!raw) return false;
-    const state = JSON.parse(raw);
-    // migración: estados antiguos sin version se tratan como compatibles
-    if (state.split) currentSplit = state.split;
-    if (state.week && state.week !== weekStamp()) {
-      // semana nueva: mantener split, resetear el resto
-      newWeek = true;
-      overrides = {}; autoPlacements = {}; wfhSet = new Set(); planned = false; satEnabled = false;
-      document.getElementById('sundayTime').value = 'var';
-      saveState();
-      return true;
+    const cfg = JSON.parse(localStorage.getItem(CONFIG_KEY) || '{}');
+    if (cfg.split) currentSplit = cfg.split;
+    const raw = localStorage.getItem(WEEK_PREFIX + stamp);
+    if (raw) {
+      const st = JSON.parse(raw);
+      if (st.split) currentSplit = st.split;
+      if (Array.isArray(st.wfh)) wfhSet = new Set(st.wfh);
+      if (st.sundayTime) sundayTime = st.sundayTime;
+      if (st.overrides) overrides = st.overrides;
+      if (st.autoPlacements) autoPlacements = st.autoPlacements;
+      planned = !!st.planned;
+      satEnabled = !!st.satEnabled;
+      if (Array.isArray(st.done)) done = new Set(st.done);
     }
-    if (Array.isArray(state.wfh)) wfhSet = new Set(state.wfh);
-    if (state.sundayTime) document.getElementById('sundayTime').value = state.sundayTime;
-    if (state.overrides) overrides = state.overrides;
-    if (state.autoPlacements) autoPlacements = state.autoPlacements;
-    planned = state.planned !== undefined ? state.planned : Object.keys(autoPlacements).length > 0;
-    if (state.satEnabled !== undefined) satEnabled = state.satEnabled;
   } catch(e) {}
-  return newWeek;
+  document.getElementById('sundayTime').value = sundayTime;
+  document.querySelectorAll('#splitToggle button').forEach(b => {
+    b.classList.toggle('active', Number(b.dataset.split) === currentSplit);
+  });
+  document.getElementById('satSwitch').classList.toggle('on', satEnabled);
+}
+
+function toastMsg(msg, ms){
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  setTimeout(() => { if (t.textContent === msg) t.textContent = ''; }, ms || 4000);
 }
 
 function key(d,s){ return d+'_'+s; }
@@ -371,7 +601,10 @@ function computeBaseDefaults(){
 
   grid.lun.noche = 'baloncesto';
   grid.jue.noche = 'baloncesto';
+  // curso de alemán: desde el 18-09-2026 es viernes 17:30–21:00 → ocupa tarde y noche
+  // (cuenta doble en estadísticas). Antes de esa semana, solo tarde, para no reescribir el histórico.
   grid.vie.tarde = 'aleman';
+  if (viewedMonday >= GERMAN_COURSE_WEEK) grid.vie.noche = 'aleman';
   const st = document.getElementById('sundayTime').value;
   if (st !== 'var' && st !== 'none') grid.dom[sundaySlot(st)] = 'baloncesto';
 
@@ -613,11 +846,30 @@ function optionsHTML(currentVal){
   return html;
 }
 
+const JS_DAY_TO_KEY = ['dom','lun','mar','mie','jue','vie','sab'];
+
+function renderWeekBar(){
+  const cur = mondayOf(new Date());
+  const [y,m,dd] = viewedMonday.split('-').map(Number);
+  const start = new Date(y, m-1, dd, 12);
+  const end = new Date(start); end.setDate(end.getDate() + 6);
+  const fmt = d => d.toLocaleDateString('es-ES', {day:'numeric', month:'short'});
+  document.getElementById('weekLabel').textContent = `${fmt(start)} – ${fmt(end)} ${end.getFullYear()}`;
+  document.getElementById('weekTag').textContent =
+    viewedMonday === cur ? 'Esta semana' : (viewedMonday < cur ? 'Histórico' : 'Semana futura');
+  document.getElementById('weekToday').style.display = viewedMonday === cur ? 'none' : '';
+}
+
 function render(){
   const grid = buildGrid();
+  const isCurWeek = viewedMonday === mondayOf(new Date());
+  const todayD = JS_DAY_TO_KEY[new Date().getDay()];
 
   let html = '<thead><tr><th class="slot-col">Franja</th>';
-  DAYS.forEach(d => { html += `<th>${DAY_NAMES[d]}</th>`; });
+  DAYS.forEach(d => {
+    const thCls = (isCurWeek && d === todayD) ? ' class="today"' : '';
+    html += `<th${thCls}>${DAY_NAMES[d]}</th>`;
+  });
   html += '</tr></thead><tbody>';
   SLOTS.forEach(s => {
     html += `<tr><th>${SLOT_LABELS[s]}</th>`;
@@ -628,20 +880,54 @@ function render(){
       const tdCls = ['day-col'];
       if (overrides[k] !== undefined) tdCls.push('manual');
       if (lastPlaced.has(k)) tdCls.push('just-placed');
-      html += `<td class="${tdCls.join(' ')}"><select data-day="${d}" data-slot="${s}" style="color:${CLS_COLOR[cls] || 'var(--ink)'}">${optionsHTML(val)}</select></td>`;
+      if (isCurWeek && d === todayD) tdCls.push('today');
+      if (isCurWeek && DAYS.indexOf(d) < DAYS.indexOf(todayD)) tdCls.push('past');
+      if (done.has(k)) tdCls.push('done');
+      const doneBtn = (val && val !== 'oficina' && val !== 'teletrabajo')
+        ? `<button class="done-btn" data-day="${d}" data-slot="${s}" title="Marcar hecho">✓</button>` : '';
+      html += `<td class="${tdCls.join(' ')}"><select data-day="${d}" data-slot="${s}" style="color:${CLS_COLOR[cls] || 'var(--ink)'}">${optionsHTML(val)}</select>${doneBtn}</td>`;
     });
     html += '</tr>';
   });
   html += '</tbody>';
   document.getElementById('scheduleTable').innerHTML = html;
 
+  // estadística de la semana: hechas / planificadas (sin contar bloques de trabajo)
+  let total = 0, doneN = 0;
+  DAYS.forEach(d => SLOTS.forEach(s => {
+    const v = effective(grid, d, s);
+    if (v && v !== 'oficina' && v !== 'teletrabajo') {
+      total++;
+      if (done.has(key(d,s))) doneN++;
+    }
+  }));
+  document.getElementById('weekStats').textContent = total ? `✓ ${doneN}/${total}` : '';
+  renderWeekBar();
+
+  document.querySelectorAll('#scheduleTable .done-btn').forEach(btn => {
+    btn.addEventListener('click', (e) => {
+      const k = key(e.target.dataset.day, e.target.dataset.slot);
+      done.has(k) ? done.delete(k) : done.add(k);
+      saveState();
+      render();
+    });
+  });
+
   document.querySelectorAll('#scheduleTable select').forEach(sel => {
     sel.addEventListener('change', (e) => {
       const d = e.target.dataset.day, s = e.target.dataset.slot;
       const v = e.target.value;
       const k = key(d,s);
-      if (v === '__AUTO__') { delete overrides[k]; delete autoPlacements[k]; }
-      else overrides[k] = v;
+      if (v === '__AUTO__') { delete overrides[k]; delete autoPlacements[k]; done.delete(k); }
+      else {
+        // aviso inmediato si pisas un entreno colocado por el planificador
+        const prevAuto = autoPlacements[k];
+        if (prevAuto && TRAINING_TYPES.includes(prevAuto) && v !== prevAuto) {
+          toastMsg(`Ojo: pisas el ${ACTIVITIES[prevAuto].label} del ${DAY_NAMES[d].toLowerCase()} — pulsa Planificar si quieres recolocarlo`, 6000);
+        }
+        overrides[k] = v;
+        done.delete(k);
+      }
       saveState();
       render();
     });
@@ -705,25 +991,415 @@ document.getElementById('resetBtn').addEventListener('click', () => {
   if (!confirm('¿Borrar todo lo que has fijado a mano y volver todo a automático?')) return;
   overrides = {};
   autoPlacements = {};
+  done = new Set();
   planned = false;
   saveState();
   render();
-  const toast = document.getElementById('toast');
-  toast.textContent = 'Semana reseteada ✓';
-  setTimeout(() => { toast.textContent=''; }, 3000);
+  toastMsg('Semana reseteada ✓', 3000);
 });
 
-const isNewWeek = loadState();
-document.querySelectorAll('#splitToggle button').forEach(b => {
-  b.classList.toggle('active', Number(b.dataset.split) === currentSplit);
-});
-document.getElementById('satSwitch').classList.toggle('on', satEnabled);
-render();
-if (isNewWeek) {
-  const toast = document.getElementById('toast');
-  toast.textContent = 'Semana nueva: planning reseteado ✓';
-  setTimeout(() => { toast.textContent=''; }, 4000);
+// ---- navegación entre semanas ----
+function gotoWeek(stamp){
+  viewedMonday = stamp;
+  loadWeek(stamp);
+  render();
 }
+document.getElementById('weekPrev').addEventListener('click', () => gotoWeek(shiftWeek(viewedMonday, -1)));
+document.getElementById('weekNext').addEventListener('click', () => gotoWeek(shiftWeek(viewedMonday, 1)));
+document.getElementById('weekToday').addEventListener('click', () => gotoWeek(mondayOf(new Date())));
+
+function downloadBlob(text, name, type){
+  const blob = new Blob([text], {type});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = name;
+  document.body.appendChild(a);
+  a.click();
+  setTimeout(() => { URL.revokeObjectURL(a.href); a.remove(); }, 500);
+}
+
+// ---- copia de seguridad ----
+document.getElementById('backupBtn').addEventListener('click', () => {
+  const data = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (k && k.startsWith('rutina_')) data[k] = localStorage.getItem(k);
+  }
+  downloadBlob(
+    JSON.stringify({app:'rutina', exported:new Date().toISOString(), data}, null, 2),
+    `rutina_backup_${localStamp(new Date())}.json`, 'application/json'
+  );
+  toastMsg('Copia exportada ✓', 3000);
+});
+
+document.getElementById('restoreBtn').addEventListener('click', () => {
+  document.getElementById('restoreFile').click();
+});
+document.getElementById('restoreFile').addEventListener('change', (e) => {
+  const file = e.target.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = () => {
+    try {
+      const obj = JSON.parse(reader.result);
+      if (!obj || obj.app !== 'rutina' || !obj.data) throw new Error('formato');
+      if (!confirm('Restaurar la copia sobrescribirá las semanas guardadas que coincidan. ¿Seguir?')) return;
+      Object.entries(obj.data).forEach(([k, v]) => {
+        if (k.startsWith('rutina_')) localStorage.setItem(k, v);
+      });
+      loadWeek(viewedMonday);
+      render();
+      if (document.getElementById('viewStats').style.display !== 'none') renderStats();
+      toastMsg('Copia restaurada ✓', 3000);
+    } catch(err) {
+      toastMsg('El archivo no parece una copia válida de la app');
+    }
+    e.target.value = '';
+  };
+  reader.readAsText(file);
+});
+
+// ---- sincronización vía Gist privado ----
+// El token se guarda solo en este navegador (localStorage) y se envía únicamente a api.github.com.
+const SYNC_KEY = 'rutina_sync_cfg';
+const GIST_FILE = 'rutina.json';
+
+function syncCfg(){
+  try { return JSON.parse(localStorage.getItem(SYNC_KEY) || '{}'); } catch(e) { return {}; }
+}
+
+// recoge todas las claves de la app + cuándo se tocó cada semana
+function localPayload(){
+  const weeks = {};
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (!k || !k.startsWith(WEEK_PREFIX)) continue;
+    const wk = k.slice(WEEK_PREFIX.length);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(wk)) weeks[wk] = localStorage.getItem(k);
+  }
+  let stamps = {};
+  try { stamps = JSON.parse(localStorage.getItem('rutina_stamps') || '{}'); } catch(e) {}
+  return {
+    app: 'rutina', version: 1,
+    updated: new Date().toISOString(),
+    config: localStorage.getItem(CONFIG_KEY),
+    weeks, stamps
+  };
+}
+
+// fusiona semana a semana: gana la versión editada más recientemente.
+// Así editar en móvil y escritorio en semanas distintas no pierde nada.
+// La semana que tengas en pantalla y hayas tocado en esta sesión nunca se sobrescribe:
+// evita que un sync en segundo plano te cambie el planning bajo los dedos.
+function mergeRemote(remote){
+  const mine = localPayload();
+  let taken = 0, kept = 0, skippedOpen = false;
+  Object.entries(remote.weeks || {}).forEach(([wk, val]) => {
+    const rTime = (remote.stamps || {})[wk] || remote.updated || '';
+    const lTime = (mine.stamps || {})[wk] || '';
+    const localVal = mine.weeks[wk];
+    if (wk === viewedMonday && dirtyWeeks.has(wk) && localVal !== val) { skippedOpen = true; return; }
+    if (localVal === undefined || rTime > lTime) {
+      if (localVal !== val) {
+        localStorage.setItem(WEEK_PREFIX + wk, val);
+        const s = JSON.parse(localStorage.getItem('rutina_stamps') || '{}');
+        s[wk] = rTime; localStorage.setItem('rutina_stamps', JSON.stringify(s));
+        taken++;
+      }
+    } else if (localVal !== val) kept++;
+  });
+  if (remote.config && !localStorage.getItem(CONFIG_KEY)) localStorage.setItem(CONFIG_KEY, remote.config);
+  return {taken, kept, skippedOpen};
+}
+
+async function gistRequest(cfg, method, body){
+  const res = await fetch(`https://api.github.com/gists/${cfg.gistId}`, {
+    method,
+    headers: {
+      'Authorization': 'Bearer ' + cfg.token,
+      'Accept': 'application/vnd.github+json',
+      'Content-Type': 'application/json'
+    },
+    body: body ? JSON.stringify(body) : undefined
+  });
+  if (!res.ok) {
+    const msg = res.status === 401 ? 'token rechazado (401)'
+      : res.status === 404 ? 'gist no encontrado o el token no tiene permiso (404)'
+      : res.status === 403 ? 'acceso denegado o límite alcanzado (403)'
+      : 'error ' + res.status;
+    throw new Error(msg);
+  }
+  return res.json();
+}
+
+let syncing = false;
+
+// silent: sin toasts de éxito ni de error de red (para el sync automático)
+async function doSync(silent){
+  const cfg = syncCfg();
+  if (!cfg.gistId || !cfg.token) { if (!silent) configureSync(); return; }
+  if (syncing) return;                                   // evita solapes
+  if (silent && navigator.onLine === false) return;      // offline: ni lo intenta
+  syncing = true;
+  const btn = document.getElementById('syncBtn');
+  if (!silent) { btn.disabled = true; btn.textContent = '🔄 Sincronizando…'; }
+  else btn.textContent = '🔄 ·';
+  try {
+    // 1) bajar y fusionar
+    const gist = await gistRequest(cfg, 'GET');
+    const file = (gist.files || {})[GIST_FILE];
+    let result = {taken:0, kept:0, skippedOpen:false};
+    if (file && file.content && file.content.trim() && file.content.trim() !== '{}') {
+      let remote = null;
+      try { remote = JSON.parse(file.content); } catch(e) {}
+      if (remote && remote.app === 'rutina') result = mergeRemote(remote);
+      else throw new Error('el contenido del gist no es de esta app');
+    }
+    // 2) subir el estado ya fusionado
+    await gistRequest(cfg, 'PATCH', {
+      files: { [GIST_FILE]: { content: JSON.stringify(localPayload(), null, 2) } }
+    });
+    dirtyWeeks.clear();
+    if (result.taken) {
+      loadWeek(viewedMonday);
+      render();
+      if (document.getElementById('viewStats').style.display !== 'none') renderStats();
+    }
+    if (result.taken) {
+      toastMsg(`Sincronizado ✓ ${result.taken} semana(s) actualizada(s) desde el otro dispositivo`, 4000);
+    } else if (result.skippedOpen) {
+      toastMsg('Sincronizado ✓ la semana que estás editando se ha mantenido', 4000);
+    } else if (!silent) {
+      toastMsg('Sincronizado ✓ todo al día', 3000);
+    }
+  } catch(err) {
+    if (!silent) toastMsg('No se pudo sincronizar: ' + err.message, 7000);
+  } finally {
+    syncing = false;
+    btn.disabled = false; btn.textContent = '🔄 Sincronizar';
+  }
+}
+
+// subida automática tras editar: se agrupan los cambios seguidos en una sola llamada
+let syncTimer = null;
+function scheduleSync(){
+  const cfg = syncCfg();
+  if (!cfg.gistId || !cfg.token) return;
+  clearTimeout(syncTimer);
+  syncTimer = setTimeout(() => doSync(true), 6000);
+}
+
+function configureSync(){
+  const cfg = syncCfg();
+  const gistId = prompt(
+    'ID del gist privado (la parte final de su URL).\n\n' +
+    'Deja el campo vacío y acepta para desactivar la sincronización.',
+    cfg.gistId || ''
+  );
+  if (gistId === null) return;
+  if (!gistId.trim()) {
+    localStorage.removeItem(SYNC_KEY);
+    toastMsg('Sincronización desactivada', 3000);
+    return;
+  }
+  const token = prompt(
+    'Token de GitHub con permiso de Gists.\n\n' +
+    'Se guarda solo en este navegador y se envía únicamente a api.github.com.',
+    cfg.token || ''
+  );
+  if (token === null || !token.trim()) return;
+  try {
+    localStorage.setItem(SYNC_KEY, JSON.stringify({gistId: gistId.trim(), token: token.trim()}));
+    toastMsg('Sincronización configurada ✓ pulsa 🔄 para sincronizar', 4000);
+  } catch(e) { toastMsg('No se pudo guardar la configuración'); }
+}
+
+document.getElementById('syncBtn').addEventListener('click', () => doSync(false));
+document.getElementById('syncCfgBtn').addEventListener('click', configureSync);
+
+// ---- estadísticas ----
+const WORK_ACTS = new Set(['oficina','teletrabajo']);
+
+// lista de semanas guardadas, en orden cronológico
+function storedWeeks(){
+  const out = [];
+  for (let i = 0; i < localStorage.length; i++) {
+    const k = localStorage.key(i);
+    if (!k || !k.startsWith(WEEK_PREFIX)) continue;
+    const wk = k.slice(WEEK_PREFIX.length);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(wk)) out.push(wk); // solo claves con forma de fecha
+  }
+  return out.sort();
+}
+
+// calcula la cuadrícula efectiva de una semana guardada sin tocar el estado en pantalla
+function weekSnapshot(stamp){
+  const bak = {overrides, autoPlacements, wfhSet, currentSplit, satEnabled, viewedMonday,
+               sunday: document.getElementById('sundayTime').value};
+  let st = {};
+  try { st = JSON.parse(localStorage.getItem(WEEK_PREFIX + stamp) || '{}'); } catch(e) {}
+  viewedMonday = stamp;
+  overrides = st.overrides || {};
+  autoPlacements = st.autoPlacements || {};
+  wfhSet = new Set(st.wfh || []);
+  satEnabled = !!st.satEnabled;
+  if (st.split) currentSplit = st.split;
+  document.getElementById('sundayTime').value = st.sundayTime || 'var';
+
+  const grid = buildGrid();
+  const doneSet = new Set(st.done || []);
+  const cells = [];
+  DAYS.forEach(d => SLOTS.forEach(s => {
+    const v = effective(grid, d, s);
+    if (!v || WORK_ACTS.has(v)) return;
+    cells.push({day:d, slot:s, act:v, done: doneSet.has(key(d,s))});
+  }));
+
+  overrides = bak.overrides; autoPlacements = bak.autoPlacements; wfhSet = bak.wfhSet;
+  currentSplit = bak.currentSplit; satEnabled = bak.satEnabled; viewedMonday = bak.viewedMonday;
+  document.getElementById('sundayTime').value = bak.sunday;
+
+  return {stamp, cells, planned: !!st.planned};
+}
+
+const ALL_TRAINING = new Set(['push','pull','leg','upper','fullbody']);
+
+function renderStats(){
+  const weeks = storedWeeks();
+  const curMon = mondayOf(new Date());
+  // solo semanas ya empezadas: las futuras aún no se pueden "cumplir"
+  const snaps = weeks.filter(w => w <= curMon).map(weekSnapshot);
+
+  const cards = document.getElementById('statCards');
+  if (!snaps.length) {
+    cards.innerHTML = '';
+    document.getElementById('statChart').innerHTML = '<p class="note">Todavía no hay semanas guardadas.</p>';
+    document.getElementById('statActs').innerHTML = '';
+    document.getElementById('statNote').textContent = '';
+    return;
+  }
+
+  let totalCells = 0, totalDone = 0, trainPlan = 0, trainDone = 0, gamesDone = 0, germanDone = 0;
+  const actCount = {};
+  snaps.forEach(sn => sn.cells.forEach(c => {
+    if (c.act === 'descanso') return; // el descanso no es algo que "cumplir"
+    totalCells++;
+    if (c.done) totalDone++;
+    if (ALL_TRAINING.has(c.act)) { trainPlan++; if (c.done) trainDone++; }
+    if (c.act === 'baloncesto' && c.done) gamesDone++;
+    if (c.act === 'aleman' && c.done) germanDone++;
+    actCount[c.act] = actCount[c.act] || {plan:0, done:0};
+    actCount[c.act].plan++;
+    if (c.done) actCount[c.act].done++;
+  }));
+
+  const pct = (a,b) => b ? Math.round(a*100/b) : 0;
+
+  // racha: semanas consecutivas (hacia atrás desde la última) con al menos un entreno hecho.
+  // La semana en curso sin entrenos hechos todavía no rompe la racha, simplemente no suma.
+  let streak = 0;
+  for (let i = snaps.length - 1; i >= 0; i--) {
+    const n = snaps[i].cells.filter(c => ALL_TRAINING.has(c.act) && c.done).length;
+    if (n > 0) streak++;
+    else if (i === snaps.length - 1 && snaps[i].stamp === curMon) continue;
+    else break;
+  }
+
+  // tendencia: media de entrenos hechos en las últimas 4 semanas vs las 4 anteriores
+  const perWeek = snaps.map(sn => sn.cells.filter(c => ALL_TRAINING.has(c.act) && c.done).length);
+  const avg = arr => arr.length ? arr.reduce((a,b)=>a+b,0)/arr.length : 0;
+  const recent = avg(perWeek.slice(-4)), before = avg(perWeek.slice(-8,-4));
+  const trend = before ? (recent - before) : null;
+  const trendTxt = trend === null ? 'sin histórico previo'
+    : (trend > 0.25 ? `↑ +${trend.toFixed(1)}/sem` : trend < -0.25 ? `↓ ${trend.toFixed(1)}/sem` : '→ estable');
+
+  cards.innerHTML = `
+    <div class="stat-card"><div class="lbl">Adherencia global</div>
+      <div class="num">${pct(totalDone, totalCells)}%</div>
+      <div class="sub">${totalDone} de ${totalCells} actividades</div></div>
+    <div class="stat-card"><div class="lbl">Adherencia entreno</div>
+      <div class="num" style="color:var(--push)">${pct(trainDone, trainPlan)}%</div>
+      <div class="sub">${trainDone} de ${trainPlan} sesiones</div></div>
+    <div class="stat-card"><div class="lbl">Racha</div>
+      <div class="num" style="color:var(--game)">${streak}</div>
+      <div class="sub">semana(s) entrenando seguidas</div></div>
+    <div class="stat-card"><div class="lbl">Media entrenos</div>
+      <div class="num" style="color:var(--leg)">${recent.toFixed(1)}</div>
+      <div class="sub">últimas 4 sem · ${trendTxt}</div></div>
+    <div class="stat-card"><div class="lbl">Partidos jugados</div>
+      <div class="num" style="color:var(--game)">${gamesDone}</div>
+      <div class="sub">marcados como hechos</div></div>
+    <div class="stat-card"><div class="lbl">Sesiones de alemán</div>
+      <div class="num" style="color:var(--german)">${germanDone}</div>
+      <div class="sub">marcadas como hechas</div></div>
+  `;
+
+  // barras por semana (últimas 12), hechas vs planificadas
+  const last = snaps.slice(-12);
+  const maxPlan = Math.max(...last.map(sn => sn.cells.filter(c => ALL_TRAINING.has(c.act)).length), 1);
+  document.getElementById('statChart').innerHTML = last.map(sn => {
+    const plan = sn.cells.filter(c => ALL_TRAINING.has(c.act)).length;
+    const dn = sn.cells.filter(c => ALL_TRAINING.has(c.act) && c.done).length;
+    const [y,m,dd] = sn.stamp.split('-').map(Number);
+    const lbl = new Date(y, m-1, dd, 12).toLocaleDateString('es-ES', {day:'2-digit', month:'2-digit'});
+    return `<div class="wk-row">
+      <span class="wk-lbl">${lbl}</span>
+      <div class="bar-outer" title="${dn} hechos de ${plan} planificados">
+        <div class="bar-inner" style="width:${plan*100/maxPlan}%; background:rgba(11,11,11,0.14); position:relative;">
+          <div class="bar-inner" style="width:${plan ? dn*100/plan : 0}%; background:var(--push);"></div>
+        </div>
+      </div>
+      <span class="wk-val">${dn}/${plan}</span>
+    </div>`;
+  }).join('');
+
+  // tabla por actividad, de más planificada a menos
+  const rows = Object.entries(actCount).sort((a,b) => b[1].plan - a[1].plan);
+  document.getElementById('statActs').innerHTML = `
+    <table class="act-table"><thead><tr>
+      <th>Actividad</th><th style="text-align:right">Plan.</th><th style="text-align:right">Hechas</th><th style="text-align:right">%</th>
+    </tr></thead><tbody>` +
+    rows.map(([act, c]) => {
+      const cls = (ACTIVITIES[act] || {}).cls || '';
+      return `<tr>
+        <td style="color:${CLS_COLOR[cls] || 'var(--ink)'}">${(ACTIVITIES[act]||{label:act}).label}</td>
+        <td class="n">${c.plan}</td><td class="n">${c.done}</td>
+        <td class="n">${pct(c.done, c.plan)}%</td></tr>`;
+    }).join('') + '</tbody></table>';
+
+  document.getElementById('statNote').textContent =
+    `${snaps.length} semana(s) con datos. Las semanas futuras no cuentan. Los porcentajes dependen de que marques el ✓ en el planning.`;
+}
+
+// ---- pestañas de vista ----
+function setView(v){
+  const isStats = v === 'stats';
+  document.getElementById('viewPlan').style.display = isStats ? 'none' : '';
+  document.getElementById('viewStats').style.display = isStats ? '' : 'none';
+  document.getElementById('tabPlan').classList.toggle('active', !isStats);
+  document.getElementById('tabStats').classList.toggle('active', isStats);
+  if (isStats) renderStats();
+}
+document.getElementById('tabPlan').addEventListener('click', () => setView('plan'));
+document.getElementById('tabStats').addEventListener('click', () => setView('stats'));
+
+// ---- arranque ----
+migrateLegacy();
+loadWeek(viewedMonday);
+render();
+
+// la app pinta al instante desde localStorage; el sync va detrás, sin bloquear
+setTimeout(() => doSync(true), 300);
+
+// al volver a primer plano (típico en la PWA del móvil) y al recuperar conexión
+let lastAutoSync = Date.now();
+document.addEventListener('visibilitychange', () => {
+  if (document.visibilityState !== 'visible') return;
+  if (Date.now() - lastAutoSync < 60000) return;  // como máximo una vez por minuto
+  lastAutoSync = Date.now();
+  doSync(true);
+});
+window.addEventListener('online', () => doSync(true));
 
 if ('serviceWorker' in navigator) {
   window.addEventListener('load', () => { navigator.serviceWorker.register('sw.js').catch(()=>{}); });
