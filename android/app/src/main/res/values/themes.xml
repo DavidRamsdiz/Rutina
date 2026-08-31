@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <style name="AppTheme" parent="@android:style/Theme.Material.Light.NoActionBar">
+        <item name="android:statusBarColor">@color/theme_red</item>
+        <item name="android:navigationBarColor">@color/plank</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">true</item>
+        <!-- evita el flash blanco al arrancar: el fondo ya es el de la cancha -->
+        <item name="android:windowBackground">@color/plank</item>
+    </style>
+</resources>

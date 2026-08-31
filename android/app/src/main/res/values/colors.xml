@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Mismos valores que las variables game y plank-a de index.html -->
+    <color name="theme_red">#E03A3E</color>
+    <color name="plank">#E9C99A</color>
+    <color name="ink">#0B0B0B</color>
+</resources>

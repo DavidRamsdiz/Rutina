@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Rutina</string>
+    <string name="saved_to_downloads">Copia guardada en Descargas: %1$s</string>
+    <string name="save_failed">No se pudo guardar la copia</string>
+</resources>
