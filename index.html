@@ -609,6 +609,18 @@ function morningGame(games, d){
 }
 function nextDay(d){ const i = DAYS.indexOf(d); return i >= 0 && i < DAYS.length-1 ? DAYS[i+1] : null; }
 
+// Descanso obligatorio a primera hora del día siguiente a un partido, sea el día que sea.
+// Los partidos de mañana (el domingo típicamente) no bloquean nada: hasta la mañana
+// siguiente hay tiempo de sobra. El lunes tampoco mira atrás: el domingo anterior
+// pertenece a la semana pasada.
+function restAfterGame(games, d){
+  const i = DAYS.indexOf(d);
+  if (i <= 0) return false;
+  const prev = DAYS[i-1];
+  if (!dayHasGame(games, prev)) return false;
+  return !morningGame(games, prev);
+}
+
 // Defaults base (sin bloques de trabajo, se rellenan después alrededor de lo ya colocado)
 function computeBaseDefaults(){
   const grid = {};
@@ -623,13 +635,16 @@ function computeBaseDefaults(){
   const st = document.getElementById('sundayTime').value;
   if (st !== 'var' && st !== 'none') grid.dom[sundaySlot(st)] = 'baloncesto';
 
-  const lunNightGame = (overrides['lun_noche'] !== undefined ? overrides['lun_noche'] : 'baloncesto') === 'baloncesto';
+  const games = gamesMap();
 
+  // el día después de un partido de tarde/noche toca recuperar: paseo corto si
+  // se teletrabaja, y a la oficina se va sin entrenar
   ['lun','mar','mie','jue','vie'].forEach(d=>{
+    const easy = restAfterGame(games, d);
     if (wfhSet.has(d)) {
-      grid[d].temprano = (d === 'mar') ? 'paseo_corto' : 'paseo_largo';
+      grid[d].temprano = easy ? 'paseo_corto' : 'paseo_largo';
     } else {
-      grid[d].temprano = (d === 'mar' && lunNightGame) ? 'descanso' : '';
+      grid[d].temprano = easy ? 'descanso' : '';
     }
   });
   return grid;
@@ -671,11 +686,6 @@ function effective(grid, d, s){
   return rv !== undefined ? rv : grid[d][s];
 }
 
-function slotForDay(d){
-  if (!wfhSet.has(d)) return 'temprano';
-  return (d === 'vie') ? 'siesta' : 'mediodia';
-}
-
 function dayHasTraining(d){
   return SLOTS.some(s => {
     const v = rawValue(d, s) || '';
@@ -704,18 +714,42 @@ function adjacentSameType(type, d, strict){
 // huecos de entreno disponibles con la configuración actual (misma lógica que el planificador)
 function trainingSlots(){
   const games = gamesMap();
-  const lunNightGame = games.lun.includes('noche');
   const list = [];
   ['lun','mar','mie','jue','vie'].forEach(d => {
-    if (wfhSet.has(d)) {
-      list.push({day:d, slot: d === 'vie' ? 'siesta' : 'mediodia'});
-    } else {
-      if (d === 'mar' && lunNightGame) return;
-      list.push({day:d, slot:'temprano'});
-    }
+    // viernes: jornada reducida, la siesta queda libre haya oficina o teletrabajo
+    if (d === 'vie') { list.push({day:'vie', slot:'siesta'}); return; }
+    if (wfhSet.has(d)) { list.push({day:d, slot:'mediodia'}); return; }
+    if (restAfterGame(games, d)) return;   // primera hora tras un partido: descanso
+    list.push({day:d, slot:'temprano'});
   });
-  if (satEnabled) list.push({day:'sab', slot:'temprano'});
+  if (satEnabled && !restAfterGame(games, 'sab')) list.push({day:'sab', slot:'temprano'});
   return list;
+}
+
+// ---- reparto de sesiones: cuanto más separadas, mejor ----
+// todas las combinaciones de n elementos, en orden (las listas son de 6 como mucho)
+function combos(arr, n){
+  if (n === 0) return [[]];
+  if (arr.length < n) return [];
+  const out = [];
+  arr.forEach((item, i) => combos(arr.slice(i+1), n-1).forEach(rest => out.push([item].concat(rest))));
+  return out;
+}
+// huecos entre días de entreno, del más apretado al más holgado
+function spreadScore(dayIdx){
+  const xs = dayIdx.slice().sort((a,b) => a-b);
+  const gaps = [];
+  for (let i = 1; i < xs.length; i++) gaps.push(xs[i] - xs[i-1]);
+  return gaps.sort((a,b) => a-b);
+}
+// gana el reparto cuyo hueco más apretado sea mayor; si empatan, el siguiente, etc.
+function cmpSpread(a, b){
+  for (let i = 0; i < Math.max(a.length, b.length); i++) {
+    const x = a[i] === undefined ? 99 : a[i];
+    const y = b[i] === undefined ? 99 : b[i];
+    if (x !== y) return x - y;
+  }
+  return 0;
 }
 
 // avisa cuando el split elegido no cabe en los huecos disponibles
@@ -741,7 +775,12 @@ function updateCapacityWarning(){
   if (missing > 0) {
     const games = gamesMap();
     const reasons = [];
-    if (games.lun.includes('noche') && !wfhSet.has('mar')) reasons.push('el martes queda bloqueado por el partido del lunes');
+    const blockedDays = ['mar','mie','jue'].concat(satEnabled ? ['sab'] : [])
+      .filter(d => !wfhSet.has(d) && restAfterGame(games, d));
+    if (blockedDays.length) {
+      const names = blockedDays.map(d => DAY_NAMES[d].toLowerCase());
+      reasons.push(`${names.join(' y ')} ${blockedDays.length > 1 ? 'quedan bloqueados' : 'queda bloqueado'} por el partido del día anterior`);
+    }
     if (!satEnabled) reasons.push('el sábado está desactivado');
     banner.className = 'warn-banner';
     banner.innerHTML = `<strong>No caben ${needed} sesiones esta semana.</strong> ` +
@@ -759,65 +798,33 @@ function autoFillWeek(silent){
   lastPlaced = new Set();
 
   const games = gamesMap();
-  const lunNightGame = games.lun.includes('noche');
   const thuGame = dayHasGame(games, 'jue');
 
   // cuántas sesiones de cada tipo faltan (lo fijado a mano ya cuenta)
   const manualCounts = {};
   Object.values(overrides).forEach(v => { if (TRAINING_TYPES.includes(v)) manualCounts[v] = (manualCounts[v]||0)+1; });
 
-  // huecos válidos de entreno, en orden cronológico
-  const candidates = [];
-  ['lun','mar','mie','jue','vie'].forEach(d => {
-    if (wfhSet.has(d)) {
-      candidates.push({day:d, slot: d === 'vie' ? 'siesta' : 'mediodia'});
-    } else {
-      if (d === 'mar' && lunNightGame) return; // martes tras partido del lunes: sin entreno
-      candidates.push({day:d, slot:'temprano'});
-    }
-  });
-  if (satEnabled) candidates.push({day:'sab', slot:'temprano'});
+  // huecos válidos de entreno, en orden cronológico (misma lista que usa el aviso de capacidad)
+  const candidates = trainingSlots();
 
   function slotFree(day, slot){
     return rawValue(day, slot) === undefined;
   }
 
-  function canPlaceLeg(day, slot){
+  function canPlaceLeg(day, slot, strict){
     if (!slotFree(day, slot)) return false;
     if (dayHasTraining(day)) return false;
     if (dayHasGame(games, day)) return false;                       // nunca pierna el día de un partido
     const nd = nextDay(day);
-    if (nd && dayHasGame(games, nd)) return false;                  // ni la víspera de un partido
+    if (strict && nd && dayHasGame(games, nd)) return false;         // víspera de partido: solo si no hay otra
     if (adjacentSameType('leg', day)) return false;
     return true;
   }
 
   const skipped = [];
 
-  // 1) PIERNA primero: va por libre, mandan los partidos
-  let legNeeded = 1 - (manualCounts['leg'] || 0);
-  if (legNeeded > 0) {
-    // sin partido el jueves: miércoles es el sitio ideal.
-    // con partido: martes si está disponible (WFH a mediodía, o temprano si no hubo partido el lunes); si no, viernes.
-    const legDay = !thuGame ? 'mie'
-      : ((wfhSet.has('mar') || !lunNightGame) ? 'mar' : 'vie');
-    const primary = {day: legDay, slot: slotForDay(legDay)};
-    const tryList = [primary, ...candidates.filter(c => !(c.day === primary.day && c.slot === primary.slot))];
-    let placed = false;
-    for (const c of tryList) {
-      if (canPlaceLeg(c.day, c.slot)) {
-        autoPlacements[key(c.day, c.slot)] = 'leg';
-        lastPlaced.add(key(c.day, c.slot));
-        placed = true;
-        break;
-      }
-    }
-    if (!placed) skipped.push(ACTIVITIES['leg'].label);
-  }
-
-  // 2) resto de entrenos en CASCADA ordenada: si un hueco se salta, todo se empuja hacia delante
+  // secuencia de entrenos que falta por colocar (lo fijado a mano ya cuenta)
   const seq = SPLIT_SEQUENCE[currentSplit].slice();
-  // descontar lo ya fijado a mano (quitando la primera aparición de cada tipo)
   Object.keys(manualCounts).forEach(t => {
     let n = manualCounts[t];
     while (n > 0) {
@@ -828,31 +835,101 @@ function autoFillWeek(silent){
     }
   });
 
-  function runCascade(strict){
+  // coloca la secuencia en los huecos elegidos, en orden cronológico.
+  // Escribe sobre la marcha para que el control de solape muscular vea lo ya puesto;
+  // si alguno no vale, deshace y devuelve null.
+  function tryPlacement(pick, strict){
     const placedKeys = [];
-    let ptr = 0;
-    for (const c of candidates) {
-      if (ptr >= seq.length) break;
-      const type = seq[ptr];
-      if (!slotFree(c.day, c.slot)) continue;
-      if (dayHasTraining(c.day)) continue;
-      if (adjacentSameType(type, c.day, strict)) continue;
+    for (let i = 0; i < pick.length; i++) {
+      const c = pick[i];
+      if (adjacentSameType(seq[i], c.day, strict)) {
+        placedKeys.forEach(k => delete autoPlacements[k]);
+        return null;
+      }
       const k = key(c.day, c.slot);
-      autoPlacements[k] = type;
+      autoPlacements[k] = seq[i];
       placedKeys.push(k);
-      ptr++;
     }
-    return {ptr, placedKeys};
+    return placedKeys;
+  }
+
+  // busca el reparto más espaciado que cumpla las reglas. Si no caben todas las
+  // sesiones, prueba con una menos (y así sucesivamente) en vez de amontonarlas.
+  function runCascade(strict){
+    const free = candidates.filter(c => slotFree(c.day, c.slot) && !dayHasTraining(c.day));
+    // días que ya tienen entreno (la pierna, o lo fijado a mano): cuentan para
+    // medir la separación aunque su hueco ya no esté libre
+    const busy = DAYS.map((d,i) => dayHasTraining(d) ? i : -1).filter(i => i >= 0);
+
+    for (let n = Math.min(seq.length, free.length); n > 0; n--) {
+      const options = combos(free, n)
+        .map(pick => ({pick, spread: spreadScore(pick.map(c => DAYS.indexOf(c.day)).concat(busy))}))
+        .sort((a,b) => cmpSpread(b.spread, a.spread));   // empates: gana el más temprano (sort estable)
+      for (const opt of options) {
+        const placedKeys = tryPlacement(opt.pick, strict);
+        if (placedKeys) return {ptr: n, placedKeys};
+      }
+    }
+    return {ptr: 0, placedKeys: []};
+  }
+
+  // prueba una semana entera con la pierna en un hueco concreto y devuelve el resultado
+  function attempt(legSlot, muscleStrict){
+    autoPlacements = {};
+    const legKeys = [];
+    if (legSlot) {
+      const k = key(legSlot.day, legSlot.slot);
+      autoPlacements[k] = 'leg';
+      legKeys.push(k);
+    }
+    const res = runCascade(muscleStrict);
+    const days = DAYS.map((d,i) => dayHasTraining(d) ? i : -1).filter(i => i >= 0);
+    return {
+      legSlot, muscleStrict,
+      count: res.ptr + legKeys.length,
+      ptr: res.ptr,
+      keys: legKeys.concat(res.placedKeys),
+      spread: spreadScore(days),
+      snapshot: Object.assign({}, autoPlacements)
+    };
+  }
+
+  // criterio: primero que quepan todas las sesiones, luego que queden lo más
+  // separadas posible, y solo al final la preferencia de día de la pierna
+  function isBetter(a, b){
+    if (a.count !== b.count) return a.count > b.count;
+    const sp = cmpSpread(a.spread, b.spread);
+    if (sp !== 0) return sp > 0;
+    return a.muscleStrict && !b.muscleStrict;
+  }
+
+  // días válidos para la pierna, del preferido al resto. Pasada estricta primero;
+  // si no cabe en ninguno, se permite la víspera de un partido antes que quedarse sin pierna
+  const legNeeded = 1 - (manualCounts['leg'] || 0);
+  let legOptions = [null];
+  if (legNeeded > 0) {
+    const prefer = thuGame ? 'mar' : 'mie';   // sin partido el jueves el miércoles es el sitio ideal
+    const byPreference = candidates.slice().sort((a,b) => (b.day === prefer) - (a.day === prefer));
+    for (const strict of [true, false]) {
+      const list = byPreference.filter(c => canPlaceLeg(c.day, c.slot, strict));
+      if (list.length) { legOptions = list; break; }
+    }
   }
 
   // con el sábado disponible hay margen para separar upper de push/pull; si no, se relaja
-  let res = runCascade(satEnabled);
-  if (res.ptr < seq.length && satEnabled) {
-    res.placedKeys.forEach(k => delete autoPlacements[k]);
-    res = runCascade(false);
-  }
-  res.placedKeys.forEach(k => lastPlaced.add(k));
-  for (let ptr = res.ptr; ptr < seq.length; ptr++) skipped.push(ACTIVITIES[seq[ptr]].label);
+  const muscleModes = satEnabled ? [true, false] : [false];
+  let best = null;
+  legOptions.forEach(legSlot => {
+    muscleModes.forEach(m => {
+      const a = attempt(legSlot, m);
+      if (!best || isBetter(a, best)) best = a;
+    });
+  });
+
+  autoPlacements = best.snapshot;
+  best.keys.forEach(k => lastPlaced.add(k));
+  if (legNeeded > 0 && !best.legSlot) skipped.push(ACTIVITIES['leg'].label);
+  for (let ptr = best.ptr; ptr < seq.length; ptr++) skipped.push(ACTIVITIES[seq[ptr]].label);
 
   planned = true;
 
