@@ -37,12 +37,11 @@ BALL_CX, BALL_CY, BALL_R = 96.0, 96.0, 55.0
 # Los trazos del balon, copiados del SVG del manifest:
 #   <circle cx=96 cy=96 r=55 stroke-width=8/>
 #   <line x1=41 y1=96 x2=151 y2=96 stroke-width=6/>
-#   <path d='M96 41 A55 55 0 0 1 96 151' stroke-width=6/>
+#   <line x1=96 y1=41 x2=96 y2=151 stroke-width=6/>
 #   <path d='M73 55 A75 75 0 0 1 63 137' stroke-width=5/>
 #   <path d='M129 55 A75 75 0 0 0 129 137' stroke-width=5/>
 BALL_ARCS = [
     # (x1, y1, rx, ry, large_arc, sweep, x2, y2, stroke_width)
-    (96.0, 41.0, 55.0, 55.0, 0, 1, 96.0, 151.0, 6.0),
     (73.0, 55.0, 75.0, 75.0, 0, 1, 63.0, 137.0, 5.0),
     (129.0, 55.0, 75.0, 75.0, 0, 0, 129.0, 137.0, 5.0),
 ]
@@ -107,9 +106,8 @@ def draw_ball(draw, scale, ox, oy):
     ]
     draw.line([tx(px, py) for px, py in circle], fill=INK, width=w(8.0), joint="curve")
 
-    a = tx(41.0, 96.0)
-    b = tx(151.0, 96.0)
-    draw.line([a, b], fill=INK, width=w(6.0))
+    draw.line([tx(41.0, 96.0), tx(151.0, 96.0)], fill=INK, width=w(6.0))
+    draw.line([tx(96.0, 41.0), tx(96.0, 151.0)], fill=INK, width=w(6.0))
 
     for spec in BALL_ARCS:
         pts = arc_points(*spec[:8])
