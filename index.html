@@ -613,7 +613,7 @@
   </div>
 
   <p class="note">Cada franja es un desplegable: pincha y elige la actividad. "↺ Volver a automático" borra tu elección manual (y cualquier entreno colocado por el botón) y vuelve a la regla por defecto. El circulito ✓ marca la actividad como hecha.<br>
-  Oficina, paseos y baloncesto ya salen solos desde el principio. "Planificar semana" recalcula el entreno entero cada vez que lo pulsas (útil si cambias el WFH o el split) — solo respeta lo que hayas tocado tú a mano. En el móvil puedes deslizar a izquierda o derecha sobre los días para cambiar de semana.</p>
+  Oficina, paseos y baloncesto ya salen solos desde el principio. "Planificar semana" recalcula el entreno <strong>de hoy en adelante</strong>: los días ya pasados no se tocan y respeta lo que hayas fijado a mano con 📌. Las sesiones de gym que se quedaron en días pasados sin marcar ✓ se recolocan en los huecos que queden de la semana y en su sitio aparece 😴 Descanso — es el único caso en el que se borra un 📌. Si no queda hueco libre, la sesión se queda en su día y te avisa. En el móvil puedes deslizar a izquierda o derecha sobre los días para cambiar de semana.</p>
 
   </div><!-- /viewPlan -->
 
@@ -992,21 +992,34 @@ function cmpSpread(a, b){
   return 0;
 }
 
+// ---- qué parte de la semana que se está viendo ya es pasado ----
+// Solo la semana en curso tiene pasado: una futura no tiene nada hecho todavía y una
+// pasada se replanifica entera, como siempre. Hoy cuenta como disponible.
+function todayIndexInWeek(){
+  if (viewedMonday !== mondayOf(new Date())) return 0;
+  return DAYS.indexOf(JS_DAY_TO_KEY[new Date().getDay()]);
+}
+function isPastDay(d){ return DAYS.indexOf(d) < todayIndexInWeek(); }
+
 // avisa cuando el split elegido no cabe en los huecos disponibles
 function updateCapacityWarning(){
   const banner = document.getElementById('warnBanner');
   const needed = SPLIT_SEQUENCE[currentSplit].length + 1; // + pierna
 
   // sesiones ya colocadas en CUALQUIER franja (incluidas las que fijas a mano
-  // fuera de los huecos habituales: p. ej. un pull en la siesta)
+  // fuera de los huecos habituales: p. ej. un pull en la siesta). En los días ya
+  // pasados solo cuenta lo que llegaste a marcar como hecho: el resto se recoloca.
   let placed = 0;
   DAYS.forEach(d => SLOTS.forEach(s => {
-    if (TRAINING_TYPES.includes(rawValue(d, s) || '')) placed++;
+    if (!TRAINING_TYPES.includes(rawValue(d, s) || '')) return;
+    if (isPastDay(d) && !done.has(key(d, s))) return;
+    placed++;
   }));
 
-  // huecos libres que el planificador aún podría usar (un día con entreno ya no cuenta)
+  // huecos libres que el planificador aún podría usar, de hoy en adelante
+  // (un día con entreno ya no cuenta)
   const free = trainingSlots().filter(c =>
-    rawValue(c.day, c.slot) === undefined && !dayHasTraining(c.day)
+    !isPastDay(c.day) && rawValue(c.day, c.slot) === undefined && !dayHasTraining(c.day)
   ).length;
 
   const capacity = placed + free;
@@ -1016,14 +1029,15 @@ function updateCapacityWarning(){
     const games = gamesMap();
     const reasons = [];
     const blockedDays = ['mar','mie','jue'].concat(satEnabled ? ['sab'] : [])
-      .filter(d => !wfhSet.has(d) && restAfterGame(games, d));
+      .filter(d => !isPastDay(d) && !wfhSet.has(d) && restAfterGame(games, d));
     if (blockedDays.length) {
       const names = blockedDays.map(d => DAY_NAMES[d].toLowerCase());
       reasons.push(`${names.join(' y ')} ${blockedDays.length > 1 ? 'quedan bloqueados' : 'queda bloqueado'} por el partido del día anterior`);
     }
     if (!satEnabled) reasons.push('el sábado está desactivado');
     banner.className = 'warn-banner';
-    banner.innerHTML = `<strong>No caben ${needed} sesiones esta semana.</strong> ` +
+    const restante = todayIndexInWeek() > 0 ? 'en lo que queda de semana' : 'esta semana';
+    banner.innerHTML = `<strong>No caben ${needed} sesiones ${restante}.</strong> ` +
       `Hay ${placed} colocada(s) y ${free} hueco(s) libre(s)` +
       (reasons.length ? `: ${reasons.join(' y ')}` : '') +
       `. Activa el sábado, marca algún día de teletrabajo (libera el mediodía), coloca alguna sesión a mano o baja el split.`;
@@ -1034,18 +1048,52 @@ function updateCapacityWarning(){
 }
 
 function autoFillWeek(silent){
-  autoPlacements = {};
+  // el ✓ va pegado a la celda, no a la actividad: si el planificador cambia lo que
+  // hay en una celda marcada como hecha, ese ✓ deja de tener sentido
+  const doneActs = {};
+  (() => {
+    const g = buildGrid();
+    Array.from(done).forEach(k => {
+      const i = k.indexOf('_');
+      doneActs[k] = effective(g, k.slice(0, i), k.slice(i+1));
+    });
+  })();
+
+  // ---- el pasado no se replanifica ----
+  // Lo que ya hiciste se queda donde está. Lo que quedó programado y sin hacer se
+  // libera para recolocarlo en los días que quedan, y en su hueco queda descanso.
+  // Es el único caso en el que se borra algo fijado a mano.
+  const frozen = {};
+  const vacated = [];   // celdas liberadas: {k, act, wasOverride}
+  DAYS.filter(isPastDay).forEach(d => SLOTS.forEach(s => {
+    const k = key(d, s);
+    const ov = overrides[k];
+    const v = ov !== undefined ? ov : autoPlacements[k];
+    if (v === undefined) return;
+    if (!TRAINING_TYPES.includes(v) || done.has(k)) {
+      if (ov === undefined) frozen[k] = v;   // lo que puso el planificador se conserva
+      return;
+    }
+    vacated.push({k, act: v, wasOverride: ov !== undefined});
+    if (ov !== undefined) delete overrides[k];
+    frozen[k] = 'descanso';
+  }));
+
+  autoPlacements = Object.assign({}, frozen);
   lastPlaced = new Set();
 
   const games = gamesMap();
   const thuGame = dayHasGame(games, 'jue');
 
-  // cuántas sesiones de cada tipo faltan (lo fijado a mano ya cuenta)
+  // cuántas sesiones de cada tipo están ya colocadas: lo fijado a mano y lo congelado
+  // del pasado cuentan, y lo liberado vuelve a la cola
   const manualCounts = {};
-  Object.values(overrides).forEach(v => { if (TRAINING_TYPES.includes(v)) manualCounts[v] = (manualCounts[v]||0)+1; });
+  const countTraining = v => { if (TRAINING_TYPES.includes(v)) manualCounts[v] = (manualCounts[v]||0)+1; };
+  Object.values(overrides).forEach(countTraining);
+  Object.values(frozen).forEach(countTraining);
 
-  // huecos válidos de entreno, en orden cronológico (misma lista que usa el aviso de capacidad)
-  const candidates = trainingSlots();
+  // huecos válidos de entreno, de hoy en adelante (hoy todavía cuenta como disponible)
+  const candidates = trainingSlots().filter(c => !isPastDay(c.day));
 
   function slotFree(day, slot){
     return rawValue(day, slot) === undefined;
@@ -1061,9 +1109,9 @@ function autoFillWeek(silent){
     return true;
   }
 
-  const skipped = [];
+  const skippedTypes = [];
 
-  // secuencia de entrenos que falta por colocar (lo fijado a mano ya cuenta)
+  // secuencia de entrenos que falta por colocar (lo ya colocado ya cuenta)
   const seq = SPLIT_SEQUENCE[currentSplit].slice();
   Object.keys(manualCounts).forEach(t => {
     let n = manualCounts[t];
@@ -1097,8 +1145,8 @@ function autoFillWeek(silent){
   // sesiones, prueba con una menos (y así sucesivamente) en vez de amontonarlas.
   function runCascade(strict){
     const free = candidates.filter(c => slotFree(c.day, c.slot) && !dayHasTraining(c.day));
-    // días que ya tienen entreno (la pierna, o lo fijado a mano): cuentan para
-    // medir la separación aunque su hueco ya no esté libre
+    // días que ya tienen entreno (la pierna, lo fijado a mano o lo hecho en días
+    // pasados): cuentan para medir la separación aunque su hueco ya no esté libre
     const busy = DAYS.map((d,i) => dayHasTraining(d) ? i : -1).filter(i => i >= 0);
 
     for (let n = Math.min(seq.length, free.length); n > 0; n--) {
@@ -1115,7 +1163,7 @@ function autoFillWeek(silent){
 
   // prueba una semana entera con la pierna en un hueco concreto y devuelve el resultado
   function attempt(legSlot, muscleStrict){
-    autoPlacements = {};
+    autoPlacements = Object.assign({}, frozen);   // el pasado congelado es el punto de partida
     const legKeys = [];
     if (legSlot) {
       const k = key(legSlot.day, legSlot.slot);
@@ -1168,12 +1216,46 @@ function autoFillWeek(silent){
 
   autoPlacements = best.snapshot;
   best.keys.forEach(k => lastPlaced.add(k));
-  if (legNeeded > 0 && !best.legSlot) skipped.push(ACTIVITIES['leg'].label);
-  for (let ptr = best.ptr; ptr < seq.length; ptr++) skipped.push(ACTIVITIES[seq[ptr]].label);
+  if (legNeeded > 0 && !best.legSlot) skippedTypes.push('leg');
+  for (let ptr = best.ptr; ptr < seq.length; ptr++) skippedTypes.push(seq[ptr]);
+
+  // una sesión liberada del pasado que no encuentra hueco se queda donde estaba:
+  // vaciar el pasado y encima perder la sesión no le sirve a nadie
+  const restored = [];
+  skippedTypes.slice().forEach(t => {
+    const i = vacated.findIndex(v => v.act === t);
+    if (i === -1) return;
+    const v = vacated.splice(i, 1)[0];
+    delete autoPlacements[v.k];                  // quita el descanso que había quedado
+    if (v.wasOverride) overrides[v.k] = v.act;
+    else autoPlacements[v.k] = v.act;
+    restored.push(v);
+    skippedTypes.splice(skippedTypes.indexOf(t), 1);
+  });
+
+  // el ✓ de una celda cuya actividad ha cambiado se retira
+  (() => {
+    const g = buildGrid();
+    Array.from(done).forEach(k => {
+      const i = k.indexOf('_');
+      if (effective(g, k.slice(0, i), k.slice(i+1)) !== doneActs[k]) done.delete(k);
+    });
+  })();
 
   planned = true;
 
-  if (skipped.length) toastMsg(`Sin hueco válido para: ${skipped.join(', ')}`, 5500);
+  const lbl = t => ACTIVITIES[t].label;
+  const parts = [];
+  if (vacated.length) {
+    parts.push(`Recolocad${vacated.length > 1 ? 'as' : 'a'} ${vacated.length > 1 ? vacated.length + ' sesiones' : '1 sesión'} sin hacer: ${vacated.map(v => lbl(v.act)).join(', ')}`);
+  }
+  if (restored.length) {
+    parts.push(`sin hueco para recolocar ${restored.map(v => lbl(v.act)).join(', ')}: se queda${restored.length > 1 ? 'n' : ''} en su día`);
+  }
+  if (skippedTypes.length) {
+    parts.push(`sin hueco válido para ${skippedTypes.map(lbl).join(', ')}`);
+  }
+  if (parts.length) toastMsg(parts.join(' · '), 6500);
   else if (!silent) toastMsg('Semana planificada ✓', 2600);
 
   saveState();
