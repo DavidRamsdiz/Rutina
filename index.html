@@ -257,6 +257,13 @@
   .warn-banner::before{content:'⚠️'; flex:0 0 auto; font-size:14px; line-height:1.35;}
   .warn-banner strong{font-family:'Oswald', sans-serif; font-weight:600;}
   .warn-banner.hidden{display:none;}
+  .locked-note{
+    background:rgba(255,252,245,.72); border:1px solid var(--line-2);
+    border-left:4px solid var(--ink-dim); border-radius:var(--r-sm);
+    padding:12px 14px; margin-bottom:14px; font-size:12.8px; line-height:1.5; color:var(--ink-2);
+  }
+  .locked-note strong{font-family:'Oswald', sans-serif; font-weight:600; color:var(--ink);}
+  .locked-note.hidden{display:none;}
 
   /* ---------- tarjetas por día (móvil) ---------- */
   .day-cards{display:grid; gap:12px; margin-bottom:16px;}
@@ -269,12 +276,31 @@
     box-shadow:0 0 0 2px rgba(224,58,62,.16), var(--sh-2);
   }
   .day-card.is-past .dc-head,
+  .day-card.is-past .dc-summary,
   .day-card.is-past .dc-slots{opacity:.62;}
   .dc-head{
     display:flex; align-items:center; gap:8px; padding:11px 14px;
     background:linear-gradient(100deg, rgba(25,22,16,.055), rgba(25,22,16,.012));
     border-bottom:1px solid var(--line);
+    cursor:pointer; user-select:none; -webkit-user-select:none;
   }
+  .dc-head:active{background:rgba(25,22,16,.09);}
+  .dc-caret{
+    font-size:19px; line-height:1; color:var(--ink-dim); flex:0 0 auto;
+    transform:translateY(-3px); transition:transform .22s ease;
+  }
+  /* plegado: solo queda la cabecera y, si hay deporte o alemán ese día, un resumen de una línea */
+  .day-card.is-folded .dc-caret{transform:translateY(-1px) rotate(-90deg);}
+  .day-card.is-folded .dc-head{border-bottom:0;}
+  .day-card.is-folded .dc-slots{display:none;}
+  .dc-summary{
+    display:none; padding:8px 14px 10px; border-top:1px solid var(--line);
+    font-size:12.5px; font-weight:600; line-height:1.45;
+    overflow:hidden; text-overflow:ellipsis; white-space:nowrap;
+  }
+  .day-card.is-folded .dc-summary{display:block;}
+  .dc-summary .is-done{text-decoration:line-through; opacity:.55;}
+  .dc-sep{color:var(--ink-dim); margin:0 6px; font-weight:400;}
   .day-card.is-today .dc-head{background:linear-gradient(100deg, rgba(224,58,62,.15), rgba(224,58,62,.03));}
   .dc-day{font-family:'Oswald', sans-serif; font-weight:600; font-size:16.5px; letter-spacing:.01em;}
   .dc-date{
@@ -594,6 +620,8 @@
     <button class="reset-btn" id="resetBtn" title="Resetear semana" aria-label="Resetear semana">↺</button>
   </div>
 
+  <div class="locked-note hidden" id="lockedNote">🔒 <strong>Semana cerrada.</strong> El histórico no se replanifica ni se resetea: puedes seguir editando cada franja a mano y marcando el ✓.</div>
+
   <div class="warn-banner hidden" id="warnBanner"></div>
 
   <div class="day-cards" id="dayCards"></div>
@@ -612,8 +640,8 @@
     <input type="file" id="restoreFile" accept="application/json,.json" style="display:none">
   </div>
 
-  <p class="note">Cada franja es un desplegable: pincha y elige la actividad. "↺ Volver a automático" borra tu elección manual (y cualquier entreno colocado por el botón) y vuelve a la regla por defecto. El circulito ✓ marca la actividad como hecha.<br>
-  Oficina, paseos y baloncesto ya salen solos desde el principio. "Planificar semana" recalcula el entreno <strong>de hoy en adelante</strong>: los días ya pasados no se tocan y respeta lo que hayas fijado a mano con 📌. Las sesiones de gym que se quedaron en días pasados sin marcar ✓ se recolocan en los huecos que queden de la semana y en su sitio aparece 😴 Descanso — es el único caso en el que se borra un 📌. Si no queda hueco libre, la sesión se queda en su día y te avisa. En el móvil puedes deslizar a izquierda o derecha sobre los días para cambiar de semana.</p>
+  <p class="note">Cada franja es un desplegable: pincha y elige la actividad. "↺ Volver a automático" borra tu elección manual (y cualquier entreno colocado por el botón) y vuelve a la regla por defecto. "— Libre —" vacía la franja sin fijarla: nunca lleva 📌 y el planificador puede volver a usarla — si quieres que no la toque, fija 😴 Descanso. El circulito ✓ marca la actividad como hecha.<br>
+  Oficina, paseos y baloncesto ya salen solos desde el principio. "Planificar semana" recalcula el entreno <strong>de hoy en adelante</strong>: los días ya pasados no se tocan y respeta lo que hayas fijado a mano con 📌. Las sesiones de gym que se quedaron en días pasados sin marcar ✓ se recolocan en los huecos que queden de la semana y en su sitio aparece 😴 Descanso — es el único caso en el que se borra un 📌. Si no queda hueco libre, la sesión se queda en su día y te avisa. Las semanas ya cerradas no se replanifican ni se resetean: el histórico solo se edita a mano. En el móvil puedes deslizar a izquierda o derecha sobre los días para cambiar de semana, y tocar la cabecera de un día para plegarlo o desplegarlo: los días ya pasados salen plegados.</p>
 
   </div><!-- /viewPlan -->
 
@@ -890,11 +918,23 @@ function computeBaseDefaults(){
   return grid;
 }
 
+// "— Libre —" (cadena vacía) no es una elección que bloquee la franja: solo tapa el
+// valor por defecto, así que el planificador puede seguir usando ese hueco
 function rawValue(d, s){
   const k = key(d,s);
-  if (overrides[k] !== undefined) return overrides[k];
-  if (autoPlacements[k] !== undefined) return autoPlacements[k];
+  const ov = overrides[k];
+  const ap = autoPlacements[k];
+  if (ov !== undefined && ov !== '') return ov;
+  if (ap !== undefined) return ap;
+  if (ov === '') return '';
   return undefined; // sin elección: el default decide
+}
+
+// un hueco cuenta como libre para el planificador si no hay nada elegido o si lo
+// has vaciado tú con "— Libre —"
+function slotIsFree(d, s){
+  const v = rawValue(d, s);
+  return v === undefined || v === '';
 }
 
 // rellena los bloques de trabajo alrededor de lo ya colocado:
@@ -1001,9 +1041,14 @@ function todayIndexInWeek(){
 }
 function isPastDay(d){ return DAYS.indexOf(d) < todayIndexInWeek(); }
 
+// una semana ya cerrada no se replanifica nunca: el histórico solo se edita a mano
+function isPastWeek(){ return viewedMonday < mondayOf(new Date()); }
+
 // avisa cuando el split elegido no cabe en los huecos disponibles
 function updateCapacityWarning(){
   const banner = document.getElementById('warnBanner');
+  // en una semana cerrada no hay nada que planificar: el aviso no aplica
+  if (isPastWeek()) { banner.className = 'warn-banner hidden'; banner.innerHTML = ''; return; }
   const needed = SPLIT_SEQUENCE[currentSplit].length + 1; // + pierna
 
   // sesiones ya colocadas en CUALQUIER franja (incluidas las que fijas a mano
@@ -1019,7 +1064,7 @@ function updateCapacityWarning(){
   // huecos libres que el planificador aún podría usar, de hoy en adelante
   // (un día con entreno ya no cuenta)
   const free = trainingSlots().filter(c =>
-    !isPastDay(c.day) && rawValue(c.day, c.slot) === undefined && !dayHasTraining(c.day)
+    !isPastDay(c.day) && slotIsFree(c.day, c.slot) && !dayHasTraining(c.day)
   ).length;
 
   const capacity = placed + free;
@@ -1048,6 +1093,12 @@ function updateCapacityWarning(){
 }
 
 function autoFillWeek(silent){
+  // el histórico es intocable: una semana ya cerrada solo se edita a mano
+  if (isPastWeek()) {
+    if (!silent) toastMsg('Semana cerrada: el histórico no se replanifica, edítalo a mano', 4500);
+    return;
+  }
+
   // el ✓ va pegado a la celda, no a la actividad: si el planificador cambia lo que
   // hay en una celda marcada como hecha, ese ✓ deja de tener sentido
   const doneActs = {};
@@ -1067,15 +1118,15 @@ function autoFillWeek(silent){
   const vacated = [];   // celdas liberadas: {k, act, wasOverride}
   DAYS.filter(isPastDay).forEach(d => SLOTS.forEach(s => {
     const k = key(d, s);
-    const ov = overrides[k];
-    const v = ov !== undefined ? ov : autoPlacements[k];
+    const v = rawValue(d, s);
     if (v === undefined) return;
+    const pinned = !!overrides[k] && overrides[k] === v;   // "libre" no cuenta como fijado
     if (!TRAINING_TYPES.includes(v) || done.has(k)) {
-      if (ov === undefined) frozen[k] = v;   // lo que puso el planificador se conserva
+      if (!pinned) frozen[k] = v;            // lo que puso el planificador se conserva
       return;
     }
-    vacated.push({k, act: v, wasOverride: ov !== undefined});
-    if (ov !== undefined) delete overrides[k];
+    vacated.push({k, act: v, wasPinned: pinned});
+    if (pinned) delete overrides[k];
     frozen[k] = 'descanso';
   }));
 
@@ -1095,12 +1146,8 @@ function autoFillWeek(silent){
   // huecos válidos de entreno, de hoy en adelante (hoy todavía cuenta como disponible)
   const candidates = trainingSlots().filter(c => !isPastDay(c.day));
 
-  function slotFree(day, slot){
-    return rawValue(day, slot) === undefined;
-  }
-
   function canPlaceLeg(day, slot, strict){
-    if (!slotFree(day, slot)) return false;
+    if (!slotIsFree(day, slot)) return false;
     if (dayHasTraining(day)) return false;
     if (dayHasGame(games, day)) return false;                       // nunca pierna el día de un partido
     const nd = nextDay(day);
@@ -1144,7 +1191,7 @@ function autoFillWeek(silent){
   // busca el reparto más espaciado que cumpla las reglas. Si no caben todas las
   // sesiones, prueba con una menos (y así sucesivamente) en vez de amontonarlas.
   function runCascade(strict){
-    const free = candidates.filter(c => slotFree(c.day, c.slot) && !dayHasTraining(c.day));
+    const free = candidates.filter(c => slotIsFree(c.day, c.slot) && !dayHasTraining(c.day));
     // días que ya tienen entreno (la pierna, lo fijado a mano o lo hecho en días
     // pasados): cuentan para medir la separación aunque su hueco ya no esté libre
     const busy = DAYS.map((d,i) => dayHasTraining(d) ? i : -1).filter(i => i >= 0);
@@ -1227,7 +1274,7 @@ function autoFillWeek(silent){
     if (i === -1) return;
     const v = vacated.splice(i, 1)[0];
     delete autoPlacements[v.k];                  // quita el descanso que había quedado
-    if (v.wasOverride) overrides[v.k] = v.act;
+    if (v.wasPinned) overrides[v.k] = v.act;
     else autoPlacements[v.k] = v.act;
     restored.push(v);
     skippedTypes.splice(skippedTypes.indexOf(t), 1);
@@ -1317,8 +1364,8 @@ function render(){
   html += '</tr></thead><tbody>';
 
   // las tarjetas por día (vista móvil) se construyen a la vez que la tabla
-  const cardRows = {}, cardDone = {};
-  DAYS.forEach(d => { cardRows[d] = ''; cardDone[d] = [0,0]; });
+  const cardRows = {}, cardDone = {}, cardSummary = {};
+  DAYS.forEach(d => { cardRows[d] = ''; cardDone[d] = [0,0]; cardSummary[d] = []; });
 
   // contador de la semana: mismas actividades que miden las estadísticas
   let total = 0, doneN = 0;
@@ -1331,7 +1378,7 @@ function render(){
       const cls = (ACTIVITIES[val] || {}).cls || '';
       const color = actColor(cls);
       const tint = val ? (CLS_TINT[cls] || CLS_TINT['']) : 'transparent';
-      const isManual = overrides[k] !== undefined;
+      const isManual = !!overrides[k];   // "libre" no lleva 📌: vaciar no es fijar
       const isDone = done.has(k);
       const isPlaced = lastPlaced.has(k);
       const isToday = isCurWeek && d === todayD;
@@ -1340,6 +1387,7 @@ function render(){
       if (measurable) {
         total++; cardDone[d][1]++;
         if (isDone) { doneN++; cardDone[d][0]++; }
+        cardSummary[d].push(`<span class="${isDone ? 'is-done' : ''}" style="color:${color}">${actLabel(val, s)}</span>`);
       }
       const doneBtn = measurable
         ? `<button class="done-btn" data-day="${d}" data-slot="${s}" title="Marcar hecho" aria-label="Marcar hecho">✓</button>` : '';
@@ -1374,12 +1422,16 @@ function render(){
     const isToday = isCurWeek && d === todayD;
     const isPast = isCurWeek && todayIdx > -1 && DAYS.indexOf(d) < todayIdx;
     const dn = cardDone[d][0], tt = cardDone[d][1];
-    return `<article class="day-card${isToday ? ' is-today' : ''}${isPast ? ' is-past' : ''}">`
-      + `<header class="dc-head">`
+    const folded = isFolded(d, isPast);
+    const summary = cardSummary[d].length
+      ? `<div class="dc-summary">${cardSummary[d].join('<span class="dc-sep">·</span>')}</div>` : '';
+    return `<article class="day-card${isToday ? ' is-today' : ''}${isPast ? ' is-past' : ''}${folded ? ' is-folded' : ''}" data-day="${d}">`
+      + `<header class="dc-head" role="button" tabindex="0" aria-expanded="${!folded}" title="${folded ? 'Desplegar' : 'Plegar'}">`
       + `<span class="dc-day">${DAY_NAMES[d]}<span class="dc-date">${dayDateLabel(d)}</span></span>`
       + `<span class="dc-badges">${isToday ? '<span class="pill-today">Hoy</span>' : ''}`
-      + `${tt ? `<span class="dc-count">✓ ${dn}/${tt}</span>` : ''}</span>`
-      + `</header><div class="dc-slots">${cardRows[d]}</div></article>`;
+      + `${tt ? `<span class="dc-count">✓ ${dn}/${tt}</span>` : ''}`
+      + `<span class="dc-caret" aria-hidden="true">⌄</span></span>`
+      + `</header>${summary}<div class="dc-slots">${cardRows[d]}</div></article>`;
   }).join('');
 
   document.getElementById('weekStats').textContent = total ? `✓ ${doneN}/${total}` : 'sin actividades';
@@ -1396,8 +1448,7 @@ function render(){
     btn.innerHTML = `<span class="d-long">${DAY_NAMES[d]}</span><span class="d-short">${DAY_NAMES[d].slice(0,3)}</span>`;
     btn.onclick = () => {
       wfhSet.has(d) ? wfhSet.delete(d) : wfhSet.add(d);
-      if (planned) autoFillWeek(true);
-      else { saveState(); render(); }
+      replanOrSave();
     };
     wfhC.appendChild(btn);
   });
@@ -1410,6 +1461,11 @@ function render(){
       : 'sin WFH';
     hint.textContent = `${currentSplit}d · ${wfhTxt}${satEnabled ? ' · sáb' : ''}`;
   }
+
+  // en una semana cerrada no se ofrece planificar ni resetear
+  const locked = isPastWeek();
+  document.querySelector('.action-dock').style.display = locked ? 'none' : '';
+  document.getElementById('lockedNote').classList.toggle('hidden', !locked);
 
   updateCapacityWarning();
 
@@ -1440,6 +1496,8 @@ document.getElementById('viewPlan').addEventListener('change', (e) => {
       toastMsg(`Ojo: pisas el ${ACTIVITIES[prevAuto].label} del ${DAY_NAMES[d].toLowerCase()} — pulsa Planificar si quieres recolocarlo`, 6000);
     }
     overrides[k] = v;
+    // "libre" no fija nada: vacía el hueco y lo deja disponible para el planificador
+    if (v === '') delete autoPlacements[k];
     done.delete(k);
   }
   saveState();
@@ -1454,6 +1512,35 @@ document.getElementById('viewPlan').addEventListener('click', (e) => {
   if (navigator.vibrate) { try { navigator.vibrate(12); } catch(err) {} }
   saveState();
   render();
+});
+
+// plegar/desplegar un día tocando su cabecera. Lo que toques a mano manda mientras la app
+// esté abierta; si no has tocado nada, los días ya pasados de la semana en curso salen
+// plegados y el resto abiertos
+const foldChoice = {};   // `${lunes}_${día}` -> true (plegado) / false (abierto)
+function isFolded(d, isPast){
+  const c = foldChoice[viewedMonday + '_' + d];
+  return c !== undefined ? c : isPast;
+}
+function toggleFold(card){
+  if (!card) return;
+  const folded = !card.classList.contains('is-folded');
+  foldChoice[viewedMonday + '_' + card.dataset.day] = folded;
+  card.classList.toggle('is-folded', folded);
+  const head = card.querySelector('.dc-head');
+  head.setAttribute('aria-expanded', String(!folded));
+  head.title = folded ? 'Desplegar' : 'Plegar';
+}
+document.getElementById('dayCards').addEventListener('click', (e) => {
+  const head = e.target.closest('.dc-head');
+  if (head) toggleFold(head.closest('.day-card'));
+});
+document.getElementById('dayCards').addEventListener('keydown', (e) => {
+  if (e.key !== 'Enter' && e.key !== ' ') return;
+  const head = e.target.closest('.dc-head');
+  if (!head) return;
+  e.preventDefault();
+  toggleFold(head.closest('.day-card'));
 });
 
 // deslizar sobre las tarjetas para cambiar de semana (solo móvil, es donde se usan)
@@ -1475,33 +1562,38 @@ document.getElementById('viewPlan').addEventListener('click', (e) => {
   }, {passive:true});
 })();
 
+// tras cambiar una condición: si la semana ya está planificada se recoloca sola,
+// salvo en una semana cerrada, donde solo se guarda el cambio
+function replanOrSave(){
+  if (planned && !isPastWeek()) autoFillWeek(true);
+  else { saveState(); render(); }
+}
+
 document.getElementById('splitToggle').addEventListener('click', (e) => {
   const btn = e.target.closest('button');
   if (!btn) return;
   currentSplit = Number(btn.dataset.split);
   document.querySelectorAll('#splitToggle button').forEach(b => b.classList.toggle('active', b === btn));
-  if (planned) autoFillWeek(true);
-  else { saveState(); render(); }
+  replanOrSave();
 });
 
 document.getElementById('sundayTime').addEventListener('change', () => {
   // al cambiar la hora, los ajustes manuales del domingo dejan de tener sentido: se limpian
   Object.keys(overrides).forEach(k => { if (k.startsWith('dom_')) delete overrides[k]; });
   Object.keys(autoPlacements).forEach(k => { if (k.startsWith('dom_')) delete autoPlacements[k]; });
-  if (planned) autoFillWeek(true);
-  else { saveState(); render(); }
+  replanOrSave();
 });
 
 document.getElementById('satToggle').addEventListener('click', () => {
   satEnabled = !satEnabled;
   document.getElementById('satSwitch').classList.toggle('on', satEnabled);
-  if (planned) autoFillWeek(true);
-  else { saveState(); render(); }
+  replanOrSave();
 });
 
 document.getElementById('scheduleBtn').addEventListener('click', () => autoFillWeek(false));
 
 document.getElementById('resetBtn').addEventListener('click', () => {
+  if (isPastWeek()) { toastMsg('Semana cerrada: el histórico no se resetea, edítalo a mano', 4500); return; }
   if (!confirm('¿Borrar todo lo que has fijado a mano y volver todo a automático?')) return;
   overrides = {};
   autoPlacements = {};
