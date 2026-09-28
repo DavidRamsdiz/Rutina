@@ -101,8 +101,8 @@
     margin:1px 0 0; line-height:1.15; letter-spacing:.01em; color:var(--ink);
   }
   .view-tabs{
-    display:grid; grid-template-columns:repeat(3, 1fr); gap:4px; margin:11px auto 0;
-    max-width:400px; background:rgba(25,22,16,.07); border-radius:13px; padding:4px;
+    display:grid; grid-template-columns:1fr 1fr; gap:4px; margin:11px auto 0;
+    max-width:340px; background:rgba(25,22,16,.07); border-radius:13px; padding:4px;
   }
   .view-tabs button{
     min-height:38px; border:0; border-radius:9px; cursor:pointer;
@@ -503,224 +503,13 @@
     transition:opacity .22s ease, transform .22s ease;
   }
   .toast.show{opacity:1; transform:translateY(0);}
-  .toast.has-action{display:flex; align-items:center; gap:12px;}
-  .toast.show.has-action{pointer-events:auto;}
-  .toast-undo{
-    margin-left:auto; flex:0 0 auto; border:0; background:none; cursor:pointer;
-    padding:6px 2px 6px 8px; color:#F6C26B; font-family:'IBM Plex Sans', sans-serif;
-    font-size:13px; font-weight:700; letter-spacing:.02em;
-  }
-
-  /* ---------- hábitos ---------- */
-  #viewHabits{max-width:720px; margin:0 auto;}
-  .hb-progress{
-    display:flex; align-items:center; gap:14px; margin:0 0 4px; padding:12px 14px;
-    background:var(--surface); border:1px solid var(--line-2); border-radius:var(--r); box-shadow:var(--sh-1);
-  }
-  .hb-ring{width:60px; height:60px; flex:0 0 60px;}
-  .hb-ring circle{transition:stroke-dashoffset .45s cubic-bezier(.4,0,.2,1);}
-  .hb-prog-txt{flex:1; min-width:0; line-height:1.4;}
-  .hb-prog-txt b{font-family:'Oswald', sans-serif; font-weight:600; font-size:21px;}
-  .hb-prog-txt span{font-size:12.5px; color:var(--ink-dim);}
-  .hb-sec{
-    display:flex; align-items:center; justify-content:space-between; width:100%;
-    margin:18px 0 8px; padding:0 4px; border:0; background:none; color:var(--ink-dim);
-    font-family:'IBM Plex Mono', monospace; font-size:10.5px; letter-spacing:.12em; text-transform:uppercase;
-  }
-  button.hb-sec{cursor:pointer; min-height:34px;}
-  .hb-caret{display:inline-block; margin-left:4px; transition:transform .2s ease;}
-  .hb-sec[aria-expanded="true"] .hb-caret{transform:rotate(180deg);}
-  .hb-moment{font-size:12.5px; font-weight:600; color:var(--ink-2); margin:12px 4px 6px;}
-  .hb-sec + .hb-moment{margin-top:2px;}
-  .hb-card{
-    background:var(--surface); border:1px solid var(--line-2); border-radius:var(--r);
-    box-shadow:var(--sh-1); overflow:hidden;
-  }
-  .hb-card.hb-pad{padding:14px;}
-  .hb-row{
-    display:flex; align-items:center; gap:8px; min-height:62px;
-    padding:7px 12px 7px 8px; border-top:1px solid var(--line);
-  }
-  .hb-row:first-child, .hb-mrow:first-child{border-top:0;}
-  .hb-open{
-    flex:1; min-width:0; display:flex; align-items:center; gap:12px; text-align:left;
-    margin:0; padding:5px 6px; border:0; border-radius:12px; background:none; color:inherit; cursor:pointer;
-  }
-  .hb-open:active{background:rgba(25,22,16,.05);}
-  .hb-open.is-static{cursor:default;}
-  .hb-open.is-static:active{background:none;}
-  .hb-emo{
-    width:40px; height:40px; flex:0 0 40px; border-radius:12px;
-    display:grid; place-items:center; font-size:20px; line-height:1;
-  }
-  .hb-txt{display:flex; flex-direction:column; flex:1; min-width:0;}
-  .hb-name{font-size:15px; font-weight:600; line-height:1.3; overflow:hidden; text-overflow:ellipsis; white-space:nowrap;}
-  .hb-sub{
-    display:flex; flex-wrap:wrap; align-items:center; gap:4px 8px; margin-top:3px;
-    font-size:12px; color:var(--ink-dim); line-height:1.35;
-  }
-  .hb-tag{
-    font-family:'IBM Plex Mono', monospace; font-size:10.5px; padding:2px 7px; border-radius:6px;
-    background:var(--surface-2); color:var(--ink-2); white-space:nowrap;
-  }
-  .hb-tag.plan{background:rgba(31,138,112,.12); color:var(--german);}
-  .hb-tag.ok{background:rgba(47,107,79,.13); color:var(--leg);}
-  .hb-tag.warn{background:rgba(224,58,62,.12); color:var(--game-2);}
-  .hb-chk{
-    width:38px; height:38px; flex:0 0 38px; padding:0; border-radius:50%; cursor:pointer;
-    display:grid; place-items:center; font-size:16px; font-weight:700; line-height:1;
-    border:2px solid rgba(25,22,16,.22); background:var(--surface-2); color:transparent;
-    transition:background .18s ease, border-color .18s ease, color .18s ease, transform .12s ease;
-  }
-  .hb-chk:active{transform:scale(.86);}
-  .hb-row.is-done .hb-chk{
-    background:var(--c, var(--leg)); border-color:var(--c, var(--leg)); color:#fff;
-    box-shadow:0 2px 8px rgba(25,22,16,.22);
-  }
-  .hb-row.is-done .hb-name{text-decoration:line-through; opacity:.5;}
-  .hb-row.is-done .hb-emo{opacity:.5;}
-  .hb-row.is-week .hb-name, .hb-row.is-week .hb-emo{opacity:.55;}
-  .hb-row.is-week .hb-chk{border-style:dashed;}
-  .hb-row.is-future .hb-chk{opacity:.35; cursor:not-allowed;}
-  .hb-chk.pop, .hb-day.pop{animation:hbPop .38s cubic-bezier(.3,1.5,.5,1);}
-  @keyframes hbPop{0%{transform:scale(.72);} 60%{transform:scale(1.16);} 100%{transform:scale(1);}}
-  .hb-empty{padding:20px 16px; text-align:center; font-size:14.5px; font-weight:500; color:var(--ink-2);}
-  .hb-dock{display:flex; gap:10px; margin:16px 0;}
-  .hb-back{
-    border:0; background:none; cursor:pointer; padding:8px 2px; margin:0 0 6px;
-    font-family:'IBM Plex Mono', monospace; font-size:12px; color:var(--ink-2);
-  }
-  .hb-h2{font-family:'Oswald', sans-serif; font-weight:600; font-size:20px; margin:0 0 12px;}
-  .hb-dhead{display:flex; align-items:center; gap:14px; margin:0 0 14px;}
-  .hb-dhead .hb-emo{width:56px; height:56px; flex-basis:56px; font-size:28px; border-radius:17px;}
-  .hb-dhead h2{font-family:'Oswald', sans-serif; font-weight:600; font-size:22px; line-height:1.15; margin:0;}
-  .hb-dsub{font-size:12.5px; color:var(--ink-dim); margin-top:3px; line-height:1.45;}
-  .hb-cal{
-    background:var(--surface); border:1px solid var(--line-2); border-radius:var(--r);
-    box-shadow:var(--sh-1); padding:12px 14px 14px; margin-bottom:14px;
-  }
-  .hb-cal-head{
-    display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
-    font-family:'Oswald', sans-serif; font-weight:600; font-size:16px; text-transform:capitalize;
-  }
-  .hb-cal-head .wk-nav{width:36px; height:36px; flex-basis:36px; font-size:20px; border-radius:11px;}
-  .hb-cal-head .wk-nav:disabled{opacity:.3; cursor:default;}
-  .hb-cal-grid{display:grid; grid-template-columns:repeat(7, 1fr); gap:5px; text-align:center;}
-  .hb-cal-h{font-family:'IBM Plex Mono', monospace; font-size:10px; color:var(--ink-dim); padding-bottom:2px;}
-  .hb-day{
-    position:relative; aspect-ratio:1; border-radius:50%; display:grid; place-items:center;
-    border:0; padding:0; background:none; cursor:pointer; color:var(--ink);
-    font-family:'IBM Plex Sans', sans-serif; font-size:13px;
-  }
-  span.hb-day{cursor:default;}
-  .hb-day.is-done{background:var(--c); color:#fff; font-weight:600;}
-  .hb-day.is-off{color:rgba(25,22,16,.26);}
-  .hb-day.is-future{color:var(--ink-dim);}
-  .hb-day.is-miss::after{
-    content:''; position:absolute; bottom:9%; left:50%; width:6px; height:6px; margin-left:-3px;
-    border-radius:50%; border:1.5px solid var(--game);
-  }
-  .hb-day.is-today{box-shadow:inset 0 0 0 2px var(--ink);}
-  .hb-legend{display:flex; flex-wrap:wrap; gap:6px 14px; margin-top:12px; font-size:11px; color:var(--ink-dim);}
-  .hb-legend i{display:inline-block; width:10px; height:10px; border-radius:50%; margin-right:5px; vertical-align:-1px;}
-  .hb-weeks{display:flex; flex-wrap:wrap; gap:6px; margin-top:12px;}
-  .hb-wk{
-    font-family:'IBM Plex Mono', monospace; font-size:11px; padding:4px 8px; border-radius:8px;
-    background:var(--surface-2); color:var(--ink-2);
-  }
-  .hb-wk.ok{background:rgba(47,107,79,.13); color:var(--leg);}
-  .hb-wk.ko{background:rgba(224,58,62,.1); color:var(--game-2);}
-  .hb-actions{display:flex; gap:10px; margin:0 0 14px;}
-  .hb-actions button, .hb-wide{
-    flex:1; min-height:48px; border-radius:14px; cursor:pointer;
-    border:1px solid var(--line-2); background:var(--glass); color:var(--ink);
-    font-family:'Oswald', sans-serif; font-weight:600; font-size:15px;
-  }
-  .schedule-btn.hb-wide{display:block; width:100%; margin:12px 0 0; border:0; color:#fff;}
-  .hb-howto-body{padding:14px 16px; font-size:13px; line-height:1.6; color:var(--ink-2);}
-  .hb-howto-body p{margin:0 0 9px;}
-  .hb-howto-body p:last-child{margin:0;}
-  .hb-mrow{display:flex; align-items:center; gap:6px; min-height:58px; padding:6px 10px 6px 6px; border-top:1px solid var(--line);}
-  .hb-mini{
-    width:36px; height:36px; flex:0 0 36px; padding:0; border-radius:11px; cursor:pointer;
-    display:grid; place-items:center; font-size:15px; color:var(--ink-2);
-    border:1px solid var(--line-2); background:var(--surface-2);
-  }
-  .hb-mini:disabled{opacity:.3; cursor:default;}
-  .hb-mini.danger{color:var(--game-2);}
-  .hb-stat-foot{display:flex; align-items:center; justify-content:space-between; gap:10px; flex-wrap:wrap; margin-top:12px;}
-  .hb-switch{border:0; background:none; padding:0; text-align:left; color:inherit;}
-  .hb-stat-sub{font-family:'IBM Plex Mono', monospace; font-size:10px; letter-spacing:.12em; text-transform:uppercase; color:var(--ink-dim); margin:16px 0 10px;}
-
-  /* hoja inferior: crear / editar hábito */
-  .hb-shade{
-    position:fixed; inset:0; z-index:50; display:flex; align-items:flex-end; justify-content:center;
-    background:rgba(21,18,14,.42); opacity:0; pointer-events:none; transition:opacity .2s ease;
-  }
-  .hb-shade.open, .hb-shade.closing{pointer-events:auto;}
-  .hb-shade.open{opacity:1;}
-  .hb-sheet{
-    width:100%; max-width:560px; max-height:92vh; overflow-y:auto; overscroll-behavior:contain;
-    -webkit-overflow-scrolling:touch; background:var(--surface); box-shadow:var(--sh-2);
-    border-radius:22px 22px 0 0; padding:18px 16px 0;
-    transform:translateY(30px); transition:transform .24s cubic-bezier(.4,0,.2,1);
-  }
-  .hb-shade.open .hb-sheet{transform:none;}
-  .hb-sheet h3{font-family:'Oswald', sans-serif; font-weight:600; font-size:19px; margin:0 0 14px;}
-  .hb-f{margin-bottom:17px;}
-  .hb-f > label, .hb-lbl{
-    display:block; margin-bottom:7px; font-family:'IBM Plex Mono', monospace; font-size:10px;
-    letter-spacing:.12em; text-transform:uppercase; color:var(--ink-dim);
-  }
-  .hb-input{
-    width:100%; min-height:44px; padding:0 13px; border-radius:12px; border:1px solid var(--line-2);
-    background:var(--surface-2); color:var(--ink); font-size:16px;
-  }
-  .hb-chips{display:flex; flex-wrap:wrap; gap:6px;}
-  .hb-chips + .hb-chips, .hb-mt{margin-top:10px;}
-  .hb-chip{
-    min-height:38px; padding:0 12px; border-radius:99px; cursor:pointer;
-    border:1px solid var(--line-2); background:var(--surface); color:var(--ink-2);
-    font-size:13px; font-weight:500; transition:background .15s ease, color .15s ease;
-  }
-  .hb-chip.on{background:var(--blaze-black); border-color:var(--blaze-black); color:#fff;}
-  .hb-chip.emo{min-width:44px; padding:0 8px; font-size:19px;}
-  .hb-chip.day{min-width:42px; padding:0; font-weight:600;}
-  .hb-emoji-in{width:86px; min-height:38px; border-radius:99px; text-align:center; font-size:16px;}
-  .hb-sw{
-    width:34px; height:34px; border-radius:50%; cursor:pointer; padding:0;
-    border:3px solid var(--surface); box-shadow:0 0 0 1px var(--line-2);
-  }
-  .hb-sw.on{box-shadow:0 0 0 2.5px var(--ink);}
-  .hb-stepper{display:flex; align-items:center; gap:12px;}
-  .hb-stepper button{
-    width:40px; height:40px; border-radius:50%; cursor:pointer; font-size:20px; line-height:1;
-    border:1px solid var(--line-2); background:var(--surface); color:var(--ink);
-  }
-  .hb-stepper b{font-family:'Oswald', sans-serif; font-weight:600; font-size:22px; min-width:56px; text-align:center;}
-  .hb-hint{font-size:12px; color:var(--ink-dim); line-height:1.45; margin:7px 0 0;}
-  .hb-hint + .hb-chips{margin-top:8px;}
-  .hb-sheet-actions{
-    position:sticky; bottom:0; display:flex; gap:10px; margin:4px -16px 0;
-    padding:12px 16px calc(14px + var(--safe-b)); background:var(--surface); border-top:1px solid var(--line);
-  }
-  .hb-sheet-actions button{
-    flex:1; min-height:48px; border-radius:14px; cursor:pointer;
-    font-family:'Oswald', sans-serif; font-weight:600; font-size:15px;
-  }
-  .hb-btn-ghost{border:1px solid var(--line-2); background:var(--surface-2); color:var(--ink);}
-  .hb-btn-pri{
-    border:0; color:#fff; background:linear-gradient(145deg, #EC4A4E, var(--game-2));
-    box-shadow:0 5px 16px rgba(224,58,62,.3);
-  }
-  body.hb-lock{overflow:hidden;}
 
   .hidden-view{display:none;}
   .court-footer{margin-top:6px; width:100%; opacity:.9;}
 
   /* ---------- móvil ---------- */
   @media(max-width:767px){
-    .action-dock, .hb-dock{
+    .action-dock{
       position:fixed; left:0; right:0; bottom:0; z-index:40; margin:0;
       padding:10px 12px calc(10px + var(--safe-b));
       background:linear-gradient(180deg, rgba(232,199,149,0), rgba(233,203,157,.92) 45%);
@@ -744,18 +533,15 @@
       display:flex; align-items:center; gap:24px;
       margin:0 -20px 20px; padding:14px 24px 13px;
     }
-    .appbar .view-tabs{margin:0 0 0 auto; width:390px; flex:0 0 390px;}
+    .appbar .view-tabs{margin:0 0 0 auto; width:290px; flex:0 0 290px;}
     .brand-mark{width:44px; height:44px; flex-basis:44px; font-size:23px; border-radius:14px;}
     .day-cards{display:none;}
     .table-wrap{display:block;}
     .settings-body{padding:18px 20px 20px;}
     .week-label{font-size:18px;}
     .week-meta{max-width:560px; margin-left:auto; margin-right:auto;}
-    .action-dock, .hb-dock{max-width:430px;}
+    .action-dock{max-width:430px;}
     .toast{left:auto; right:24px; bottom:24px; max-width:400px; margin:0;}
-    .hb-shade{align-items:center; padding:20px;}
-    .hb-sheet{border-radius:22px; max-height:88vh;}
-    .hb-sheet-actions{border-radius:0 0 22px 22px;}
     .note{font-size:13px;}
   }
 
@@ -776,7 +562,6 @@
     </div>
     <div class="view-tabs" role="tablist">
       <button id="tabPlan" class="active" role="tab">Planning</button>
-      <button id="tabHabits" role="tab">Hábitos</button>
       <button id="tabStats" role="tab">Estadísticas</button>
     </div>
   </header>
@@ -855,18 +640,10 @@
     <input type="file" id="restoreFile" accept="application/json,.json" style="display:none">
   </div>
 
-  <p class="note">Cada franja es un desplegable: pincha y elige la actividad. "↺ Volver a automático" borra tu elección manual (y cualquier entreno colocado por el botón) y vuelve a la regla por defecto. "— Libre —" vacía la franja sin fijarla: nunca lleva 📌 y el planificador puede volver a usarla — si quieres que no la toque, fija 😴 Descanso. El circulito ✓ marca la actividad como hecha, y es el mismo ✓ que ves tachado en la pestaña Hábitos: marcarlo en un sitio lo marca en el otro.<br>
+  <p class="note">Cada franja es un desplegable: pincha y elige la actividad. "↺ Volver a automático" borra tu elección manual (y cualquier entreno colocado por el botón) y vuelve a la regla por defecto. "— Libre —" vacía la franja sin fijarla: nunca lleva 📌 y el planificador puede volver a usarla — si quieres que no la toque, fija 😴 Descanso. El circulito ✓ marca la actividad como hecha.<br>
   Oficina, paseos y baloncesto ya salen solos desde el principio. "Planificar semana" recalcula el entreno <strong>de hoy en adelante</strong>: los días ya pasados no se tocan y respeta lo que hayas fijado a mano con 📌. Las sesiones de gym que se quedaron en días pasados sin marcar ✓ se recolocan en los huecos que queden de la semana y en su sitio aparece 😴 Descanso — es el único caso en el que se borra un 📌. Si no queda hueco libre, la sesión se queda en su día y te avisa. Las semanas ya cerradas no se replanifican ni se resetean: el histórico solo se edita a mano. En el móvil puedes deslizar a izquierda o derecha sobre los días para cambiar de semana, y tocar la cabecera de un día para plegarlo o desplegarlo: los días ya pasados salen plegados.</p>
 
   </div><!-- /viewPlan -->
-
-  <div id="viewHabits" style="display:none">
-    <div id="habMain"></div>
-    <div class="hb-dock" id="habDock">
-      <button class="schedule-btn" data-hact="new">＋ Nuevo hábito</button>
-      <button class="reset-btn" data-hact="manage" title="Gestionar hábitos" aria-label="Gestionar hábitos">⚙️</button>
-    </div>
-  </div><!-- /viewHabits -->
 
   <div id="viewStats" style="display:none">
     <div class="stat-cards" id="statCards"></div>
@@ -879,15 +656,7 @@
       <div id="statActs"></div>
     </div>
     <p class="note" id="statNote"></p>
-    <div class="stats-panel">
-      <h3>✅ Hábitos</h3>
-      <div id="habStats"></div>
-    </div>
   </div><!-- /viewStats -->
-
-  <div class="hb-shade" id="hbShade">
-    <div class="hb-sheet" id="hbSheet" role="dialog" aria-modal="true" aria-label="Hábito"></div>
-  </div>
 
   <div class="toast" id="toast"></div>
 
@@ -926,7 +695,6 @@ const ACTIVITIES = {
   paseo_largo: {label:'🐕 Paseo largo',  cls:'wfh'},
   baloncesto:  {label:'🏀 Baloncesto',   cls:'game'},
   aleman:      {label:'🇩🇪 Alemán',      cls:'german'},
-  clase_aleman:{label:'🇩🇪 Clase alemán', cls:'german'},
   descanso:    {label:'😴 Descanso',     cls:'dim'},
   cine:        {label:'🎬 Cine',         cls:''},
   correr:      {label:'🏃 Correr',       cls:''},
@@ -947,9 +715,9 @@ function actLabel(act, slot){
 }
 
 const ALL_TRAINING = new Set(['push','pull','leg','upper','fullbody']);
-// solo se miden deporte y alemán (clases y estudio por separado); el resto (paseos,
-// recados, médico, comidas fuera, cine, trabajo, descanso) no entra en las estadísticas
-const STAT_ACTS = new Set([...ALL_TRAINING, 'baloncesto', 'correr', 'aleman', 'clase_aleman']);
+// solo se miden deporte y alemán; el resto (paseos, recados, médico, comidas fuera,
+// cine, trabajo, descanso) no entra en las estadísticas
+const STAT_ACTS = new Set([...ALL_TRAINING, 'baloncesto', 'correr', 'aleman']);
 
 // entrenos NO-pierna, en el orden que debe respetarse (pierna va por libre, según baloncesto)
 const SPLIT_SEQUENCE = {
@@ -970,12 +738,6 @@ let lastPlaced = new Set(); // celdas recién colocadas (para resaltarlas)
 const WEEK_PREFIX = 'rutina_week_';
 const CONFIG_KEY = 'rutina_config_v1';
 const LEGACY_KEY = 'rutina_gym_baloncesto_v3';
-// hábitos: definiciones, registro manual por semana (mismo lunes que el Planning),
-// última pestaña abierta y migraciones de datos ya aplicadas
-const HABITS_KEY = 'rutina_habits_v1';
-const HLOG_PREFIX = 'rutina_hlog_';
-const UI_TAB_KEY = 'rutina_ui_tab';
-const MIGR_KEY = 'rutina_migrations';
 
 // fechas en local (nada de toISOString: desplaza el día cerca de medianoche)
 function localStamp(d){
@@ -1077,19 +839,9 @@ function loadWeek(stamp){
   document.getElementById('satSwitch').classList.toggle('on', satEnabled);
 }
 
-// undo (opcional): añade un botón "Deshacer" que ejecuta esa función
-function toastMsg(msg, ms, undo){
+function toastMsg(msg, ms){
   const t = document.getElementById('toast');
   t.textContent = msg;
-  if (msg && undo) {
-    const b = document.createElement('button');
-    b.type = 'button';
-    b.className = 'toast-undo';
-    b.textContent = 'Deshacer';
-    b.onclick = () => { clearTimeout(t._toastTimer); t.classList.remove('show'); undo(); };
-    t.appendChild(b);
-  }
-  t.classList.toggle('has-action', !!(msg && undo));
   t.classList.toggle('show', !!msg);
   clearTimeout(t._toastTimer);
   if (msg) t._toastTimer = setTimeout(() => { t.classList.remove('show'); }, ms || 4000);
@@ -1146,9 +898,8 @@ function computeBaseDefaults(){
   grid.jue.noche = 'baloncesto';
   // curso de alemán: desde el 18-09-2026 es viernes 17:30–21:00 → ocupa tarde y noche
   // (cuenta doble en estadísticas). Antes de esa semana, solo tarde, para no reescribir el histórico.
-  // Es la clase, no el estudio: va como clase_aleman para no sumar en el hábito de estudiar.
-  grid.vie.tarde = 'clase_aleman';
-  if (viewedMonday >= GERMAN_COURSE_WEEK) grid.vie.noche = 'clase_aleman';
+  grid.vie.tarde = 'aleman';
+  if (viewedMonday >= GERMAN_COURSE_WEEK) grid.vie.noche = 'aleman';
   const st = document.getElementById('sundayTime').value;
   if (st !== 'var' && st !== 'none') grid.dom[sundaySlot(st)] = 'baloncesto';
 
@@ -1638,9 +1389,7 @@ function render(){
         if (isDone) { doneN++; cardDone[d][0]++; }
         cardSummary[d].push(`<span class="${isDone ? 'is-done' : ''}" style="color:${color}">${actLabel(val, s)}</span>`);
       }
-      // el ✓ sale también en lo que la pestaña Hábitos puede tachar (paseos, recados…):
-      // es el mismo ✓ en los dos sitios
-      const doneBtn = (measurable || hbPlanTickable(val))
+      const doneBtn = measurable
         ? `<button class="done-btn" data-day="${d}" data-slot="${s}" title="Marcar hecho" aria-label="Marcar hecho">✓</button>` : '';
 
       const tdCls = ['day-col'];
@@ -1900,20 +1649,13 @@ document.getElementById('restoreFile').addEventListener('change', (e) => {
     try {
       const obj = JSON.parse(reader.result);
       if (!obj || obj.app !== 'rutina' || !obj.data) throw new Error('formato');
-      if (!confirm('Restaurar la copia sobrescribirá las semanas y los hábitos guardados que coincidan. ¿Seguir?')) return;
+      if (!confirm('Restaurar la copia sobrescribirá las semanas guardadas que coincidan. ¿Seguir?')) return;
       Object.entries(obj.data).forEach(([k, v]) => {
         if (k.startsWith('rutina_')) localStorage.setItem(k, v);
       });
-      // una copia hecha antes de esta versión trae las clases del viernes como "aleman"
-      if (!(MIGR_KEY in obj.data)) {
-        migrateClaseAleman(Object.keys(obj.data)
-          .filter(k => k.startsWith(WEEK_PREFIX)).map(k => k.slice(WEEK_PREFIX.length)));
-      }
-      loadHabits();
-      seedHabits();
       loadWeek(viewedMonday);
       render();
-      refreshSecondaryViews();
+      if (document.getElementById('viewStats').style.display !== 'none') renderStats();
       toastMsg('Copia restaurada ✓', 3000);
     } catch(err) {
       toastMsg('El archivo no parece una copia válida de la app');
@@ -1932,28 +1674,22 @@ function syncCfg(){
   try { return JSON.parse(localStorage.getItem(SYNC_KEY) || '{}'); } catch(e) { return {}; }
 }
 
-// recoge todas las claves de la app + cuándo se tocó cada semana.
-// v2 añade los hábitos (definiciones) y su registro manual por semana (hlogs)
+// recoge todas las claves de la app + cuándo se tocó cada semana
 function localPayload(){
-  const weeks = {}, hlogs = {};
+  const weeks = {};
   for (let i = 0; i < localStorage.length; i++) {
     const k = localStorage.key(i);
-    if (!k) continue;
-    const isWeek = k.startsWith(WEEK_PREFIX), isLog = k.startsWith(HLOG_PREFIX);
-    if (!isWeek && !isLog) continue;
-    const wk = k.slice((isWeek ? WEEK_PREFIX : HLOG_PREFIX).length);
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(wk)) continue;
-    (isWeek ? weeks : hlogs)[wk] = localStorage.getItem(k);
+    if (!k || !k.startsWith(WEEK_PREFIX)) continue;
+    const wk = k.slice(WEEK_PREFIX.length);
+    if (/^\d{4}-\d{2}-\d{2}$/.test(wk)) weeks[wk] = localStorage.getItem(k);
   }
   let stamps = {};
   try { stamps = JSON.parse(localStorage.getItem('rutina_stamps') || '{}'); } catch(e) {}
-  let habits = null;
-  try { habits = JSON.parse(localStorage.getItem(HABITS_KEY) || 'null'); } catch(e) {}
   return {
-    app: 'rutina', version: 2,
+    app: 'rutina', version: 1,
     updated: new Date().toISOString(),
     config: localStorage.getItem(CONFIG_KEY),
-    weeks, stamps, habits, hlogs
+    weeks, stamps
   };
 }
 
@@ -1961,13 +1697,9 @@ function localPayload(){
 // Así editar en móvil y escritorio en semanas distintas no pierde nada.
 // La semana que tengas en pantalla y hayas tocado en esta sesión nunca se sobrescribe:
 // evita que un sync en segundo plano te cambie el planning bajo los dedos.
-// El registro de hábitos sigue el mismo criterio (sellos "h:<lunes>") y las definiciones
-// se fusionan hábito a hábito por su updatedAt. Un payload v1 (app sin actualizar) no
-// trae hábitos: solo se fusionan sus semanas, pasándolas a clase_aleman.
 function mergeRemote(remote){
   const mine = localPayload();
-  const legacy = !(Number(remote.version) >= 2);
-  let taken = 0, kept = 0, skippedOpen = false, hTaken = 0;
+  let taken = 0, kept = 0, skippedOpen = false;
   Object.entries(remote.weeks || {}).forEach(([wk, val]) => {
     const rTime = (remote.stamps || {})[wk] || remote.updated || '';
     const lTime = (mine.stamps || {})[wk] || '';
@@ -1978,27 +1710,12 @@ function mergeRemote(remote){
         localStorage.setItem(WEEK_PREFIX + wk, val);
         const s = JSON.parse(localStorage.getItem('rutina_stamps') || '{}');
         s[wk] = rTime; localStorage.setItem('rutina_stamps', JSON.stringify(s));
-        if (legacy) migrateClaseAleman([wk]);
         taken++;
       }
     } else if (localVal !== val) kept++;
   });
-  Object.entries(remote.hlogs || {}).forEach(([wk, val]) => {
-    if (!/^\d{4}-\d{2}-\d{2}$/.test(wk) || typeof val !== 'string') return;
-    const sk = 'h:' + wk;
-    const rTime = (remote.stamps || {})[sk] || remote.updated || '';
-    const lTime = (mine.stamps || {})[sk] || '';
-    const localVal = mine.hlogs[wk];
-    if ((localVal === undefined || rTime > lTime) && localVal !== val) {
-      localStorage.setItem(HLOG_PREFIX + wk, val);
-      const s = JSON.parse(localStorage.getItem('rutina_stamps') || '{}');
-      s[sk] = rTime; localStorage.setItem('rutina_stamps', JSON.stringify(s));
-      hTaken++;
-    }
-  });
-  if (remote.habits) hTaken += mergeHabitDefs(remote.habits);
   if (remote.config && !localStorage.getItem(CONFIG_KEY)) localStorage.setItem(CONFIG_KEY, remote.config);
-  return {taken, kept, skippedOpen, hTaken};
+  return {taken, kept, skippedOpen};
 }
 
 async function gistRequest(cfg, method, body){
@@ -2037,7 +1754,7 @@ async function doSync(silent){
     // 1) bajar y fusionar
     const gist = await gistRequest(cfg, 'GET');
     const file = (gist.files || {})[GIST_FILE];
-    let result = {taken:0, kept:0, skippedOpen:false, hTaken:0};
+    let result = {taken:0, kept:0, skippedOpen:false};
     if (file && file.content && file.content.trim() && file.content.trim() !== '{}') {
       let remote = null;
       try { remote = JSON.parse(file.content); } catch(e) {}
@@ -2049,16 +1766,13 @@ async function doSync(silent){
       files: { [GIST_FILE]: { content: JSON.stringify(localPayload(), null, 2) } }
     });
     dirtyWeeks.clear();
-    if (result.taken || result.hTaken) {
+    if (result.taken) {
       loadWeek(viewedMonday);
       render();
-      refreshSecondaryViews();
+      if (document.getElementById('viewStats').style.display !== 'none') renderStats();
     }
-    if (result.taken || result.hTaken) {
-      const parts = [];
-      if (result.taken) parts.push(`${result.taken} semana(s)`);
-      if (result.hTaken) parts.push(`${result.hTaken} cambio(s) de hábitos`);
-      toastMsg(`Sincronizado ✓ ${parts.join(' y ')} desde el otro dispositivo`, 4000);
+    if (result.taken) {
+      toastMsg(`Sincronizado ✓ ${result.taken} semana(s) actualizada(s) desde el otro dispositivo`, 4000);
     } else if (result.skippedOpen) {
       toastMsg('Sincronizado ✓ la semana que estás editando se ha mantenido', 4000);
     } else if (!silent) {
@@ -2155,7 +1869,6 @@ function weekSnapshot(stamp){
 }
 
 function renderStats(){
-  renderHabitStats();   // el panel de hábitos no depende de que haya semanas guardadas
   const weeks = storedWeeks();
   const curMon = mondayOf(new Date());
   // solo semanas ya empezadas: las futuras aún no se pueden "cumplir"
@@ -2170,7 +1883,7 @@ function renderStats(){
     return;
   }
 
-  let totalCells = 0, totalDone = 0, trainPlan = 0, trainDone = 0, gamesDone = 0, germanDone = 0, classDone = 0;
+  let totalCells = 0, totalDone = 0, trainPlan = 0, trainDone = 0, gamesDone = 0, germanDone = 0;
   const actCount = {};
   snaps.forEach(sn => sn.cells.forEach(c => {
     if (!STAT_ACTS.has(c.act)) return;
@@ -2179,7 +1892,6 @@ function renderStats(){
     if (ALL_TRAINING.has(c.act)) { trainPlan++; if (c.done) trainDone++; }
     if (c.act === 'baloncesto' && c.done) gamesDone++;
     if (c.act === 'aleman' && c.done) germanDone++;
-    if (c.act === 'clase_aleman' && c.done) classDone++;
     const ck = c.act;
     actCount[ck] = actCount[ck] || {plan:0, done:0, act:c.act, slot:c.slot};
     actCount[ck].plan++;
@@ -2222,12 +1934,9 @@ function renderStats(){
     <div class="stat-card"><div class="lbl">Partidos jugados</div>
       <div class="num" style="color:var(--game)">${gamesDone}</div>
       <div class="sub">marcados como hechos</div></div>
-    <div class="stat-card" style="--accent:var(--german)"><div class="lbl">Clases de alemán</div>
-      <div class="num" style="color:var(--german)">${classDone}</div>
-      <div class="sub">franjas de clase marcadas como hechas</div></div>
-    <div class="stat-card" style="--accent:var(--german)"><div class="lbl">Estudio de alemán</div>
+    <div class="stat-card" style="--accent:var(--german)"><div class="lbl">Sesiones de alemán</div>
       <div class="num" style="color:var(--german)">${germanDone}</div>
-      <div class="sub">sesiones por tu cuenta marcadas como hechas</div></div>
+      <div class="sub">marcadas como hechas</div></div>
   `;
 
   // barras por semana (últimas 12), hechas vs planificadas
@@ -2264,1309 +1973,24 @@ function renderStats(){
     }).join('') + '</tbody></table>';
 
   document.getElementById('statNote').textContent =
-    `${snaps.length} semana(s) con datos. Solo se miden gym, baloncesto, correr y alemán (las clases y el estudio por separado). Las semanas futuras no cuentan. Los porcentajes dependen de que marques el ✓ en el planning.`;
+    `${snaps.length} semana(s) con datos. Solo se miden gym, baloncesto, correr y alemán. Las semanas futuras no cuentan. Los porcentajes dependen de que marques el ✓ en el planning.`;
 }
-
-// =====================================================================
-// ---- hábitos ----
-// Definiciones en rutina_habits_v1 y registro manual por semana en rutina_hlog_<lunes>.
-// Un hábito vinculado al Planning no duplica nada en el registro: cuenta como hecho si
-// ese día alguna franja con una actividad vinculada tiene el ✓ en rutina_week_<lunes>.
-// =====================================================================
-const H_MOMENTS = {manana:'🌅 Mañana', mediodia:'☀️ Mediodía', tarde:'🌇 Tarde', noche:'🌙 Noche', any:'🕐 Cualquier momento'};
-const H_MOMENT_ORDER = ['manana','mediodia','tarde','noche','any'];
-// momento del día en el que cae cada franja del Planning
-const SLOT_MOMENT = {temprano:'manana', manana:'manana', mediodia:'mediodia', siesta:'tarde', tarde:'tarde', noche:'noche'};
-const H_COLORS = ['--german','--pull','--leg','--push','--wfh','--fullbody','--game','--rest'];
-const H_TINT = {
-  '--german':'rgba(31,138,112,.14)', '--pull':'rgba(29,78,137,.13)', '--leg':'rgba(47,107,79,.14)',
-  '--push':'rgba(181,101,29,.14)', '--wfh':'rgba(107,79,160,.13)', '--fullbody':'rgba(160,50,110,.13)',
-  '--game':'rgba(224,58,62,.13)', '--rest':'rgba(156,139,114,.2)'
-};
-const H_EMOJIS = ['⭐','🇩🇪','🏋️','🐕','📅','📖','🧘','💧','☕','💊','🥗','😴','🧹','✍️','🎸','🚶'];
-const H_DEFAULT_EXCLUDE = ['oficina','teletrabajo','descanso'];
-const H_TYPES = [['daily','Diario'],['days','Días concretos'],['weekly','N veces por semana'],['cond','Según el Planning']];
-const DOW_SHORT = {lun:'L', mar:'M', mie:'X', jue:'J', vie:'V', sab:'S', dom:'D'};
-const MONTH_NAMES = ['enero','febrero','marzo','abril','mayo','junio','julio','agosto','septiembre','octubre','noviembre','diciembre'];
-
-// ---- utilidades ----
-function lsGet(k){ try { return localStorage.getItem(k); } catch(e) { return null; } }
-function lsSet(k, v){ try { localStorage.setItem(k, v); return true; } catch(e) { return false; } }
-// fechas de las claves con un prefijo (rutina_week_, rutina_hlog_…), en orden
-function lsWeeks(prefix){
-  const out = [];
-  try {
-    for (let i = 0; i < localStorage.length; i++) {
-      const k = localStorage.key(i);
-      if (!k || !k.startsWith(prefix)) continue;
-      const wk = k.slice(prefix.length);
-      if (/^\d{4}-\d{2}-\d{2}$/.test(wk)) out.push(wk);
-    }
-  } catch(e) {}
-  return out.sort();
-}
-// sello de edición para el sync: la misma tabla que usan las semanas del Planning
-function touchStamp(sk){
-  const now = new Date().toISOString();
-  let st = {};
-  try { st = JSON.parse(lsGet('rutina_stamps') || '{}') || {}; } catch(e) {}
-  st[sk] = now;
-  lsSet('rutina_stamps', JSON.stringify(st));
-  lsSet('rutina_last_edit', now);
-}
-function parseStamp(s){ const [y,m,d] = s.split('-').map(Number); return new Date(y, m-1, d, 12); }
-function addDays(s, n){ const d = parseStamp(s); d.setDate(d.getDate() + n); return localStamp(d); }
-function todayStamp(){ return localStamp(new Date()); }
-function weekOf(s){ return mondayOf(parseStamp(s)); }
-function dayKeyOf(s){ return JS_DAY_TO_KEY[parseStamp(s).getDay()]; }
-function fmtDay(s, opts){ return parseStamp(s).toLocaleDateString('es-ES', opts || {day:'numeric', month:'short'}); }
-function esc(v){
-  return String(v == null ? '' : v).replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'})[c]);
-}
-
-// ---- migración: las clases del viernes pasan de "aleman" a "clase_aleman" ----
-// Lo que sale del default ya cambia solo en computeBaseDefaults. Aquí se cambia lo
-// guardado a mano con "aleman" en las franjas del viernes donde el default pone la clase
-// (tarde siempre; noche desde que el curso ocupa las dos). El resto de días no se toca.
-function migrateClaseAleman(weeks){
-  const changed = [];
-  (weeks || storedWeeks()).forEach(wk => {
-    const raw = lsGet(WEEK_PREFIX + wk);
-    if (!raw) return;
-    let st;
-    try { st = JSON.parse(raw); } catch(e) { return; }
-    if (!st || typeof st !== 'object') return;
-    let touched = false;
-    (wk >= GERMAN_COURSE_WEEK ? ['tarde','noche'] : ['tarde']).forEach(s => {
-      ['overrides','autoPlacements'].forEach(f => {
-        if (st[f] && st[f]['vie_' + s] === 'aleman') {
-          st[f]['vie_' + s] = 'clase_aleman';
-          touched = true;
-          changed.push(`${wk} vie_${s}`);
-        }
-      });
-    });
-    if (touched) lsSet(WEEK_PREFIX + wk, JSON.stringify(st));
-  });
-  return changed;
-}
-function runMigrations(){
-  let m = {};
-  try { m = JSON.parse(lsGet(MIGR_KEY) || '{}') || {}; } catch(e) {}
-  if (m.claseAleman) return;
-  m.claseAleman = {at: new Date().toISOString(), changed: migrateClaseAleman()};
-  lsSet(MIGR_KEY, JSON.stringify(m));
-}
-
-// ---- lectura del Planning y del registro, con caché por pasada ----
-// Cada semana se lee y se parsea una vez por pasada (un render o un toque); en la
-// siguiente se revalida contra el texto guardado, así que nunca se sirve un dato viejo.
-let hbPass = 0;
-const planCache = new Map();
-const hlogCache = new Map();
-function hbNewPass(){ hbPass++; }
-
-// actividad efectiva de cada franja y ✓ de cualquier semana, con la misma lógica que el
-// Planning (effective) y sin tocar la semana que tiene abierta
-function planWeek(stamp){
-  const c = planCache.get(stamp);
-  if (c && c.pass === hbPass) return c;
-  const raw = lsGet(WEEK_PREFIX + stamp) || '';
-  if (c && c.raw === raw) { c.pass = hbPass; return c; }
-  let st = {};
-  try { st = (raw && JSON.parse(raw)) || {}; } catch(e) { st = {}; }
-  const sel = document.getElementById('sundayTime');
-  const bak = {overrides, autoPlacements, wfhSet, satEnabled, viewedMonday, sunday: sel.value};
-  const eff = {};
-  try {
-    viewedMonday = stamp;
-    overrides = st.overrides || {};
-    autoPlacements = st.autoPlacements || {};
-    wfhSet = new Set(st.wfh || []);
-    satEnabled = !!st.satEnabled;
-    sel.value = st.sundayTime || 'var';
-    const grid = buildGrid();
-    DAYS.forEach(d => { eff[d] = {}; SLOTS.forEach(s => { eff[d][s] = effective(grid, d, s) || ''; }); });
-  } finally {
-    overrides = bak.overrides; autoPlacements = bak.autoPlacements; wfhSet = bak.wfhSet;
-    satEnabled = bak.satEnabled; viewedMonday = bak.viewedMonday; sel.value = bak.sunday;
-  }
-  const res = {raw, pass: hbPass, eff, done: new Set(Array.isArray(st.done) ? st.done : [])};
-  planCache.set(stamp, res);
-  return res;
-}
-
-function hlogWeek(stamp){
-  const c = hlogCache.get(stamp);
-  if (c && c.pass === hbPass) return c.obj;
-  const raw = lsGet(HLOG_PREFIX + stamp) || '';
-  if (c && c.raw === raw) { c.pass = hbPass; return c.obj; }
-  let obj = {};
-  try { obj = raw ? JSON.parse(raw) : {}; } catch(e) {}
-  if (!obj || typeof obj !== 'object' || Array.isArray(obj)) obj = {};
-  hlogCache.set(stamp, {raw, pass: hbPass, obj});
-  return obj;
-}
-// una semana que se queda vacía se guarda como {} y no se borra: así el destachado
-// también viaja en el sync
-function writeHlog(stamp, obj){
-  lsSet(HLOG_PREFIX + stamp, JSON.stringify(obj));
-  hlogCache.delete(stamp);
-  touchStamp('h:' + stamp);
-  scheduleSync();
-}
-
-// marca o desmarca franjas del Planning: es el mismo ✓ que se pulsa allí
-function setPlanCells(W, changes){
-  const keys = Object.keys(changes);
-  if (!keys.length) return;
-  if (W === viewedMonday) {
-    keys.forEach(k => changes[k] ? done.add(k) : done.delete(k));
-    saveState();
-  } else {
-    let st = null;
-    try { st = JSON.parse(lsGet(WEEK_PREFIX + W) || 'null'); } catch(e) {}
-    if (!st || typeof st !== 'object') {
-      // semana que nunca se abrió en el Planning: se guarda tal y como la vería él
-      let split = 4;
-      try { split = JSON.parse(lsGet(CONFIG_KEY) || '{}').split || 4; } catch(e) {}
-      st = {split, wfh:[], sundayTime:'var', overrides:{}, autoPlacements:{}, planned:false, satEnabled:false, done:[]};
-    }
-    const set = new Set(Array.isArray(st.done) ? st.done : []);
-    keys.forEach(k => changes[k] ? set.add(k) : set.delete(k));
-    st.done = Array.from(set);
-    lsSet(WEEK_PREFIX + W, JSON.stringify(st));
-    touchStamp(W);
-    scheduleSync();
-  }
-  planCache.delete(W);
-}
-
-// ---- definiciones ----
-let habitsDoc = null;   // {updated, habits:[…], excludeActs:[…], excludeUpdated}
-
-function hbSanitize(h){
-  if (!h || typeof h !== 'object' || !h.id) return null;
-  if (h.deleted) return {id: String(h.id), deleted: true, updatedAt: h.updatedAt || ''};
-  const types = ['daily','days','weekly','cond','off'];
-  const schedule = (Array.isArray(h.schedule) ? h.schedule : [])
-    .filter(v => v && typeof v.from === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(v.from) && types.includes(v.type))
-    .sort((a, b) => a.from < b.from ? -1 : a.from > b.from ? 1 : 0);
-  if (!schedule.length) return null;
-  return Object.assign({}, h, {
-    id: String(h.id), name: String(h.name || 'Hábito'), emoji: h.emoji ? String(h.emoji) : '⭐',
-    color: H_COLORS.includes(h.color) ? h.color : '--german',
-    moment: H_MOMENT_ORDER.includes(h.moment) ? h.moment : 'any',
-    schedule, linkActs: Array.isArray(h.linkActs) ? h.linkActs.filter(a => typeof a === 'string' && a) : [],
-    order: Number(h.order) || 0, archived: !!h.archived
-  });
-}
-function loadHabits(){
-  let doc = null;
-  try { doc = JSON.parse(lsGet(HABITS_KEY) || 'null'); } catch(e) {}
-  if (!doc || !Array.isArray(doc.habits)) { habitsDoc = null; return; }
-  doc.habits = doc.habits.map(hbSanitize).filter(Boolean);
-  if (!Array.isArray(doc.excludeActs)) doc.excludeActs = H_DEFAULT_EXCLUDE.slice();
-  habitsDoc = doc;
-}
-function saveHabits(){
-  if (!habitsDoc) return;
-  habitsDoc.updated = new Date().toISOString();
-  lsSet(HABITS_KEY, JSON.stringify(habitsDoc));
-  lsSet('rutina_last_edit', habitsDoc.updated);
-  scheduleSync();
-}
-// hábitos iniciales, solo la primera vez. Los ids son fijos para que dos dispositivos no
-// los dupliquen, y updatedAt vacío para que cualquier edición real les gane al sincronizar
-function seedHabits(){
-  if (habitsDoc) return;
-  const from = todayStamp(), now = new Date().toISOString();
-  const mk = (id, name, emoji, color, moment, sched, linkActs, order) => ({
-    id, name, emoji, color, moment, schedule: [Object.assign({from}, sched)], linkActs,
-    order, archived: false, createdAt: now, updatedAt: ''
-  });
-  habitsDoc = {updated: now, excludeActs: H_DEFAULT_EXCLUDE.slice(), excludeUpdated: '', habits: [
-    mk('seed_aleman', 'Estudiar alemán', '🇩🇪', '--german', 'any', {type:'weekly', perWeek:3}, ['aleman'], 0),
-    mk('seed_entrenar', 'Entrenar', '🏋️', '--push', 'any', {type:'weekly', perWeek: currentSplit || 4}, [...ALL_TRAINING], 1),
-    mk('seed_paseo', 'Paseo largo', '🐕', '--leg', 'tarde', {type:'daily'}, ['paseo_corto','paseo_largo'], 2),
-    mk('seed_planificar', 'Planificar la semana', '📅', '--wfh', 'noche', {type:'days', days:['dom']}, [], 3)
-  ]};
-  lsSet(HABITS_KEY, JSON.stringify(habitsDoc));
-}
-// fusión con el otro dispositivo, hábito a hábito: gana el editado más tarde. Entre dos
-// semillas sin tocar se queda la creada antes (la del primer dispositivo, con su fecha
-// de inicio). Un hábito borrado viaja como {id, deleted} para que no resucite.
-function mergeHabitDefs(remote){
-  if (!remote || !Array.isArray(remote.habits)) return 0;
-  const doc = habitsDoc || {updated:'', habits:[], excludeActs: H_DEFAULT_EXCLUDE.slice(), excludeUpdated:''};
-  const byId = new Map(doc.habits.map(h => [h.id, h]));
-  let changed = 0;
-  remote.habits.map(hbSanitize).filter(Boolean).forEach(rh => {
-    const lh = byId.get(rh.id);
-    if (lh) {
-      const ru = rh.updatedAt || '', lu = lh.updatedAt || '';
-      const newer = ru > lu || (ru === lu && (rh.createdAt || '') < (lh.createdAt || ''));
-      if (!newer || JSON.stringify(rh) === JSON.stringify(lh)) return;
-    }
-    byId.set(rh.id, rh);
-    changed++;
-  });
-  if (Array.isArray(remote.excludeActs) && (remote.excludeUpdated || '') > (doc.excludeUpdated || '')) {
-    doc.excludeActs = remote.excludeActs.filter(a => typeof a === 'string');
-    doc.excludeUpdated = remote.excludeUpdated;
-    changed++;
-  }
-  if (!changed) return 0;
-  doc.habits = Array.from(byId.values());
-  habitsDoc = doc;
-  lsSet(HABITS_KEY, JSON.stringify(doc));
-  hbPurgeDeleted();
-  return changed;
-}
-// quita del registro las marcas de hábitos borrados (también si se borraron en otro dispositivo)
-function hbPurgeDeleted(){
-  hbNewPass();
-  const dead = new Set((habitsDoc ? habitsDoc.habits : []).filter(h => h.deleted).map(h => h.id));
-  if (!dead.size) return;
-  lsWeeks(HLOG_PREFIX).forEach(W => {
-    const o = hlogWeek(W);
-    const ids = Object.keys(o).filter(id => dead.has(id));
-    if (!ids.length) return;
-    const c = Object.assign({}, o);
-    ids.forEach(id => delete c[id]);
-    writeHlog(W, c);
-  });
-}
-
-function hbAll(){ return habitsDoc ? habitsDoc.habits.filter(h => !h.deleted) : []; }
-function hbSorted(list){
-  return list.slice().sort((a, b) => (a.order || 0) - (b.order || 0) || String(a.createdAt || '').localeCompare(String(b.createdAt || '')));
-}
-function hbById(id){ return hbAll().find(h => h.id === id) || null; }
-function hbExcludeSet(){ return new Set(['', ...((habitsDoc && habitsDoc.excludeActs) || H_DEFAULT_EXCLUDE)]); }
-// el Planning enseña su ✓ en todo lo que puede salir tachado en Hábitos
-function hbPlanTickable(act){
-  if (!act) return false;
-  if (!hbExcludeSet().has(act)) return true;
-  return hbAll().some(h => !h.archived && (h.linkActs || []).includes(act));
-}
-
-// ---- frecuencia versionada: cada fecha usa la versión vigente ese día ----
-// schedule = [{from, type, days, perWeek, condActs, condSlots}], ordenada por from.
-// type 'off' marca el tramo archivado: esos días ni tocan ni cuentan.
-function hbVersionAt(h, s){
-  let v = null;
-  for (const x of h.schedule) { if (x.from <= s) v = x; else break; }
-  return v;
-}
-function hbStart(h){ return h.schedule[0].from; }
-function hbLastVersion(h){
-  for (let i = h.schedule.length - 1; i >= 0; i--) if (h.schedule[i].type !== 'off') return h.schedule[i];
-  return h.schedule[0];
-}
-// una semana se evalúa con la versión de su domingo, o la de hoy si es la semana en curso
-function hbWeekVersion(h, W){
-  const sun = addDays(W, 6), t = todayStamp();
-  return hbVersionAt(h, sun < t || W > t ? sun : t);
-}
-function hbActiveOn(h, s){
-  if (h.deleted || h.archived) return false;
-  const v = hbVersionAt(h, s);
-  return !!v && v.type !== 'off';
-}
-function hbSameSched(a, b){
-  const f = v => JSON.stringify([v.type, v.days || [], v.perWeek || 0, v.condActs || [], v.condSlots || []]);
-  return f(a) === f(b);
-}
-
-// ---- ¿tocaba? ¿está hecho? ----
-// tocaba ese día (diario, días concretos o según el Planning; los flexibles van por semana)
-function hbDue(h, v, s){
-  if (!v) return false;
-  if (v.type === 'daily') return true;
-  if (v.type === 'days') return (v.days || []).includes(dayKeyOf(s));
-  if (v.type === 'cond') {
-    const e = planWeek(weekOf(s)).eff[dayKeyOf(s)];
-    return (v.condSlots || []).some(sl => (v.condActs || []).includes(e[sl]));
-  }
-  return false;
-}
-// franjas de ese día cuya actividad efectiva está vinculada al hábito
-function hbCells(h, s){
-  const acts = h.linkActs || [];
-  if (!acts.length) return [];
-  const p = planWeek(weekOf(s)), dk = dayKeyOf(s);
-  return SLOTS.filter(sl => p.eff[dk][sl] && acts.includes(p.eff[dk][sl]))
-    .map(sl => ({slot: sl, k: key(dk, sl), act: p.eff[dk][sl], done: p.done.has(key(dk, sl))}));
-}
-function hbLogged(h, s){ const a = hlogWeek(weekOf(s))[h.id]; return Array.isArray(a) && a.includes(s); }
-// hecho = registro manual, o ✓ en el Planning en alguna franja vinculada de ese día
-function isHabitDone(h, s){ return hbLogged(h, s) || hbCells(h, s).some(c => c.done); }
-
-function hbSetLogged(h, s, on){
-  if (hbLogged(h, s) === on) return;
-  const W = weekOf(s);
-  const obj = Object.assign({}, hlogWeek(W));
-  const arr = (Array.isArray(obj[h.id]) ? obj[h.id] : []).filter(x => x !== s);
-  if (on) { arr.push(s); arr.sort(); }
-  if (arr.length) obj[h.id] = arr; else delete obj[h.id];
-  writeHlog(W, obj);
-}
-// Tachar: si ese día hay una franja vinculada sin ✓ se marca la primera (el Planning hace
-// de registro); si no hay franja, va al registro de hábitos. Destachar quita las dos cosas.
-// Devuelve la franja marcada en el Planning, si la hubo.
-function setHabitDone(h, s, on){
-  const cells = hbCells(h, s);
-  if (on) {
-    if (isHabitDone(h, s)) return null;
-    const c = cells.find(x => !x.done);
-    if (c) { setPlanCells(weekOf(s), {[c.k]: true}); return c; }
-    hbSetLogged(h, s, true);
-    return null;
-  }
-  hbSetLogged(h, s, false);
-  const ch = {};
-  cells.forEach(c => { if (c.done) ch[c.k] = false; });
-  setPlanCells(weekOf(s), ch);
-  return null;
-}
-// foto de un día para poder deshacer exactamente lo que se ha tocado
-function hbSnap(h, s){ return {logged: hbLogged(h, s), cells: hbCells(h, s).filter(c => c.done).map(c => c.k)}; }
-function hbRestore(h, s, snap){
-  hbNewPass();
-  hbSetLogged(h, s, snap.logged);
-  const ch = {};
-  hbCells(h, s).forEach(c => { const want = snap.cells.includes(c.k); if (want !== c.done) ch[c.k] = want; });
-  setPlanCells(weekOf(s), ch);
-}
-
-// ---- semanas de los flexibles ----
-// días hechos de la semana W, hasta hoy (skip: un día que no se cuenta)
-function hbWeekCount(h, W, skip){
-  const t = todayStamp();
-  let n = 0;
-  for (let i = 0; i < 7; i++) {
-    const s = addDays(W, i);
-    if (s > t || s === skip) continue;
-    const v = hbVersionAt(h, s);
-    if (!v || v.type === 'off') continue;
-    if (isHabitDone(h, s)) n++;
-  }
-  return n;
-}
-// días de hoy al domingo que aún se pueden tachar (hoy cuenta si sigue sin tachar)
-function hbDaysLeft(h, W){
-  const t = todayStamp();
-  let left = 0;
-  for (let i = 0; i < 7; i++) {
-    const s = addDays(W, i);
-    if (s < t || (s === t && isHabitDone(h, s))) continue;
-    left++;
-  }
-  return left;
-}
-// met = cuota cumplida · failed = semana terminada sin cumplir · pending = no cuenta todavía
-function hbWeekResult(h, W){
-  const v = hbWeekVersion(h, W);
-  if (!v || v.type !== 'weekly') return null;
-  const N = Math.max(1, v.perWeek || 1), n = hbWeekCount(h, W), curW = mondayOf(new Date());
-  if (W > curW) return {n, N, status: 'future'};
-  if (n >= N) return {n, N, status: 'met'};
-  // la semana en curso, y una semana a medias (el hábito empezó o cambió a mitad), no penalizan
-  if (W === curW || v.from > W) return {n, N, status: 'pending'};
-  return {n, N, status: 'failed'};
-}
-
-// ---- %, rachas y totales (explicados en la ficha, "¿Cómo se calcula?") ----
-// Suma de notas y número de notas entre dos fechas: cada día que tocaba vale 1 si se hizo
-// y 0 si no; cada semana de un flexible vale min(hechos, N) / N. Hoy sin hacer y la semana
-// en curso sin cumplir todavía no cuentan: aún estás a tiempo.
-function hbScore(h, from, to){
-  const t = todayStamp(), st = hbStart(h);
-  if (to > t) to = t;
-  if (from < st) from = st;
-  let sum = 0, count = 0;
-  if (from > to) return {sum, count};
-  for (let s = from; s <= to; s = addDays(s, 1)) {
-    const v = hbVersionAt(h, s);
-    if (!v || v.type === 'off' || v.type === 'weekly') continue;
-    const wv = hbWeekVersion(h, weekOf(s));
-    if (wv && wv.type === 'weekly') continue;
-    if (!hbDue(h, v, s)) continue;
-    const isDone = isHabitDone(h, s);
-    if (s === t && !isDone) continue;
-    count++;
-    if (isDone) sum++;
-  }
-  for (let W = weekOf(from); W <= to; W = addDays(W, 7)) {
-    const r = hbWeekResult(h, W);
-    if (!r || (r.status !== 'met' && r.status !== 'failed')) continue;
-    count++;
-    sum += Math.min(r.n, r.N) / r.N;
-  }
-  return {sum, count};
-}
-function hbPct(h, from, to){ const r = hbScore(h, from, to); return r.count ? Math.round(r.sum * 100 / r.count) : null; }
-
-// racha actual: días que tocaban seguidos y hechos, hacia atrás desde hoy (o semanas con
-// la cuota cumplida, si es flexible). Lo que no tocaba no corta; hoy sin hacer tampoco.
-function hbStreak(h){
-  const t = todayStamp(), st = hbStart(h);
-  if (hbLastVersion(h).type === 'weekly') {
-    let n = 0;
-    for (let W = mondayOf(new Date()), i = 0; W >= weekOf(st) && i < 520; W = addDays(W, -7), i++) {
-      const v = hbWeekVersion(h, W);
-      if (!v) break;
-      if (v.type === 'off') continue;          // tramo archivado: ni suma ni corta
-      if (v.type !== 'weekly') break;          // antes tenía otra frecuencia
-      const r = hbWeekResult(h, W);
-      if (r.status === 'met') n++;
-      else if (r.status === 'failed') break;   // en curso o a medias: no corta
-    }
-    return {v: n, unit: 'sem'};
-  }
-  let n = 0;
-  for (let s = t, i = 0; s >= st && i < 3660; s = addDays(s, -1), i++) {
-    const v = hbVersionAt(h, s);
-    if (!v) break;
-    if (v.type === 'off') continue;
-    const wv = hbWeekVersion(h, weekOf(s));
-    if (v.type === 'weekly' || (wv && wv.type === 'weekly')) break;
-    if (!hbDue(h, v, s)) continue;
-    if (isHabitDone(h, s)) n++;
-    else if (s !== t) break;
-  }
-  return {v: n, unit: 'días'};
-}
-// mejor racha: la misma cuenta recorriendo todo el histórico
-function hbBestStreak(h){
-  const t = todayStamp(), st = hbStart(h);
-  let best = 0, run = 0;
-  if (hbLastVersion(h).type === 'weekly') {
-    for (let W = weekOf(st), i = 0; W <= mondayOf(new Date()) && i < 520; W = addDays(W, 7), i++) {
-      const v = hbWeekVersion(h, W);
-      if (!v || v.type === 'off') continue;
-      if (v.type !== 'weekly') { run = 0; continue; }
-      const r = hbWeekResult(h, W);
-      if (r.status === 'met') { run++; best = Math.max(best, run); }
-      else if (r.status === 'failed') run = 0;
-    }
-    return {v: best, unit: 'sem'};
-  }
-  for (let s = st, i = 0; s <= t && i < 3660; s = addDays(s, 1), i++) {
-    const v = hbVersionAt(h, s);
-    if (!v || v.type === 'off') continue;
-    const wv = hbWeekVersion(h, weekOf(s));
-    if (v.type === 'weekly' || (wv && wv.type === 'weekly')) { run = 0; continue; }
-    if (!hbDue(h, v, s)) continue;
-    if (isHabitDone(h, s)) { run++; best = Math.max(best, run); }
-    else if (s !== t) run = 0;
-  }
-  return {v: best, unit: 'días'};
-}
-function hbTotal(h){
-  const t = todayStamp();
-  let n = 0;
-  for (let s = hbStart(h), i = 0; s <= t && i < 3660; s = addDays(s, 1), i++) {
-    const v = hbVersionAt(h, s);
-    if (v && v.type !== 'off' && isHabitDone(h, s)) n++;
-  }
-  return n;
-}
-
-// ---- textos ----
-function hbFreqLabel(v, long){
-  if (!v) return '';
-  if (v.type === 'daily') return 'Diario';
-  if (v.type === 'days') {
-    const ds = DAYS.filter(d => (v.days || []).includes(d));
-    if (ds.length === 7) return 'Diario';
-    if (ds.length === 1) return 'Cada ' + DAY_NAMES[ds[0]].toLowerCase();
-    return ds.map(d => long ? DAY_NAMES[d].slice(0, 3) : DOW_SHORT[d]).join(long ? ', ' : ' · ');
-  }
-  if (v.type === 'weekly') {
-    const n = v.perWeek || 1;
-    return long ? `${n} ${n === 1 ? 'vez' : 'veces'} por semana` : `${n}×/semana`;
-  }
-  if (v.type === 'cond') {
-    if (!long) return 'Según el Planning';
-    const acts = (v.condActs || []).map(a => actLabel(a)).join(', ');
-    const slots = SLOTS.filter(s => (v.condSlots || []).includes(s)).map(s => SLOT_LABELS[s].toLowerCase()).join(' o ');
-    return `Cuando el Planning tiene ${acts} (${slots})`;
-  }
-  return 'Archivado';
-}
-function hbStreakTxt(r){ return `${r.v} ${r.unit === 'sem' ? 'sem' : (r.v === 1 ? 'día' : 'días')}`; }
-
-// ---- estado de la pestaña ----
-const habUi = {screen:'today', day: todayStamp(), followToday: true, habitId: null, calMonth: null, showDone: null, statsArchived: false};
-let hbDraft = null;
-let hbRenderTimer = null;
-
-// ---- modelo de un día: qué sale y en qué bloque ----
-function hbDayModel(s){
-  const t = todayStamp(), W = weekOf(s), dk = dayKeyOf(s);
-  const p = planWeek(W), excl = hbExcludeSet();
-  const habits = hbSorted(hbAll().filter(h => hbActiveOn(h, s)));
-  const linked = new Set();
-  habits.forEach(h => (h.linkActs || []).forEach(a => linked.add(a)));
-  const items = [];
-  // cada franja con actividad es una fila, salvo lo excluido y lo que ya representa un hábito
-  SLOTS.forEach((sl, i) => {
-    const act = p.eff[dk][sl];
-    if (!act || excl.has(act) || linked.has(act)) return;
-    items.push({kind: 'plan', slot: sl, act, done: p.done.has(key(dk, sl)),
-      mandatory: true, moment: SLOT_MOMENT[sl], sort: i});
-  });
-  habits.forEach(h => {
-    const v = hbVersionAt(h, s);
-    const cells = hbCells(h, s);
-    const isDone = hbLogged(h, s) || cells.some(c => c.done);
-    const anchor = cells.length ? cells[0].slot : null;   // si está en el Planning, va a su hora
-    const it = {kind: 'habit', h, v, cells, done: isDone,
-      moment: anchor ? SLOT_MOMENT[anchor] : (h.moment || 'any'),
-      sort: anchor ? SLOTS.indexOf(anchor) : 10 + (h.order || 0)};
-    if (v.type === 'weekly') {
-      const N = Math.max(1, v.perWeek || 1), nOther = hbWeekCount(h, W, s);
-      it.flex = true;
-      it.N = N;
-      it.n = nOther + (isDone && s <= t ? 1 : 0);
-      it.mandatory = cells.length > 0 && nOther < N;    // planificado ese día: sube a Pendientes
-      it.weekMet = !isDone && it.n >= N;
-      it.optional = !it.mandatory && !isDone && it.n < N;
-    } else {
-      const due = hbDue(h, v, s);
-      if (!due && !cells.length && !isDone) return;
-      it.mandatory = due || cells.length > 0;
-      it.extra = !it.mandatory;                         // tachado un día que no tocaba
-    }
-    items.push(it);
-  });
-  return items;
-}
-
-function hbRing(p, n){
-  const r = 24, c = 2 * Math.PI * r;
-  return `<svg class="hb-ring" viewBox="0 0 60 60" aria-hidden="true">
-    <circle cx="30" cy="30" r="${r}" fill="none" stroke-width="7" style="stroke:rgba(25,22,16,.1)"/>
-    <circle cx="30" cy="30" r="${r}" fill="none" stroke-width="7" stroke-linecap="round" transform="rotate(-90 30 30)"
-      style="stroke:var(--leg); opacity:${p > 0 ? 1 : 0}" stroke-dasharray="${c.toFixed(2)}" stroke-dashoffset="${(c * (1 - p)).toFixed(2)}"/>
-    <text x="30" y="35" text-anchor="middle" style="font-family:Oswald, sans-serif; font-weight:600; font-size:15px; fill:var(--ink)">${n ? Math.round(p * 100) + '%' : '—'}</text>
-  </svg>`;
-}
-
-function hbRowHTML(it, s){
-  const fut = s > todayStamp();
-  const cls = ['hb-row'];
-  if (it.done) cls.push('is-done');
-  if (it.weekMet) cls.push('is-week');
-  if (fut) cls.push('is-future');
-  const chk = (attrs, label) => `<button class="hb-chk" ${attrs} aria-pressed="${!!it.done}"`
-    + ` aria-label="${it.done ? 'Desmarcar' : 'Marcar hecho'}: ${esc(label)}"${fut ? ' aria-disabled="true"' : ''}>✓</button>`;
-  if (it.kind === 'plan') {
-    const lbl = actLabel(it.act, it.slot), sp = lbl.indexOf(' ');
-    const emo = sp > 0 ? lbl.slice(0, sp) : '•', name = sp > 0 ? lbl.slice(sp + 1) : lbl;
-    const acls = (ACTIVITIES[it.act] || {}).cls || '';
-    const col = acls && acls !== 'dim' ? CLS_COLOR[acls] : 'var(--leg)';
-    return `<div class="${cls.join(' ')}" style="--c:${col}">`
-      + `<div class="hb-open is-static"><span class="hb-emo" style="background:${CLS_TINT[acls] || CLS_TINT['']}">${emo}</span>`
-      + `<span class="hb-txt"><span class="hb-name" style="color:${actColor(acls)}">${esc(name)}</span>`
-      + `<span class="hb-sub"><span>${SLOT_LABELS[it.slot]}</span><span class="hb-tag plan">📅 Planning</span></span></span></div>`
-      + chk(`data-hact="plan" data-slot="${it.slot}"`, lbl) + `</div>`;
-  }
-  const h = it.h, tags = [];
-  if (it.flex) {
-    const W = weekOf(s), curW = mondayOf(new Date());
-    if (it.weekMet) tags.push('<span class="hb-tag ok">✓ semana cumplida</span>');
-    else if (it.done) tags.push(`<span class="hb-tag${it.n >= it.N ? ' ok' : ''}">${it.n}/${it.N} semana${it.n >= it.N ? ' ✓' : ''}</span>`);
-    else {
-      tags.push(`<span class="hb-tag">${it.n}/${it.N} ${W === curW ? 'esta semana' : 'esa semana'}</span>`);
-      if (W === curW) {
-        const left = hbDaysLeft(h, W);
-        tags.push(it.N - it.n > left
-          ? `<span class="hb-tag warn">no llegas a ${it.N} esta semana</span>`
-          : `<span class="hb-tag">${left === 1 ? 'queda 1 día' : `quedan ${left} días`}</span>`);
-      } else if (W < curW) tags.push('<span class="hb-tag warn">no se cumplió</span>');
-    }
-  }
-  if (it.cells.length) tags.push(`<span class="hb-tag plan">📅 en planning · ${it.cells.map(c => SLOT_LABELS[c.slot]).join(', ')}</span>`);
-  if (it.extra) tags.push('<span class="hb-tag">extra</span>');
-  const sk = hbStreak(h);
-  return `<div class="${cls.join(' ')}" style="--c:var(${h.color})">`
-    + `<button class="hb-open" data-hact="detail" data-hid="${esc(h.id)}"><span class="hb-emo" style="background:${H_TINT[h.color]}">${esc(h.emoji)}</span>`
-    + `<span class="hb-txt"><span class="hb-name">${esc(h.name)}</span>`
-    + `<span class="hb-sub"><span>${esc(hbFreqLabel(it.v))}</span>${sk.v ? `<span>🔥 ${hbStreakTxt(sk)}</span>` : ''}${tags.join('')}</span></span></button>`
-    + chk(`data-hact="toggle" data-hid="${esc(h.id)}"`, h.name) + `</div>`;
-}
-
-// ---- vista Hoy ----
-function hbTodayHTML(){
-  const t = todayStamp();
-  if (habUi.followToday) habUi.day = t;
-  const s = habUi.day, fut = s > t, isT = s === t;
-  const items = hbDayModel(s);
-  const ord = (a, b) => H_MOMENT_ORDER.indexOf(a.moment) - H_MOMENT_ORDER.indexOf(b.moment) || a.sort - b.sort;
-  const pend = items.filter(x => x.mandatory && !x.done).sort(ord);
-  const opt = items.filter(x => x.optional).sort(ord);
-  const fin = items.filter(x => x.done || x.weekMet).sort(ord);
-  const mand = items.filter(x => x.mandatory);
-  const mandDone = mand.filter(x => x.done).length;
-  const tag = isT ? 'Hoy' : s === addDays(t, -1) ? 'Ayer' : s === addDays(t, 1) ? 'Mañana' : fut ? 'Próximo' : 'Pasado';
-  const optTxt = opt.length ? `${opt.length} opcional${opt.length > 1 ? 'es' : ''} por hacer` : 'sin opcionales pendientes';
-  let html = `<div class="week-bar">
-      <button class="wk-nav" data-hact="prev" title="Día anterior" aria-label="Día anterior">‹</button>
-      <div class="week-label"><span class="tag">${tag}</span>${DAY_NAMES[dayKeyOf(s)]} ${fmtDay(s)}</div>
-      <button class="wk-nav" data-hact="next" title="Día siguiente" aria-label="Día siguiente">›</button>
-    </div>
-    <div class="hb-progress">${hbRing(mand.length ? mandDone / mand.length : 0, mand.length)}
-      <div class="hb-prog-txt"><b>${mandDone}/${mand.length}</b> <span>obligatorios</span><br>
-        <span>${fut ? 'Vista previa: se tacha cuando llegue el día' : optTxt}</span></div>
-      ${isT ? '' : '<button class="ghost-btn" data-hact="today">Hoy</button>'}
-    </div>`;
-  html += `<div class="hb-sec"><span>Pendientes</span><span>${pend.length}</span></div>`;
-  if (pend.length) {
-    H_MOMENT_ORDER.forEach(m => {
-      const g = pend.filter(x => x.moment === m);
-      if (g.length) html += `<div class="hb-moment">${H_MOMENTS[m]}</div><div class="hb-card">${g.map(x => hbRowHTML(x, s)).join('')}</div>`;
-    });
-  } else {
-    html += `<div class="hb-card"><div class="hb-empty">${mand.length ? 'Día completo 🎉' : (isT ? 'Nada obligatorio hoy' : 'Nada obligatorio ese día')}</div></div>`;
-  }
-  if (opt.length) {
-    html += `<div class="hb-sec"><span>Opcionales</span><span>${opt.length}</span></div>`
-      + `<div class="hb-card">${opt.map(x => hbRowHTML(x, s)).join('')}</div>`;
-  }
-  if (fin.length) {
-    const open = habUi.showDone !== null ? habUi.showDone : fin.length <= 3;
-    html += `<button class="hb-sec" data-hact="fold" aria-expanded="${open}"><span>Hechos</span>`
-      + `<span>${fin.length}<span class="hb-caret" aria-hidden="true">⌄</span></span></button>`;
-    if (open) html += `<div class="hb-card">${fin.map(x => hbRowHTML(x, s)).join('')}</div>`;
-  }
-  if (!hbAll().some(h => !h.archived)) html += `<p class="note">Aún no tienes hábitos: crea el primero con ＋ Nuevo hábito.</p>`;
-  html += `<p class="note">Toca el círculo para tachar (otra vez para destachar) y el nombre para ver la ficha del hábito. Lo que tienes en el Planning sale solo en Pendientes: tacharlo aquí es marcar su ✓ allí, y al revés. Los días pasados se pueden corregir; los futuros solo se ven. En el móvil puedes deslizar a los lados para cambiar de día.</p>`;
-  return html;
-}
-
-// ---- ficha de un hábito ----
-function hbDetailHTML(h){
-  const t = todayStamp(), lv = hbLastVersion(h), st = hbStart(h), weekly = lv.type === 'weekly';
-  const sk = hbStreak(h), best = hbBestStreak(h), total = hbTotal(h), pct = hbPct(h, addDays(t, -29), t);
-  const ym = habUi.calMonth || t.slice(0, 7);
-  const [cy, cm] = ym.split('-').map(Number);
-  const first = ym + '-01', last = localStamp(new Date(cy, cm, 0, 12));
-  const minYm = (st < t ? st : t).slice(0, 7), maxYm = (st > t ? st : t).slice(0, 7);
-  let grid = DAYS.map(d => `<span class="hb-cal-h">${DOW_SHORT[d]}</span>`).join('')
-    + '<span></span>'.repeat((parseStamp(first).getDay() + 6) % 7);
-  for (let s = first; s <= last; s = addDays(s, 1)) {
-    const v = hbVersionAt(h, s), on = !!v && v.type !== 'off', fut = s > t;
-    const isDone = on && !fut && isHabitDone(h, s);
-    const cls = ['hb-day'];
-    if (isDone) cls.push('is-done');
-    else if (!on) cls.push('is-off');
-    else if (v.type !== 'weekly') {
-      if (!hbDue(h, v, s)) cls.push('is-off');
-      else if (!fut && s !== t) cls.push('is-miss');
-    }
-    if (s === t) cls.push('is-today');
-    if (fut) cls.push('is-future');
-    const n = Number(s.slice(8));
-    grid += on && !fut && !h.archived
-      ? `<button class="${cls.join(' ')}" data-hact="cal" data-day="${s}" aria-label="${esc(fmtDay(s, {weekday:'long', day:'numeric', month:'long'}))}${isDone ? ', hecho' : ''}">${n}</button>`
-      : `<span class="${cls.join(' ')}">${n}</span>`;
-  }
-  let weeks = '';
-  if (weekly) {
-    for (let W = weekOf(first); W <= last; W = addDays(W, 7)) {
-      if (addDays(W, 6) < st || W > mondayOf(new Date())) continue;
-      const r = hbWeekResult(h, W);
-      if (!r) continue;
-      const wc = r.status === 'met' ? ' ok' : r.status === 'failed' ? ' ko' : '';
-      weeks += `<span class="hb-wk${wc}" title="Semana del ${fmtDay(W)}">${fmtDay(W, {day:'numeric', month:'numeric'})} · ${r.n}/${r.N}${r.status === 'met' ? ' ✓' : ''}</span>`;
-    }
-  }
-  const links = (h.linkActs || []).map(a => actLabel(a)).join(', ');
-  const unitLong = weekly ? 'semanas seguidas' : 'días seguidos';
-  return `<button class="hb-back" data-hact="back">‹ Volver</button>
-    <div class="hb-dhead"><span class="hb-emo" style="background:${H_TINT[h.color]}">${esc(h.emoji)}</span>
-      <div><h2>${esc(h.name)}</h2>
-      <div class="hb-dsub">${esc(hbFreqLabel(lv, true))} · ${H_MOMENTS[h.moment] || ''}${links ? ` · 🔗 ${esc(links)}` : ''}${h.archived ? ' · 🗄️ archivado' : ''}</div></div></div>
-    <div class="stat-cards">
-      <div class="stat-card" style="--accent:var(--game)"><div class="lbl">Racha actual</div>
-        <div class="num">🔥 ${sk.v}</div><div class="sub">${unitLong}</div></div>
-      <div class="stat-card" style="--accent:var(${h.color})"><div class="lbl">Mejor racha</div>
-        <div class="num">${best.v}</div><div class="sub">${unitLong}</div></div>
-      <div class="stat-card" style="--accent:var(--leg)"><div class="lbl">% últimos 30 días</div>
-        <div class="num" style="color:var(--leg)">${pct === null ? '—' : pct + '%'}</div>
-        <div class="sub">${weekly ? 'media de las semanas' : 'de los días que tocaba'}</div></div>
-      <div class="stat-card" style="--accent:var(--ink-dim)"><div class="lbl">Total hechos</div>
-        <div class="num">${total}</div><div class="sub">desde el ${fmtDay(st)}</div></div>
-    </div>
-    <div class="hb-cal" style="--c:var(${h.color})">
-      <div class="hb-cal-head">
-        <button class="wk-nav" data-hact="calPrev" aria-label="Mes anterior"${ym <= minYm ? ' disabled' : ''}>‹</button>
-        <span>${MONTH_NAMES[cm - 1]} ${cy}</span>
-        <button class="wk-nav" data-hact="calNext" aria-label="Mes siguiente"${ym >= maxYm ? ' disabled' : ''}>›</button>
-      </div>
-      <div class="hb-cal-grid">${grid}</div>
-      <div class="hb-legend">
-        <span><i style="background:var(${h.color})"></i>Hecho</span>
-        ${weekly ? '' : '<span><i style="border:1.5px solid var(--game)"></i>Tocaba y no</span><span><i style="background:rgba(25,22,16,.12)"></i>No tocaba</span>'}
-        <span><i style="box-shadow:inset 0 0 0 2px var(--ink)"></i>Hoy</span>
-      </div>
-      ${weeks ? `<div class="hb-weeks">${weeks}</div>` : ''}
-      ${h.archived ? '' : '<p class="hb-hint">Toca un día pasado para tacharlo o destacharlo.</p>'}
-    </div>
-    <div class="hb-actions">${h.archived
-      ? `<button data-hact="unarchive" data-hid="${esc(h.id)}">↩︎ Recuperar</button>`
-      : `<button data-hact="edit" data-hid="${esc(h.id)}">✏️ Editar</button><button data-hact="archive" data-hid="${esc(h.id)}">🗄️ Archivar</button>`}</div>
-    <details class="settings">
-      <summary><span class="sum-title">¿Cómo se calcula?</span><span class="sum-caret" aria-hidden="true">⌄</span></summary>
-      <div class="hb-howto-body">
-        <p><b>Racha.</b> Días que tocaban, seguidos y hechos, contando hacia atrás desde hoy. Los días que no tocaban no la cortan, y hoy sin hacer todavía tampoco: se corta si ayer tocaba y no lo hiciste.</p>
-        <p><b>Racha de un flexible</b> (N veces por semana). Semanas seguidas llegando a N, de lunes a domingo. La semana en curso no la corta mientras no haya terminado.</p>
-        <p><b>% de los últimos 30 días.</b> De los días que tocaba, qué parte hiciste: si tocaba 20 días e hiciste 15, es un 75 %. En un flexible cada semana puntúa hechos ÷ N con tope en el 100 % (hacer 4 de 3 cuenta como 3 de 3) y se hace la media. Lo que aún puedes hacer (hoy, o la semana en curso sin cumplir) no te resta.</p>
-        <p><b>Vinculado al Planning.</b> Cuenta como hecho si ese día marcas el ✓ de una franja vinculada en el Planning; no hace falta tacharlo dos veces. Cambiar la frecuencia vale desde el día del cambio: el pasado se sigue midiendo con la de entonces.</p>
-      </div>
-    </details>`;
-}
-
-// ---- gestión: ordenar, archivar, borrar y actividades ocultas ----
-function hbManageHTML(){
-  const act = hbSorted(hbAll().filter(h => !h.archived)), arch = hbSorted(hbAll().filter(h => h.archived));
-  const excl = hbExcludeSet();
-  const row = (h, i, n) => `<div class="hb-mrow">
-      <button class="hb-open" data-hact="${h.archived ? 'detail' : 'edit'}" data-hid="${esc(h.id)}"><span class="hb-emo" style="background:${H_TINT[h.color]}">${esc(h.emoji)}</span>
-        <span class="hb-txt"><span class="hb-name">${esc(h.name)}</span><span class="hb-sub"><span>${esc(hbFreqLabel(hbLastVersion(h)))}</span>${(h.linkActs || []).length ? '<span>🔗 Planning</span>' : ''}</span></span></button>
-      ${h.archived
-        ? `<button class="hb-mini" data-hact="unarchive" data-hid="${esc(h.id)}" title="Recuperar" aria-label="Recuperar">↩︎</button>`
-        : `<button class="hb-mini" data-hact="up" data-hid="${esc(h.id)}" title="Subir" aria-label="Subir"${i === 0 ? ' disabled' : ''}>↑</button>`
-          + `<button class="hb-mini" data-hact="down" data-hid="${esc(h.id)}" title="Bajar" aria-label="Bajar"${i === n - 1 ? ' disabled' : ''}>↓</button>`
-          + `<button class="hb-mini" data-hact="archive" data-hid="${esc(h.id)}" title="Archivar" aria-label="Archivar">🗄️</button>`}
-      <button class="hb-mini danger" data-hact="delete" data-hid="${esc(h.id)}" title="Borrar" aria-label="Borrar">🗑️</button>
-    </div>`;
-  const chips = Object.keys(ACTIVITIES).filter(a => a)
-    .map(a => `<button class="hb-chip${excl.has(a) ? ' on' : ''}" data-hact="excl" data-act="${a}" aria-pressed="${excl.has(a)}">${actLabel(a)}</button>`).join('');
-  return `<button class="hb-back" data-hact="back">‹ Volver</button>
-    <h2 class="hb-h2">⚙️ Gestionar hábitos</h2>
-    <div class="hb-card">${act.length ? act.map((h, i) => row(h, i, act.length)).join('') : '<div class="hb-empty">No hay hábitos activos</div>'}</div>
-    <button class="schedule-btn hb-wide" data-hact="new">＋ Nuevo hábito</button>
-    ${arch.length ? `<div class="hb-sec"><span>Archivados</span><span>${arch.length}</span></div><div class="hb-card">${arch.map((h, i) => row(h, i, arch.length)).join('')}</div>` : ''}
-    <div class="hb-sec"><span>Actividades del Planning que no salen en Hoy</span></div>
-    <div class="hb-card hb-pad"><div class="hb-chips">${chips}</div>
-      <p class="hb-hint">Las marcadas no salen como fila en la lista del día. Si una actividad está vinculada a un hábito, sale siempre como ese hábito. Archivar saca el hábito de Hoy y conserva su histórico; borrar lo elimina junto con su registro.</p></div>`;
-}
-
-function renderHabits(){
-  clearTimeout(hbRenderTimer);
-  if (!habitsDoc) { loadHabits(); seedHabits(); }
-  hbNewPass();
-  let h = null;
-  if (habUi.screen === 'detail') { h = hbById(habUi.habitId); if (!h) habUi.screen = 'today'; }
-  document.getElementById('habMain').innerHTML = habUi.screen === 'detail' ? hbDetailHTML(h)
-    : habUi.screen === 'manage' ? hbManageHTML() : hbTodayHTML();
-  document.getElementById('habDock').style.display = habUi.screen === 'today' ? '' : 'none';
-}
-// repinta tras una animación corta, para ver el ✓ antes de que la fila cambie de bloque
-function hbRenderSoon(ms){ clearTimeout(hbRenderTimer); hbRenderTimer = setTimeout(renderHabits, ms); }
-// tras un sync o una restauración: repinta lo que esté a la vista
-function refreshSecondaryViews(){
-  if (document.getElementById('viewHabits').style.display !== 'none') renderHabits();
-  if (document.getElementById('viewStats').style.display !== 'none') renderStats();
-}
-
-// ---- tachar ----
-function hbFeedback(btn, on){
-  (btn.closest('.hb-row') || btn).classList.toggle('is-done', on);
-  btn.classList.remove('pop');
-  void btn.offsetWidth;   // reinicia la animación si se toca dos veces seguidas
-  btn.classList.add('pop');
-  if (navigator.vibrate) { try { navigator.vibrate(12); } catch(e) {} }
-}
-function hbTap(btn, h, s){
-  if (s > todayStamp()) { toastMsg('Día futuro: solo puedes ver lo que toca', 2600); return; }
-  if (!hbActiveOn(h, s)) {
-    toastMsg(s < hbStart(h) ? 'Ese día el hábito aún no había empezado' : 'Ese día el hábito no estaba activo', 2800);
-    return;
-  }
-  const snap = hbSnap(h, s);
-  const was = isHabitDone(h, s);
-  const cell = setHabitDone(h, s, !was);
-  hbFeedback(btn, !was);
-  const name = `«${h.name}»`;
-  const msg = !was
-    ? (cell ? `${name} hecho · ✓ también en el Planning (${SLOT_LABELS[cell.slot]})` : `${name} hecho`)
-    : (snap.cells.length ? `${name} desmarcado · quitado también del Planning` : `${name} desmarcado`);
-  toastMsg(msg, 4000, () => { hbRestore(h, s, snap); renderHabits(); });
-  hbRenderSoon(380);
-}
-// fila automática del Planning: tacharla es marcar el ✓ de esa franja
-function hbTapPlan(btn, slot, s){
-  if (s > todayStamp()) { toastMsg('Día futuro: solo puedes ver lo que toca', 2600); return; }
-  const W = weekOf(s), dk = dayKeyOf(s), k = key(dk, slot);
-  const p = planWeek(W), was = p.done.has(k), lbl = actLabel(p.eff[dk][slot], slot);
-  setPlanCells(W, {[k]: !was});
-  hbFeedback(btn, !was);
-  toastMsg(was ? `${lbl} desmarcado en el Planning` : `${lbl} hecho · ✓ en el Planning`, 4000,
-    () => { hbNewPass(); setPlanCells(W, {[k]: was}); renderHabits(); });
-  hbRenderSoon(380);
-}
-function hbShiftDay(n){
-  habUi.day = addDays(habUi.day, n);
-  habUi.followToday = habUi.day === todayStamp();
-  renderHabits();
-}
-function hbShiftMonth(ym, n){
-  const [y, m] = ym.split('-').map(Number);
-  return localStamp(new Date(y, m - 1 + n, 1, 12)).slice(0, 7);
-}
-
-// ---- pantallas (ficha, gestión, hoja) y el botón Atrás del móvil ----
-// Mientras haya algo abierto encima de Hoy se mantiene una entrada propia en el
-// historial: así Atrás cierra la capa de arriba en vez de salir de la app, y si quedan
-// más se vuelve a poner. Cerrar desde la app es inmediato y el historial solo acompaña
-// (su popstate se ignora); si hay un retroceso pendiente, la entrada nueva espera a que
-// termine, para que dos toques seguidos no descuadren el historial.
-const hbLayers = [];      // capas abiertas, de abajo arriba
-let hbArmed = false;      // hay una entrada nuestra en el historial
-let hbSkipPops = 0;       // retrocesos lanzados por la app: su popstate se ignora
-function hbArm(){
-  if (hbArmed || hbSkipPops > 0 || !hbLayers.length) return;
-  try { history.pushState({rutinaLayer: true}, ''); hbArmed = true; } catch(e) {}
-}
-function hbDisarm(){
-  if (!hbArmed) return;
-  hbArmed = false;
-  hbSkipPops++;
-  try { history.back(); } catch(e) { hbSkipPops--; }
-}
-function hbPushLayer(layer){ hbLayers.push(layer); hbArm(); }
-function hbCloseLayer(layer){
-  if (layer.kind === 'sheet') { hbShowSheet(false); return; }
-  habUi.screen = layer.prev || 'today';
-  renderHabits();
-  window.scrollTo(0, 0);
-}
-function hbBack(){
-  const top = hbLayers.pop();
-  if (top) { hbCloseLayer(top); if (!hbLayers.length) hbDisarm(); return; }
-  if (hbSheetOpen()) hbShowSheet(false);
-  else if (habUi.screen !== 'today') { habUi.screen = 'today'; renderHabits(); }
-}
-window.addEventListener('popstate', () => {
-  if (hbSkipPops > 0) { hbSkipPops--; hbArm(); return; }   // si mientras tanto se abrió algo, se vuelve a armar
-  hbArmed = false;                                         // Atrás del sistema: nuestra entrada se ha gastado
-  const top = hbLayers.pop();
-  if (top) hbCloseLayer(top);
-  hbArm();                                                 // quedan capas: entrada para el siguiente Atrás
-});
-// al salir de la pestaña se cierra todo y se retira la entrada del historial
-function hbDropLayers(){
-  hbLayers.length = 0;
-  hbShowSheet(false);
-  habUi.screen = 'today';
-  hbDisarm();
-}
-function hbOpenScreen(screen){
-  hbPushLayer({kind: 'screen', prev: habUi.screen});
-  habUi.screen = screen;
-  renderHabits();
-  window.scrollTo(0, 0);
-}
-function hbOpenDetail(h){
-  habUi.habitId = h.id;
-  habUi.calMonth = (habUi.screen === 'today' ? habUi.day : todayStamp()).slice(0, 7);
-  hbOpenScreen('detail');
-}
-function hbSheetOpen(){ return document.getElementById('hbShade').classList.contains('open'); }
-function hbShowSheet(on){
-  const sh = document.getElementById('hbShade');
-  const wasOpen = sh.classList.contains('open');
-  sh.classList.toggle('open', on);
-  document.body.classList.toggle('hb-lock', on);
-  clearTimeout(sh._closing);
-  sh.classList.toggle('closing', !on && wasOpen);
-  // durante el fundido de salida la hoja sigue tapando: un doble toque no la atraviesa
-  if (!on && wasOpen) sh._closing = setTimeout(() => sh.classList.remove('closing'), 320);
-  if (!on) hbDraft = null;
-}
-
-// ---- archivar, recuperar, borrar, ordenar ----
-// archivar deja un tramo 'off' desde hoy: el histórico se conserva y esos días no cuentan
-function hbArchive(h){
-  const t = todayStamp(), keep = h.schedule.filter(v => v.from < t);
-  if (keep.length) h.schedule = keep.concat([{from: t, type: 'off'}]);
-  h.archived = true;
-  h.updatedAt = new Date().toISOString();
-}
-function hbUnarchive(h){
-  const t = todayStamp(), last = h.schedule[h.schedule.length - 1];
-  if (last.type === 'off') {
-    if (last.from === t) h.schedule.pop();   // archivado y recuperado el mismo día
-    else h.schedule = h.schedule.filter(v => v.from < t).concat([Object.assign({}, hbLastVersion(h), {from: t})]);
-  }
-  h.archived = false;
-  h.updatedAt = new Date().toISOString();
-}
-// vuelve a dejar un hábito como estaba (para Deshacer)
-function hbReplace(copy){
-  const i = habitsDoc.habits.findIndex(x => x.id === copy.id);
-  if (i < 0) return;
-  habitsDoc.habits[i] = Object.assign(copy, {updatedAt: new Date().toISOString()});
-  saveHabits();
-  renderHabits();
-}
-function hbArchiveUI(h){
-  const copy = JSON.parse(JSON.stringify(h));
-  hbArchive(h);
-  saveHabits();
-  renderHabits();
-  toastMsg(`«${h.name}» archivado: sale de Hoy y conserva su histórico`, 4500, () => hbReplace(copy));
-}
-function hbUnarchiveUI(h){
-  const copy = JSON.parse(JSON.stringify(h));
-  hbUnarchive(h);
-  saveHabits();
-  renderHabits();
-  toastMsg(`«${h.name}» recuperado: vuelve a salir en Hoy`, 4500, () => hbReplace(copy));
-}
-function hbDeleteUI(h){
-  if (!confirm(`¿Borrar «${h.name}» y todo su registro? Esto no se puede deshacer.`)) return;
-  lsWeeks(HLOG_PREFIX).forEach(W => {
-    const o = hlogWeek(W);
-    if (!o[h.id]) return;
-    const c = Object.assign({}, o);
-    delete c[h.id];
-    writeHlog(W, c);
-  });
-  const i = habitsDoc.habits.findIndex(x => x.id === h.id);
-  if (i >= 0) habitsDoc.habits[i] = {id: h.id, deleted: true, updatedAt: new Date().toISOString()};
-  saveHabits();
-  renderHabits();
-  toastMsg(`«${h.name}» borrado`, 2600);
-}
-function hbMove(h, dir){
-  const list = hbSorted(hbAll().filter(x => !x.archived));
-  const i = list.indexOf(h), j = i + dir;
-  if (i < 0 || j < 0 || j >= list.length) return;
-  [list[i], list[j]] = [list[j], list[i]];
-  const now = new Date().toISOString();
-  list.forEach((x, k) => { if (x.order !== k) { x.order = k; x.updatedAt = now; } });
-  saveHabits();
-}
-function hbToggleExclude(act){
-  if (!act || !habitsDoc) return;
-  const set = new Set(habitsDoc.excludeActs || H_DEFAULT_EXCLUDE);
-  set.has(act) ? set.delete(act) : set.add(act);
-  habitsDoc.excludeActs = Object.keys(ACTIVITIES).filter(a => a && set.has(a));
-  habitsDoc.excludeUpdated = new Date().toISOString();
-  saveHabits();
-  renderHabits();
-}
-
-// ---- crear / editar (hoja inferior) ----
-function hbOpenEditor(h){
-  const lv = h ? hbLastVersion(h) : null;
-  hbDraft = {
-    id: h ? h.id : null,
-    name: h ? h.name : '',
-    emoji: h ? h.emoji : '⭐',
-    color: h ? h.color : '--german',
-    moment: h ? (h.moment || 'any') : 'any',
-    type: lv && lv.type !== 'off' ? lv.type : 'daily',
-    days: lv && lv.days ? lv.days.slice() : [],
-    perWeek: lv && lv.perWeek ? lv.perWeek : 3,
-    condActs: lv && lv.condActs ? lv.condActs.slice() : [...ALL_TRAINING],
-    condSlots: lv && lv.condSlots ? lv.condSlots.slice() : ['temprano','manana'],
-    linkActs: h ? (h.linkActs || []).slice() : [],
-    start: h ? hbStart(h) : todayStamp()
-  };
-  hbDrawEditor();
-  hbPushLayer({kind: 'sheet'});
-  hbShowSheet(true);
-  document.getElementById('hbSheet').scrollTop = 0;
-  if (!h && !window.matchMedia('(pointer: coarse)').matches) {
-    setTimeout(() => { const i = document.getElementById('hbName'); if (i) i.focus(); }, 260);
-  }
-}
-function hbDrawEditor(){
-  const d = hbDraft;
-  if (!d) return;
-  const chip = (on, attrs, label, extra) =>
-    `<button type="button" class="hb-chip${extra || ''}${on ? ' on' : ''}" ${attrs} aria-pressed="${on}">${label}</button>`;
-  const acts = Object.keys(ACTIVITIES).filter(a => a);
-  const emojis = H_EMOJIS.includes(d.emoji) ? H_EMOJIS : [d.emoji].concat(H_EMOJIS);
-  let html = `<h3>${d.id ? 'Editar hábito' : 'Nuevo hábito'}</h3>
-    <div class="hb-f"><label for="hbName">Nombre</label>
-      <input id="hbName" class="hb-input" type="text" maxlength="40" autocomplete="off" value="${esc(d.name)}" placeholder="p. ej. Estudiar alemán"></div>
-    <div class="hb-f"><span class="hb-lbl">Emoji</span><div class="hb-chips">
-      ${emojis.map(e => chip(d.emoji === e, `data-hed="emoji" data-v="${esc(e)}"`, esc(e), ' emo')).join('')}
-      <input id="hbEmoji" class="hb-input hb-emoji-in" type="text" maxlength="16" autocomplete="off" placeholder="otro" aria-label="Otro emoji"></div></div>
-    <div class="hb-f"><span class="hb-lbl">Color</span><div class="hb-chips">
-      ${H_COLORS.map(c => `<button type="button" class="hb-sw${d.color === c ? ' on' : ''}" data-hed="color" data-v="${c}" style="background:var(${c})" aria-label="Color ${c.slice(2)}" aria-pressed="${d.color === c}"></button>`).join('')}</div></div>
-    <div class="hb-f"><span class="hb-lbl">Frecuencia</span>
-      <div class="hb-chips">${H_TYPES.map(([v, l]) => chip(d.type === v, `data-hed="type" data-v="${v}"`, l)).join('')}</div>`;
-  if (d.type === 'days') {
-    html += `<div class="hb-chips">${DAYS.map(x => chip(d.days.includes(x), `data-hed="day" data-v="${x}" aria-label="${DAY_NAMES[x]}"`, DOW_SHORT[x], ' day')).join('')}</div>
-      <p class="hb-hint">Solo sale los días elegidos. Con un solo día es un hábito semanal fijo.</p>`;
-  } else if (d.type === 'weekly') {
-    html += `<div class="hb-stepper hb-mt"><button type="button" data-hed="minus" aria-label="Una vez menos">−</button><b>${d.perWeek}×</b><button type="button" data-hed="plus" aria-label="Una vez más">+</button></div>
-      <p class="hb-hint">Sale cada día como opcional hasta que llegues a ${d.perWeek} en la semana (de lunes a domingo). Si lo tienes en el Planning ese día, pasa a pendiente.</p>`;
-  } else if (d.type === 'cond') {
-    html += `<p class="hb-hint">Solo toca los días en que el Planning tenga alguna de estas actividades…</p>
-      <div class="hb-chips">${acts.map(a => chip(d.condActs.includes(a), `data-hed="cact" data-v="${a}"`, actLabel(a))).join('')}</div>
-      <p class="hb-hint">…en alguna de estas franjas:</p>
-      <div class="hb-chips">${SLOTS.map(s => chip(d.condSlots.includes(s), `data-hed="cslot" data-v="${s}"`, SLOT_LABELS[s])).join('')}</div>`;
-  } else {
-    html += `<p class="hb-hint">Toca todos los días.</p>`;
-  }
-  html += `</div>
-    <div class="hb-f"><span class="hb-lbl">Momento del día</span>
-      <div class="hb-chips">${H_MOMENT_ORDER.map(m => chip(d.moment === m, `data-hed="moment" data-v="${m}"`, H_MOMENTS[m])).join('')}</div></div>
-    <div class="hb-f"><span class="hb-lbl">Vincular con el Planning (opcional)</span>
-      <div class="hb-chips">${acts.map(a => chip(d.linkActs.includes(a), `data-hed="link" data-v="${a}"`, actLabel(a))).join('')}</div>
-      <p class="hb-hint">Si ese día hay una franja con alguna de estas actividades, tacharlo aquí marca su ✓ en el Planning, y al revés.</p></div>
-    <div class="hb-f"><label for="hbStart">Fecha de inicio</label>
-      <input id="hbStart" class="hb-input" type="date" value="${esc(d.start)}">
-      <p class="hb-hint">Antes de esta fecha no cuenta como «tocaba».${d.id ? ' Un cambio de frecuencia vale desde hoy: el pasado no se reescribe.' : ''}</p></div>
-    <div class="hb-sheet-actions"><button type="button" class="hb-btn-ghost" data-hed="cancel">Cancelar</button>
-      <button type="button" class="hb-btn-pri" data-hed="save">Guardar</button></div>`;
-  document.getElementById('hbSheet').innerHTML = html;
-}
-// Aplica el formulario a la lista versionada sin reescribir el pasado:
-// 1) la fecha de inicio mueve el principio; 2) una frecuencia distinta abre una versión
-// nueva desde hoy (o desde el inicio, si todavía no ha empezado).
-function hbEditSchedule(schedule, start, sched){
-  let sch = schedule.map(v => Object.assign({}, v));
-  if (start !== sch[0].from) {
-    if (start < sch[0].from) sch[0].from = start;
-    else {
-      const cur = hbVersionAt({schedule: sch}, start);
-      sch = [Object.assign({}, cur, {from: start})].concat(sch.filter(v => v.from > start));
-    }
-  }
-  const t = todayStamp(), from = t > sch[0].from ? t : sch[0].from;
-  const cur = hbVersionAt({schedule: sch}, from);
-  if (!cur || !hbSameSched(cur, sched)) sch = sch.filter(v => v.from < from).concat([Object.assign({from}, sched)]);
-  return sch;
-}
-function hbSaveDraft(){
-  const d = hbDraft;
-  if (!d) return;
-  const name = d.name.trim();
-  if (!name) { toastMsg('Ponle un nombre al hábito', 2500); return; }
-  if (d.type === 'days' && !d.days.length) { toastMsg('Elige al menos un día', 2500); return; }
-  if (d.type === 'cond' && (!d.condActs.length || !d.condSlots.length)) { toastMsg('Elige al menos una actividad y una franja', 3000); return; }
-  if (!/^\d{4}-\d{2}-\d{2}$/.test(d.start || '')) { toastMsg('La fecha de inicio no es válida', 2500); return; }
-  const sched = {type: d.type};
-  if (d.type === 'days') sched.days = DAYS.filter(x => d.days.includes(x));
-  if (d.type === 'weekly') sched.perWeek = d.perWeek;
-  if (d.type === 'cond') {
-    sched.condActs = Object.keys(ACTIVITIES).filter(a => d.condActs.includes(a));
-    sched.condSlots = SLOTS.filter(s => d.condSlots.includes(s));
-  }
-  const now = new Date().toISOString();
-  const linkActs = Object.keys(ACTIVITIES).filter(a => a && d.linkActs.includes(a));
-  if (!d.id) {
-    const order = hbAll().reduce((m, h) => Math.max(m, (h.order || 0) + 1), 0);
-    habitsDoc.habits.push({
-      id: 'h' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6),
-      name, emoji: d.emoji || '⭐', color: d.color, moment: d.moment,
-      schedule: [Object.assign({from: d.start}, sched)], linkActs,
-      order, archived: false, createdAt: now, updatedAt: now
-    });
-  } else {
-    const h = hbById(d.id);
-    if (!h) { hbBack(); return; }
-    Object.assign(h, {name, emoji: d.emoji || h.emoji, color: d.color, moment: d.moment, linkActs});
-    h.schedule = hbEditSchedule(h.schedule, d.start, sched);
-    h.updatedAt = now;
-  }
-  saveHabits();
-  hbBack();             // cierra la hoja y suelta el borrador: un doble toque no lo guarda dos veces
-  renderHabits();
-  toastMsg(`«${name}» guardado ✓`, 2200);
-}
-// primer carácter "visible" de lo que se escriba (una bandera o un emoji compuesto cuentan como uno)
-function firstGrapheme(v){
-  try {
-    if (window.Intl && Intl.Segmenter) {
-      const it = new Intl.Segmenter('es', {granularity: 'grapheme'}).segment(v)[Symbol.iterator]().next();
-      if (!it.done) return it.value.segment;
-    }
-  } catch(e) {}
-  return Array.from(v).slice(0, 2).join('');
-}
-
-// ---- panel de hábitos en Estadísticas ----
-function renderHabitStats(){
-  const el = document.getElementById('habStats');
-  if (!el) return;
-  if (!habitsDoc) { loadHabits(); seedHabits(); }
-  hbNewPass();
-  const all = hbSorted(hbAll());
-  const list = all.filter(h => habUi.statsArchived || !h.archived);
-  const nArch = all.filter(h => h.archived).length;
-  const toggle = nArch ? `<button class="switch-row hb-switch" data-hact="statsArch" aria-pressed="${habUi.statsArchived}">`
-    + `<span class="switch${habUi.statsArchived ? ' on' : ''}"></span><span class="switch-text">Incluir archivados (${nArch})</span></button>` : '';
-  if (!list.length) { el.innerHTML = `<p class="stats-empty">Todavía no hay hábitos${nArch ? ' activos' : ''}.</p>${toggle}`; return; }
-  const t = todayStamp(), curW = mondayOf(new Date());
-  // nota de una semana: cada hábito saca su % de esa semana y se hace la media
-  const weekPct = W => {
-    const sc = [];
-    list.forEach(h => { const r = hbScore(h, W, addDays(W, 6)); if (r.count) sc.push(r.sum / r.count); });
-    return sc.length ? Math.round(sc.reduce((a, b) => a + b, 0) * 100 / sc.length) : null;
-  };
-  const weeks = [];
-  for (let i = 7; i >= 0; i--) weeks.push(shiftWeek(curW, -i));
-  const pcts = weeks.map(weekPct);
-  const fmtP = p => p === null ? '—' : p + '%';
-  const monthStart = t.slice(0, 8) + '01';
-  const bars = weeks.map((W, i) => `<div class="wk-row"${W === curW ? ' title="Semana en curso, hasta hoy"' : ''}>
-      <span class="wk-lbl">${parseStamp(W).toLocaleDateString('es-ES', {day:'2-digit', month:'2-digit'})}</span>
-      <div class="bar-outer"><div class="bar-inner" style="width:${pcts[i] || 0}%; background:var(--german)"></div></div>
-      <span class="wk-val">${fmtP(pcts[i])}</span></div>`).join('');
-  const rows = list.map(h => {
-    const m = hbPct(h, monthStart, t), s = hbStreak(h), b = hbBestStreak(h);
-    return `<tr><td><span aria-hidden="true">${esc(h.emoji)}</span> ${esc(h.name)}${h.archived ? ' <span class="hb-tag">archivado</span>' : ''}</td>`
-      + `<td class="n">${fmtP(m)}</td><td class="n">🔥 ${hbStreakTxt(s)}</td><td class="n">${hbStreakTxt(b)}</td></tr>`;
-  }).join('');
-  el.innerHTML = `<div class="stat-cards">
-      <div class="stat-card" style="--accent:var(--german)"><div class="lbl">% hábitos esta semana</div>
-        <div class="num" style="color:var(--german)">${fmtP(pcts[7])}</div>
-        <div class="sub">hasta hoy · semana pasada: ${fmtP(pcts[6])}</div></div>
-    </div>
-    <div class="hb-stat-sub">Cumplimiento por semana</div>
-    ${bars}
-    <div class="hb-stat-sub">Por hábito</div>
-    <table class="act-table"><thead><tr><th>Hábito</th><th style="text-align:right">% mes</th>`
-      + `<th style="text-align:right">Racha</th><th style="text-align:right">Mejor</th></tr></thead><tbody>${rows}</tbody></table>
-    ${toggle ? `<div class="hb-stat-foot">${toggle}</div>` : ''}
-    <p class="hb-hint">Cada hábito saca su nota de la semana (lo hecho entre lo que tocaba; en los flexibles, hechos ÷ N con tope en el 100 %) y la barra es la media de todos. Lo que aún puedes hacer hoy, o en la semana en curso, no resta.</p>`;
-}
-
-// ---- eventos ----
-document.getElementById('viewHabits').addEventListener('click', (e) => {
-  const b = e.target.closest('[data-hact]');
-  if (!b || b.disabled) return;
-  const a = b.dataset.hact;
-  hbNewPass();
-  const h = b.dataset.hid ? hbById(b.dataset.hid) : null;
-  if (a === 'prev' || a === 'next') hbShiftDay(a === 'prev' ? -1 : 1);
-  else if (a === 'today') { habUi.followToday = true; renderHabits(); }
-  else if (a === 'toggle') { if (h) hbTap(b, h, habUi.day); }
-  else if (a === 'plan') hbTapPlan(b, b.dataset.slot, habUi.day);
-  else if (a === 'cal') { const hh = hbById(habUi.habitId); if (hh) hbTap(b, hh, b.dataset.day); }
-  else if (a === 'fold') { habUi.showDone = b.getAttribute('aria-expanded') !== 'true'; renderHabits(); }
-  else if (a === 'detail') { if (h) hbOpenDetail(h); }
-  else if (a === 'back') hbBack();
-  else if (a === 'new') hbOpenEditor(null);
-  else if (a === 'manage') hbOpenScreen('manage');
-  else if (a === 'edit') { if (h) hbOpenEditor(h); }
-  else if (a === 'calPrev' || a === 'calNext') { habUi.calMonth = hbShiftMonth(habUi.calMonth, a === 'calPrev' ? -1 : 1); renderHabits(); }
-  else if (a === 'archive') { if (h) hbArchiveUI(h); }
-  else if (a === 'unarchive') { if (h) hbUnarchiveUI(h); }
-  else if (a === 'delete') { if (h) hbDeleteUI(h); }
-  else if (a === 'up' || a === 'down') { if (h) { hbMove(h, a === 'up' ? -1 : 1); renderHabits(); } }
-  else if (a === 'excl') hbToggleExclude(b.dataset.act);
-});
-
-document.getElementById('hbShade').addEventListener('click', (e) => {
-  if (!hbSheetOpen()) return;                             // cerrándose: el toque se descarta
-  if (e.target.id === 'hbShade') { hbBack(); return; }   // toque fuera de la hoja
-  const b = e.target.closest('[data-hed]');
-  if (!b || !hbDraft) return;
-  const d = hbDraft, a = b.dataset.hed, v = b.dataset.v;
-  const flip = (arr, x) => arr.includes(x) ? arr.filter(y => y !== x) : arr.concat([x]);
-  if (a === 'cancel') { hbBack(); return; }
-  if (a === 'save') { hbSaveDraft(); return; }
-  if (a === 'emoji') d.emoji = v;
-  else if (a === 'color') d.color = v;
-  else if (a === 'type') d.type = v;
-  else if (a === 'day') d.days = flip(d.days, v);
-  else if (a === 'minus') d.perWeek = Math.max(1, d.perWeek - 1);
-  else if (a === 'plus') d.perWeek = Math.min(7, d.perWeek + 1);
-  else if (a === 'cact') d.condActs = flip(d.condActs, v);
-  else if (a === 'cslot') d.condSlots = flip(d.condSlots, v);
-  else if (a === 'moment') d.moment = v;
-  else if (a === 'link') d.linkActs = flip(d.linkActs, v);
-  else return;
-  hbDrawEditor();
-});
-document.getElementById('hbShade').addEventListener('input', (e) => {
-  if (!hbDraft) return;
-  if (e.target.id === 'hbName') hbDraft.name = e.target.value;
-  else if (e.target.id === 'hbStart') hbDraft.start = e.target.value;
-});
-document.getElementById('hbShade').addEventListener('change', (e) => {
-  if (!hbDraft) return;
-  if (e.target.id === 'hbStart') hbDraft.start = e.target.value;
-  else if (e.target.id === 'hbEmoji') {
-    const v = e.target.value.trim();
-    if (v) { hbDraft.emoji = firstGrapheme(v); hbDrawEditor(); }
-  }
-});
-document.addEventListener('keydown', (e) => {
-  if (e.key !== 'Escape') return;
-  const inHabits = document.getElementById('viewHabits').style.display !== 'none';
-  if (hbSheetOpen() || (inHabits && habUi.screen !== 'today')) hbBack();
-});
-document.getElementById('habStats').addEventListener('click', (e) => {
-  if (!e.target.closest('[data-hact="statsArch"]')) return;
-  habUi.statsArchived = !habUi.statsArchived;
-  renderHabitStats();
-});
-
-// deslizar a los lados sobre la lista para cambiar de día (móvil)
-(function enableHabitSwipe(){
-  const zone = document.getElementById('habMain');
-  let x0 = null, y0 = null;
-  zone.addEventListener('touchstart', (e) => {
-    if (e.touches.length !== 1) { x0 = null; return; }
-    x0 = e.touches[0].clientX; y0 = e.touches[0].clientY;
-  }, {passive:true});
-  zone.addEventListener('touchend', (e) => {
-    if (x0 === null || !e.changedTouches.length) return;
-    const dx = e.changedTouches[0].clientX - x0;
-    const dy = e.changedTouches[0].clientY - y0;
-    x0 = null;
-    if (habUi.screen !== 'today' || Math.abs(dx) < 70 || Math.abs(dy) > 45) return;
-    hbShiftDay(dx < 0 ? 1 : -1);
-  }, {passive:true});
-})();
-
-// al volver a la app otro día, "Hoy" tiene que ser hoy
-document.addEventListener('visibilitychange', () => {
-  if (document.visibilityState !== 'visible') return;
-  if (document.getElementById('viewHabits').style.display !== 'none' && habUi.screen === 'today') renderHabits();
-});
 
 // ---- pestañas de vista ----
 function setView(v){
-  if (!['plan','habits','stats'].includes(v)) v = 'plan';
-  // salir de Hábitos (o volver a pulsar su pestaña) cierra ficha, gestión y hoja
-  if (document.getElementById('viewHabits').style.display !== 'none') hbDropLayers();
-  document.getElementById('viewPlan').style.display = v === 'plan' ? '' : 'none';
-  document.getElementById('viewHabits').style.display = v === 'habits' ? '' : 'none';
-  document.getElementById('viewStats').style.display = v === 'stats' ? '' : 'none';
-  document.getElementById('tabPlan').classList.toggle('active', v === 'plan');
-  document.getElementById('tabHabits').classList.toggle('active', v === 'habits');
-  document.getElementById('tabStats').classList.toggle('active', v === 'stats');
-  lsSet(UI_TAB_KEY, v);
-  // lo tachado en Hábitos también mueve el ✓ del Planning: se repinta al volver
-  if (v === 'plan') render();
-  else if (v === 'habits') renderHabits();
-  else renderStats();
+  const isStats = v === 'stats';
+  document.getElementById('viewPlan').style.display = isStats ? 'none' : '';
+  document.getElementById('viewStats').style.display = isStats ? '' : 'none';
+  document.getElementById('tabPlan').classList.toggle('active', !isStats);
+  document.getElementById('tabStats').classList.toggle('active', isStats);
+  if (isStats) renderStats();
 }
 document.getElementById('tabPlan').addEventListener('click', () => setView('plan'));
-document.getElementById('tabHabits').addEventListener('click', () => setView('habits'));
 document.getElementById('tabStats').addEventListener('click', () => setView('stats'));
 
 // ---- arranque ----
 migrateLegacy();
-runMigrations();        // clases del viernes guardadas como "aleman" → clase_aleman (una vez)
 loadWeek(viewedMonday);
-loadHabits();
-seedHabits();           // hábitos iniciales, solo si todavía no hay ninguno guardado
 
 // en el móvil los ajustes arrancan plegados: la semana se ve nada más abrir
 if (window.matchMedia('(max-width: 767px)').matches) {
@@ -3575,10 +1999,6 @@ if (window.matchMedia('(max-width: 767px)').matches) {
 }
 
 render();
-
-// vuelve a la última pestaña que se usó
-const savedTab = lsGet(UI_TAB_KEY);
-if (savedTab && savedTab !== 'plan') setView(savedTab);
 
 // la app pinta al instante desde localStorage; el sync va detrás, sin bloquear
 setTimeout(() => doSync(true), 300);
