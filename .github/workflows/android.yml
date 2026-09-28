@@ -27,8 +27,13 @@ jobs:
           distribution: temurin
           java-version: '17'
 
+      # Por defecto la accion instala tambien el paquete "tools", que ya no existe
+      # en cmdline-tools 16.0 y hace fallar el paso. Lo que hace falta para compilar
+      # lo instala el paso siguiente.
       - name: Preparar el Android SDK
         uses: android-actions/setup-android@v3
+        with:
+          packages: 'platform-tools'
 
       - name: Instalar la plataforma de compilacion
         run: sdkmanager "platform-tools" "platforms;android-35" "build-tools;35.0.0"
